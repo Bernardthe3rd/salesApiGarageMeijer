@@ -1,6 +1,7 @@
 package nl.garagemeijer.salesapi.models;
 
 import jakarta.persistence.*;
+import nl.garagemeijer.salesapi.enums.Addition;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,9 +26,9 @@ public class Sale {
     private BigDecimal taxPrice;
     private String comment;
     private SignatureUpload signatureUpload;
-//    private Addition addition;
-//    private Customer customer;
-//    private Account salesPerson;
+    private Addition addition;
+    private Customer customer;
+    private Account salesPerson;
 
     public Long getId() {
         return id;
@@ -131,5 +132,29 @@ public class Sale {
 
     public void setSignatureUpload(SignatureUpload signatureUpload) {
         this.signatureUpload = signatureUpload;
+    }
+
+    public Addition getAddition() {
+        return addition;
+    }
+
+    public void setAddition(Addition addition) {
+        this.addition = addition;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Account getSalesPerson() {
+        return salesPerson;
+    }
+
+    public void setSalesPerson(Account salesPerson) {
+        this.salesPerson = salesPerson;
     }
 }
