@@ -44,8 +44,8 @@ public class BusinessVehicleController {
 
     @PutMapping("/{id}")
     public ResponseEntity<BusinessVehicle> updateBusinessVehicle(@PathVariable Long id, @Valid @RequestBody BusinessVehicle businessVehicle) {
-        BusinessVehicle upddatedBusinessVehicle = businessVehicleService.updateBusinessVehicle(id, businessVehicle);
-        return ResponseEntity.ok(upddatedBusinessVehicle);
+        BusinessVehicle updatedBusinessVehicle = businessVehicleService.updateBusinessVehicle(id, businessVehicle);
+        return ResponseEntity.ok(updatedBusinessVehicle);
     }
 
     @DeleteMapping("/{id}")
