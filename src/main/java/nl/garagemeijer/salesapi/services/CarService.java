@@ -1,6 +1,5 @@
 package nl.garagemeijer.salesapi.services;
 
-import jakarta.validation.Valid;
 import nl.garagemeijer.salesapi.models.Car;
 import nl.garagemeijer.salesapi.repositories.CarRepository;
 import org.springframework.stereotype.Service;
