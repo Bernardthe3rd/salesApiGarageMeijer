@@ -24,7 +24,7 @@ public class Purchase {
     private BigDecimal bpmPrice;
     private Boolean businessOrPrivate; //aan de hand van deze variabele laat je zien of er BPM en/of BTW betaald moet worden.
     private BigDecimal taxPrice;
-    private Vehicle vehicle;
+//    private Vehicle vehicle;
 
     public Long getId() {
         return id;
@@ -122,11 +122,11 @@ public class Purchase {
         this.taxPrice = taxPrice;
     }
 
-    public Vehicle getVehicle() {
-        return vehicle;
-    }
-
-    public void setVehicle(Vehicle vehicle) {
-        this.vehicle = vehicle;
-    }
+//    public Vehicle getVehicle() {
+//        return vehicle;
+//    }
+//
+//    public void setVehicle(Vehicle vehicle) {
+//        this.vehicle = vehicle;
+//    }
 }

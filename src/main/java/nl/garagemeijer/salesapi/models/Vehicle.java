@@ -4,9 +4,9 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "Vehicles")
-public class Vehicle {
+@MappedSuperclass
+//@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Vehicle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -25,10 +25,10 @@ public class Sale {
     private BigDecimal bpmPrice;
     private BigDecimal taxPrice;
     private String comment;
-    private SignatureUpload signatureUpload;
+    //    private SignatureUpload signatureUpload;
     private Addition addition;
-    private Customer customer;
-    private Account salesPerson;
+//    private Customer customer;
+//    private Account salesPerson;
 
     public Long getId() {
         return id;
@@ -126,13 +126,13 @@ public class Sale {
         this.comment = comment;
     }
 
-    public SignatureUpload getSignatureUpload() {
-        return signatureUpload;
-    }
-
-    public void setSignatureUpload(SignatureUpload signatureUpload) {
-        this.signatureUpload = signatureUpload;
-    }
+//    public SignatureUpload getSignatureUpload() {
+//        return signatureUpload;
+//    }
+//
+//    public void setSignatureUpload(SignatureUpload signatureUpload) {
+//        this.signatureUpload = signatureUpload;
+//    }
 
     public Addition getAddition() {
         return addition;
@@ -142,19 +142,19 @@ public class Sale {
         this.addition = addition;
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
-    }
-
-    public Account getSalesPerson() {
-        return salesPerson;
-    }
-
-    public void setSalesPerson(Account salesPerson) {
-        this.salesPerson = salesPerson;
-    }
+//    public Customer getCustomer() {
+//        return customer;
+//    }
+//
+//    public void setCustomer(Customer customer) {
+//        this.customer = customer;
+//    }
+//
+//    public Account getSalesPerson() {
+//        return salesPerson;
+//    }
+//
+//    public void setSalesPerson(Account salesPerson) {
+//        this.salesPerson = salesPerson;
+//    }
 }
