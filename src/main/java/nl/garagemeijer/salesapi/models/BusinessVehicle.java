@@ -1,6 +1,7 @@
 package nl.garagemeijer.salesapi.models;
 
 import jakarta.persistence.*;
+import nl.garagemeijer.salesapi.enums.BusinessUsageType;
 
 @Entity
 @Table(name = "BusinessVehicles")
@@ -8,7 +9,7 @@ public class BusinessVehicle extends Vehicle {
 
     private Boolean companyOwned;
     private Double cargoCapacity;
-    private String businessUsage;
+    private BusinessUsageType businessUsage;
 
     public Boolean getCompanyOwned() {
         return companyOwned;
@@ -26,11 +27,11 @@ public class BusinessVehicle extends Vehicle {
         this.cargoCapacity = cargoCapacity;
     }
 
-    public String getBusinessUsage() {
+    public BusinessUsageType getBusinessUsage() {
         return businessUsage;
     }
 
-    public void setBusinessUsage(String businessUsage) {
+    public void setBusinessUsage(BusinessUsageType businessUsage) {
         this.businessUsage = businessUsage;
     }
 }
