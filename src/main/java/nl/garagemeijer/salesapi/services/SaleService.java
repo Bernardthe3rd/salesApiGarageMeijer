@@ -31,6 +31,11 @@ public class SaleService {
         }
     }
 
+    public Integer getLastOrderNumber() {
+        Integer lastOrderNumber = saleRepository.findLastOrderNumber();
+        return (lastOrderNumber != null) ? lastOrderNumber : 0;
+    }
+
     public Sale saveSale(Sale sale) {
         if (sale.getBusinessOrPrivate().contains("business")) {
             sale.setBpmPrice(new BigDecimal("0.00"));
@@ -50,12 +55,7 @@ public class SaleService {
             }
         }
 
-        if (sale.getOrderNumber() == 0) {
-            sale.setOrderNumber(1);
-        } else {
-            int getLastOrderNumber = saleRepository.findLastOrderNumber();
-            sale.setOrderNumber(++getLastOrderNumber);
-        }
+        sale.setOrderNumber(getLastOrderNumber() + 1);
         return saleRepository.save(sale);
     }
 
