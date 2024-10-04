@@ -14,16 +14,17 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate saleDate;
-    private BigDecimal salePrice;
+    private LocalDate saleDate = LocalDate.now();
+    private BigDecimal salePriceEx;
+    private BigDecimal bpmPrice;
+    private BigDecimal taxPrice;
+    private BigDecimal salePriceIncl;
     private Double discount;
-    private String status;
+    private String status = "open";
     private String warranty;
     private int orderNumber;
     private String paymentMethod;
-    private Boolean businessOrPrivate; //aan de hand van deze variabele laat je zien of er BPM en/of BTW betaald moet worden.
-    private BigDecimal bpmPrice;
-    private BigDecimal taxPrice;
+    private String businessOrPrivate; //aan de hand van deze variabele laat je zien of er BPM en/of BTW betaald moet worden.
     private String comment;
     //    private SignatureUpload signatureUpload;
     private Addition addition;
@@ -46,12 +47,20 @@ public class Sale {
         this.saleDate = saleDate;
     }
 
-    public BigDecimal getSalePrice() {
-        return salePrice;
+    public BigDecimal getSalePriceEx() {
+        return salePriceEx;
     }
 
-    public void setSalePrice(BigDecimal salePrice) {
-        this.salePrice = salePrice;
+    public void setSalePriceEx(BigDecimal salePriceEx) {
+        this.salePriceEx = salePriceEx;
+    }
+
+    public BigDecimal getSalePriceIncl() {
+        return salePriceIncl;
+    }
+
+    public void setSalePriceIncl(BigDecimal salePriceIncl) {
+        this.salePriceIncl = salePriceIncl;
     }
 
     public Double getDiscount() {
@@ -94,11 +103,11 @@ public class Sale {
         this.paymentMethod = paymentMethod;
     }
 
-    public Boolean getBusinessOrPrivate() {
+    public String getBusinessOrPrivate() {
         return businessOrPrivate;
     }
 
-    public void setBusinessOrPrivate(Boolean businessOrPrivate) {
+    public void setBusinessOrPrivate(String businessOrPrivate) {
         this.businessOrPrivate = businessOrPrivate;
     }
 
@@ -126,14 +135,6 @@ public class Sale {
         this.comment = comment;
     }
 
-//    public SignatureUpload getSignatureUpload() {
-//        return signatureUpload;
-//    }
-//
-//    public void setSignatureUpload(SignatureUpload signatureUpload) {
-//        this.signatureUpload = signatureUpload;
-//    }
-
     public Addition getAddition() {
         return addition;
     }
@@ -142,19 +143,4 @@ public class Sale {
         this.addition = addition;
     }
 
-//    public Customer getCustomer() {
-//        return customer;
-//    }
-//
-//    public void setCustomer(Customer customer) {
-//        this.customer = customer;
-//    }
-//
-//    public Account getSalesPerson() {
-//        return salesPerson;
-//    }
-//
-//    public void setSalesPerson(Account salesPerson) {
-//        this.salesPerson = salesPerson;
-//    }
 }

@@ -35,8 +35,13 @@ public class PurchaseService {
     }
 
     public Purchase updatePurchase(Long id, Purchase purchase) {
-        Purchase purchaseToUpdate = getPurchase(id);
+        Purchase purchaseToUpdate = purchaseRepository.findById(id).orElseThrow(() -> new RuntimeException("Purchase not found"));
         purchaseToUpdate.setStatus(purchase.getStatus());
         return purchaseRepository.save(purchaseToUpdate);
+    }
+
+
+    public void deletePurchase(Long id) {
+        purchaseRepository.deleteById(id);
     }
 }

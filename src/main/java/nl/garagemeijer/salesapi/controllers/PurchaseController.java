@@ -46,4 +46,10 @@ public class PurchaseController {
         Purchase updatedPurchase = purchaseService.updatePurchase(id, purchase);
         return ResponseEntity.ok(updatedPurchase);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePurchase(@PathVariable Long id) {
+        purchaseService.deletePurchase(id);
+        return ResponseEntity.noContent().build();
+    }
 }
