@@ -14,13 +14,13 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate saleDate = LocalDate.now();
+    private LocalDate saleDate;
     private BigDecimal salePriceEx;
     private BigDecimal bpmPrice;
     private BigDecimal taxPrice;
     private BigDecimal salePriceIncl;
     private Double discount;
-    private String status = "open";
+    private String status;
     private String warranty;
     private int orderNumber;
     private String paymentMethod;

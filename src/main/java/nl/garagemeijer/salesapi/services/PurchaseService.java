@@ -4,6 +4,7 @@ import nl.garagemeijer.salesapi.models.Purchase;
 import nl.garagemeijer.salesapi.repositories.PurchaseRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,9 @@ public class PurchaseService {
     }
 
     public Purchase savePurchase(Purchase purchase) {
+        purchase.setOrderDate(LocalDate.now());
+        purchase.setStatus("Open");
+
         return purchaseRepository.save(purchase);
     }
 

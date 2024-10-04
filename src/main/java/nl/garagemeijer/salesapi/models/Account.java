@@ -13,7 +13,7 @@ public class Account {
     private Long id;
 
     private String accountType; // personal or customer
-    private LocalDate creationDate = LocalDate.now();
+    private LocalDate creationDate;
     private String status;
     private String firstName;
     private String lastName;

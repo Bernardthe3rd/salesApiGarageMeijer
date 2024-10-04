@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,6 +38,9 @@ public class SaleService {
     }
 
     public Sale saveSale(Sale sale) {
+        sale.setSaleDate(LocalDate.now());
+        sale.setStatus("Open");
+
         if (sale.getBusinessOrPrivate().contains("business")) {
             sale.setBpmPrice(new BigDecimal("0.00"));
             sale.setTaxPrice(new BigDecimal("0.00"));

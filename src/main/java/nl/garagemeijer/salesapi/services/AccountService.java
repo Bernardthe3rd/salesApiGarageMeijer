@@ -4,6 +4,7 @@ import nl.garagemeijer.salesapi.models.Account;
 import nl.garagemeijer.salesapi.repositories.AccountRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +31,7 @@ public class AccountService {
     }
 
     public Account saveAccount(Account account) {
+        account.setCreationDate(LocalDate.now());
         return accountRepository.save(account);
     }
 
