@@ -3,7 +3,6 @@ package nl.garagemeijer.salesapi.controllers;
 import jakarta.validation.Valid;
 import nl.garagemeijer.salesapi.dtos.cars.CarInputDto;
 import nl.garagemeijer.salesapi.dtos.cars.CarOutputDto;
-import nl.garagemeijer.salesapi.models.Car;
 import nl.garagemeijer.salesapi.repositories.CarRepository;
 import nl.garagemeijer.salesapi.services.CarService;
 import org.springframework.http.ResponseEntity;

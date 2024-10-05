@@ -1,7 +1,8 @@
 package nl.garagemeijer.salesapi.controllers;
 
 import jakarta.validation.Valid;
-import nl.garagemeijer.salesapi.models.Motor;
+import nl.garagemeijer.salesapi.dtos.motors.MotorInputDto;
+import nl.garagemeijer.salesapi.dtos.motors.MotorOutputDto;
 import nl.garagemeijer.salesapi.repositories.MotorRepository;
 import nl.garagemeijer.salesapi.services.MotorService;
 import org.springframework.http.ResponseEntity;
@@ -23,27 +24,27 @@ public class MotorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Motor>> getAllMotors() {
-        List<Motor> motors = motorService.getMotors();
+    public ResponseEntity<List<MotorOutputDto>> getAllMotors() {
+        List<MotorOutputDto> motors = motorService.getMotors();
         return ResponseEntity.ok(motors);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Motor> getMotorById(@PathVariable Long id) {
-        Motor motor = motorService.getMotor(id);
+    public ResponseEntity<MotorOutputDto> getMotorById(@PathVariable Long id) {
+        MotorOutputDto motor = motorService.getMotor(id);
         return ResponseEntity.ok(motor);
     }
 
     @PostMapping
-    public ResponseEntity<Motor> createMotor(@Valid @RequestBody Motor Motor) {
-        Motor createdMotor = motorService.saveMotor(Motor);
+    public ResponseEntity<MotorOutputDto> createMotor(@Valid @RequestBody MotorInputDto Motor) {
+        MotorOutputDto createdMotor = motorService.saveMotor(Motor);
         URI location = URI.create("/api/motors/" + createdMotor.getId());
         return ResponseEntity.created(location).body(createdMotor);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Motor> updateMotor(@PathVariable Long id, @Valid @RequestBody Motor Motor) {
-        Motor updatedMotor = motorService.updateMotor(id, Motor);
+    public ResponseEntity<MotorOutputDto> updateMotor(@PathVariable Long id, @Valid @RequestBody MotorInputDto Motor) {
+        MotorOutputDto updatedMotor = motorService.updateMotor(id, Motor);
         return ResponseEntity.ok(updatedMotor);
     }
 

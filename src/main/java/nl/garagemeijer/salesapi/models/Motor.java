@@ -6,8 +6,11 @@ import jakarta.persistence.*;
 @Table(name = "Motors")
 public class Motor extends Vehicle {
 
+    @Column(nullable = false)
     private String typeMotorcycle;
+    @Column(nullable = false)
     private int wheelbase;
+    @Column(nullable = false)
     private String handlebarType;
 
     public String getTypeMotorcycle() {

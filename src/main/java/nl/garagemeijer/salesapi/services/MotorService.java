@@ -1,5 +1,8 @@
 package nl.garagemeijer.salesapi.services;
 
+import nl.garagemeijer.salesapi.dtos.motors.MotorInputDto;
+import nl.garagemeijer.salesapi.dtos.motors.MotorOutputDto;
+import nl.garagemeijer.salesapi.mappers.MotorMapper;
 import nl.garagemeijer.salesapi.models.Motor;
 import nl.garagemeijer.salesapi.repositories.MotorRepository;
 import org.springframework.stereotype.Service;
@@ -11,32 +14,35 @@ import java.util.Optional;
 public class MotorService {
 
     private final MotorRepository motorRepository;
+    private final MotorMapper motorMapper;
 
-    public MotorService(MotorRepository motorRepository) {
+    public MotorService(MotorRepository motorRepository, MotorMapper motorMapper) {
         this.motorRepository = motorRepository;
+        this.motorMapper = motorMapper;
     }
 
-    public List<Motor> getMotors() {
-        return motorRepository.findAll();
+    public List<MotorOutputDto> getMotors() {
+        return motorMapper.motorsTomotorsOutputDtos(motorRepository.findAll());
     }
 
-    public Motor getMotor(Long id) {
+    public MotorOutputDto getMotor(Long id) {
         Optional<Motor> motorOptional = motorRepository.findById(id);
         if (motorOptional.isPresent()) {
-            return motorOptional.get();
+            return motorMapper.motorTomotorOutputDto(motorOptional.get());
         } else {
             throw new RuntimeException("Motor with id " + id + " not found");
         }
     }
 
-    public Motor saveMotor(Motor motor) {
-        return motorRepository.save(motor);
+    public MotorOutputDto saveMotor(MotorInputDto motor) {
+        Motor motorToSave = motorMapper.motorInputDtoTomotor(motor);
+        return motorMapper.motorTomotorOutputDto(motorRepository.save(motorToSave));
     }
 
-    public Motor updateMotor(Long id, Motor motor) {
-        Motor motorToUpdate = motorRepository.findById(id).orElseThrow(() -> new RuntimeException("Motor with id " + id + " not found"));
-        motorToUpdate.setHandlebarType(motor.getHandlebarType());
-        return motorRepository.save(motorToUpdate);
+    public MotorOutputDto updateMotor(Long id, MotorInputDto motor) {
+        Motor getMotor = motorRepository.findById(id).orElseThrow(() -> new RuntimeException("Motor with id " + id + " not found"));
+        Motor motorToUpdate = motorMapper.updatemotorFrommotorInputDto(motor, getMotor);
+        return motorMapper.motorTomotorOutputDto(motorRepository.save(motorToUpdate));
     }
 
     public void deleteMotor(Long id) {
