@@ -4,23 +4,11 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "Motors")
-public class Motor {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Motor extends Vehicle {
 
     private String typeMotorcycle;
     private int wheelbase;
     private String handlebarType;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getTypeMotorcycle() {
         return typeMotorcycle;

@@ -15,11 +15,15 @@ public class Account {
     private String accountType; // personal or customer
     private LocalDate creationDate;
     private String status;
-    private String name;
+    private String firstName;
+    private String lastName;
+    private String dateOfBirth;
     private String street;
     private String postalCode;
     private String city;
+    private String country;
     private String email;
+    private String phoneNumber;
 
 //    private User user;
 
@@ -56,12 +60,28 @@ public class Account {
         this.status = status;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getStreet() {
@@ -88,11 +108,27 @@ public class Account {
         this.city = city;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 }

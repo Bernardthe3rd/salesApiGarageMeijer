@@ -1,26 +1,15 @@
 package nl.garagemeijer.salesapi.models;
 
 import jakarta.persistence.*;
+import nl.garagemeijer.salesapi.enums.BusinessUsageType;
 
 @Entity
 @Table(name = "BusinessVehicles")
-public class BusinessVehicle {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class BusinessVehicle extends Vehicle {
 
     private Boolean companyOwned;
     private Double cargoCapacity;
-    private String businessUsage;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private BusinessUsageType businessUsage;
 
     public Boolean getCompanyOwned() {
         return companyOwned;
@@ -38,11 +27,11 @@ public class BusinessVehicle {
         this.cargoCapacity = cargoCapacity;
     }
 
-    public String getBusinessUsage() {
+    public BusinessUsageType getBusinessUsage() {
         return businessUsage;
     }
 
-    public void setBusinessUsage(String businessUsage) {
+    public void setBusinessUsage(BusinessUsageType businessUsage) {
         this.businessUsage = businessUsage;
     }
 }

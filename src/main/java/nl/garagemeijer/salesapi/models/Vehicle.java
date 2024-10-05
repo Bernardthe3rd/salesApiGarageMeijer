@@ -4,9 +4,10 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "Vehicles")
-public class Vehicle {
+@MappedSuperclass
+//@Entity
+//@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class Vehicle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +24,7 @@ public class Vehicle {
     private String fuelType;
     private Double engineCapacity;
     private LocalDate firstRegistrationDate;
+
 
     public Long getId() {
         return id;
