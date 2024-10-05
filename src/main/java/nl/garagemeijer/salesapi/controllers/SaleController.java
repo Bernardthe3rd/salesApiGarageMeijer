@@ -1,6 +1,8 @@
 package nl.garagemeijer.salesapi.controllers;
 
 import jakarta.validation.Valid;
+import nl.garagemeijer.salesapi.dtos.sales.SaleInputDto;
+import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
 import nl.garagemeijer.salesapi.models.Sale;
 import nl.garagemeijer.salesapi.repositories.SaleRepository;
 import nl.garagemeijer.salesapi.services.SaleService;
@@ -23,27 +25,27 @@ public class SaleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Sale>> getAllSales() {
-        List<Sale> sales = saleService.getSales();
+    public ResponseEntity<List<SaleOutputDto>> getAllSales() {
+        List<SaleOutputDto> sales = saleService.getSales();
         return ResponseEntity.ok(sales);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Sale> getSaleById(@PathVariable Long id) {
-        Sale selectedSale = saleService.getSale(id);
+    public ResponseEntity<SaleOutputDto> getSaleById(@PathVariable Long id) {
+        SaleOutputDto selectedSale = saleService.getSale(id);
         return ResponseEntity.ok(selectedSale);
     }
 
     @PostMapping
-    public ResponseEntity<Sale> createSale(@Valid @RequestBody Sale sale) {
-        Sale createdSale = saleService.saveSale(sale);
+    public ResponseEntity<SaleOutputDto> createSale(@Valid @RequestBody SaleInputDto sale) {
+        SaleOutputDto createdSale = saleService.saveSale(sale);
         URI location = URI.create("/api/sales/" + createdSale.getId());
         return ResponseEntity.created(location).body(createdSale);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Sale> updateSale(@PathVariable Long id, @Valid @RequestBody Sale sale) {
-        Sale updatedSale = saleService.updateSale(id, sale);
+    public ResponseEntity<SaleOutputDto> updateSale(@PathVariable Long id, @Valid @RequestBody SaleInputDto sale) {
+        SaleOutputDto updatedSale = saleService.updateSale(id, sale);
         return ResponseEntity.ok(updatedSale);
     }
 

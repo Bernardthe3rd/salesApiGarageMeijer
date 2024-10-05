@@ -1,6 +1,5 @@
-package nl.garagemeijer.salesapi.models;
+package nl.garagemeijer.salesapi.dtos.sales;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import nl.garagemeijer.salesapi.enums.Addition;
@@ -10,36 +9,24 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+public class SaleOutputDto {
 
-@Entity
-@Table(name = "Sales")
-public class Sale {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private LocalDate saleDate;
     private BigDecimal salePriceEx;
     private BigDecimal bpmPrice;
     private BigDecimal taxPrice;
-    @Column(nullable = false)
     private BigDecimal salePriceIncl;
-    private String status;
-    private int orderNumber;
-    private String comment;
-    @Column(nullable = false)
     private Double discount;
-    @Column(nullable = false)
+    private String status;
     private String warranty;
-    @Column(nullable = false)
+    private int orderNumber;
     private String paymentMethod;
-    @Column(nullable = false)
     private String businessOrPrivate;
+    private String comment;
     private Addition addition;
 
 //    private SignatureUpload signatureUpload;
 //    private Customer customer;
 //    private Account salesPerson;
-
 }

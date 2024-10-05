@@ -11,13 +11,6 @@ import java.time.LocalDate;
 @Setter
 public class PurchaseInputDto {
 
-    private LocalDate orderDate;
-    private BigDecimal purchasePriceEx;
-    private BigDecimal taxPrice;
-    private BigDecimal bpmPrice;
-    private String status;
-    private int orderNumber;
-
     @NotNull(message = "please fill in what type of order it is")
     private String typeOrder;
     @NotNull(message = "please fill in which manufacturer you are buying from")
