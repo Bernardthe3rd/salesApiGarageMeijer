@@ -1,6 +1,8 @@
 package nl.garagemeijer.salesapi.controllers;
 
 import jakarta.validation.Valid;
+import nl.garagemeijer.salesapi.dtos.cars.CarInputDto;
+import nl.garagemeijer.salesapi.dtos.cars.CarOutputDto;
 import nl.garagemeijer.salesapi.models.Car;
 import nl.garagemeijer.salesapi.repositories.CarRepository;
 import nl.garagemeijer.salesapi.services.CarService;
@@ -23,27 +25,27 @@ public class CarController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Car>> getAllCars() {
-        List<Car> cars = carService.getCars();
+    public ResponseEntity<List<CarOutputDto>> getAllCars() {
+        List<CarOutputDto> cars = carService.getCars();
         return ResponseEntity.ok(cars);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Car> getCarById(@PathVariable Long id) {
-        Car car = carService.getCar(id);
+    public ResponseEntity<CarOutputDto> getCarById(@PathVariable Long id) {
+        CarOutputDto car = carService.getCar(id);
         return ResponseEntity.ok(car);
     }
 
     @PostMapping
-    public ResponseEntity<Car> createCar(@Valid @RequestBody Car car) {
-        Car createdCar = carService.saveCar(car);
+    public ResponseEntity<CarOutputDto> createCar(@Valid @RequestBody CarInputDto car) {
+        CarOutputDto createdCar = carService.saveCar(car);
         URI location = URI.create("/api/cars/" + createdCar.getId());
         return ResponseEntity.created(location).body(createdCar);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Car> updateCar(@PathVariable Long id, @Valid @RequestBody Car car) {
-        Car updatedCar = carService.updateCar(id, car);
+    public ResponseEntity<CarOutputDto> updateCar(@PathVariable Long id, @Valid @RequestBody CarInputDto car) {
+        CarOutputDto updatedCar = carService.updateCar(id, car);
         return ResponseEntity.ok(updatedCar);
     }
 
