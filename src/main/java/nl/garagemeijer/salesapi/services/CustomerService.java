@@ -1,6 +1,8 @@
 package nl.garagemeijer.salesapi.services;
 
-import nl.garagemeijer.salesapi.models.Account;
+import nl.garagemeijer.salesapi.dtos.customers.CustomerInputDto;
+import nl.garagemeijer.salesapi.dtos.customers.CustomerOutputDto;
+import nl.garagemeijer.salesapi.mappers.CustomerMapper;
 import nl.garagemeijer.salesapi.models.Customer;
 import nl.garagemeijer.salesapi.repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
@@ -12,35 +14,39 @@ import java.util.Optional;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final CustomerMapper customerMapper;
 
-    public CustomerService(CustomerRepository customerRepository) {
+    public CustomerService(CustomerRepository customerRepository, CustomerMapper customerMapper) {
         this.customerRepository = customerRepository;
+        this.customerMapper = customerMapper;
     }
 
-    public List<Customer> getCustomers() {
-        return customerRepository.findAll();
+    public List<CustomerOutputDto> getCustomers() {
+        return customerMapper.customersToCustomersOutputDtos(customerRepository.findAll());
     }
 
-    public Customer getCustomer(Long id) {
+    public CustomerOutputDto getCustomer(Long id) {
         Optional<Customer> customerOptional = customerRepository.findById(id);
         if (customerOptional.isPresent()) {
-            return customerOptional.get();
+            return customerMapper.customerTocustomerOutputDto(customerOptional.get());
         } else {
             throw new RuntimeException("Customer with id " + id + " not found");
         }
     }
 
-    public Customer saveCustomer(Customer customer) {
+    public CustomerOutputDto saveCustomer(CustomerInputDto customer) {
+        Customer customerToSave = customerMapper.customerInputDtoTocustomer(customer);
 //        Account newAccount = new Account();
 //        newAccount.setFirstName(customer);
+//        newaccount.setaccounttype("customer");
 //        in customerInputDto deze informatie uitvragen
-        return customerRepository.save(customer);
+        return customerMapper.customerTocustomerOutputDto(customerRepository.save(customerToSave));
     }
 
-    public Customer updateCustomer(Long id, Customer customer) {
-        Customer customerToUpdate = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
-        customerToUpdate.setPrefferedContactMethod(customer.getPrefferedContactMethod());
-        return customerRepository.save(customerToUpdate);
+    public CustomerOutputDto updateCustomer(Long id, CustomerInputDto customer) {
+        Customer getCustomer = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+        Customer customerToUpdate = customerMapper.updateCustomerFromCustomerInputDto(customer, getCustomer);
+        return customerMapper.customerTocustomerOutputDto(customerRepository.save(customerToUpdate));
     }
 
     public void deleteCustomer(Long id) {
@@ -48,6 +54,6 @@ public class CustomerService {
     }
 
     public void getLastSalesPerson() {
-
+//        check in de laatste salesorder gekoppeld aan de klant wat daarvan de salesperson is geweest
     }
 }

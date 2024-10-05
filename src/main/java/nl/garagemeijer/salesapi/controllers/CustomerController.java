@@ -1,6 +1,8 @@
 package nl.garagemeijer.salesapi.controllers;
 
 import jakarta.validation.Valid;
+import nl.garagemeijer.salesapi.dtos.customers.CustomerInputDto;
+import nl.garagemeijer.salesapi.dtos.customers.CustomerOutputDto;
 import nl.garagemeijer.salesapi.models.Customer;
 import nl.garagemeijer.salesapi.repositories.CustomerRepository;
 import nl.garagemeijer.salesapi.services.CustomerService;
@@ -23,27 +25,27 @@ public class CustomerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Customer>> getAllCustomers() {
-        List<Customer> customers = customerService.getCustomers();
+    public ResponseEntity<List<CustomerOutputDto>> getAllCustomers() {
+        List<CustomerOutputDto> customers = customerService.getCustomers();
         return ResponseEntity.ok(customers);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
-        Customer selectedCustomer = customerService.getCustomer(id);
+    public ResponseEntity<CustomerOutputDto> getCustomerById(@PathVariable Long id) {
+        CustomerOutputDto selectedCustomer = customerService.getCustomer(id);
         return ResponseEntity.ok(selectedCustomer);
     }
 
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@Valid @RequestBody Customer customer) {
-        Customer createdCustomer = customerService.saveCustomer(customer);
+    public ResponseEntity<CustomerOutputDto> createCustomer(@Valid @RequestBody CustomerInputDto customer) {
+        CustomerOutputDto createdCustomer = customerService.saveCustomer(customer);
         URI location = URI.create("/api/customers/" + createdCustomer.getId());
         return ResponseEntity.created(location).body(createdCustomer);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @Valid @RequestBody Customer customer) {
-        Customer updatedCustomer = customerService.updateCustomer(id, customer);
+    public ResponseEntity<CustomerOutputDto> updateCustomer(@PathVariable Long id, @Valid @RequestBody CustomerInputDto customer) {
+        CustomerOutputDto updatedCustomer = customerService.updateCustomer(id, customer);
         return ResponseEntity.ok(updatedCustomer);
     }
 

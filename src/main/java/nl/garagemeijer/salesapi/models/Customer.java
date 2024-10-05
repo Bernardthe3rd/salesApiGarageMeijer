@@ -1,9 +1,11 @@
 package nl.garagemeijer.salesapi.models;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.time.LocalDate;
-import java.util.List;
+@Getter
+@Setter
 
 @Entity
 @Table(name = "Customers")
@@ -13,26 +15,11 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String prefferedContactMethod;
     private String nameLastSalesPerson;
 //    private Account account;
 //    private List<Vehicle> vehicles;
 //    private List<Sale> purchaseHistory;
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getPrefferedContactMethod() {
-        return prefferedContactMethod;
-    }
-
-    public void setPrefferedContactMethod(String prefferedContactMethod) {
-        this.prefferedContactMethod = prefferedContactMethod;
-    }
 }
