@@ -1,6 +1,8 @@
 package nl.garagemeijer.salesapi.controllers;
 
 import jakarta.validation.Valid;
+import nl.garagemeijer.salesapi.dtos.businessVehicles.BusinessVehicleInputDto;
+import nl.garagemeijer.salesapi.dtos.businessVehicles.BusinessVehicleOutputDto;
 import nl.garagemeijer.salesapi.models.BusinessVehicle;
 import nl.garagemeijer.salesapi.models.Car;
 import nl.garagemeijer.salesapi.repositories.BusinessVehicleRepository;
@@ -24,27 +26,27 @@ public class BusinessVehicleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BusinessVehicle>> getAllBusinessVehicles() {
-        List<BusinessVehicle> businessVehicles = businessVehicleService.getBusinessVehicles();
+    public ResponseEntity<List<BusinessVehicleOutputDto>> getAllBusinessVehicles() {
+        List<BusinessVehicleOutputDto> businessVehicles = businessVehicleService.getBusinessVehicles();
         return ResponseEntity.ok(businessVehicles);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<BusinessVehicle> getBusinessVehicleById(@PathVariable Long id) {
-        BusinessVehicle businessVehicle = businessVehicleService.getBusinessVehicle(id);
+    public ResponseEntity<BusinessVehicleOutputDto> getBusinessVehicleById(@PathVariable Long id) {
+        BusinessVehicleOutputDto businessVehicle = businessVehicleService.getBusinessVehicle(id);
         return ResponseEntity.ok(businessVehicle);
     }
 
     @PostMapping
-    public ResponseEntity<BusinessVehicle> createBusinessVehicle(@Valid @RequestBody BusinessVehicle businessVehicle) {
-        BusinessVehicle createdBusinessVehicle = businessVehicleService.saveBusinessVehicle(businessVehicle);
+    public ResponseEntity<BusinessVehicleOutputDto> createBusinessVehicle(@Valid @RequestBody BusinessVehicleInputDto businessVehicle) {
+        BusinessVehicleOutputDto createdBusinessVehicle = businessVehicleService.saveBusinessVehicle(businessVehicle);
         URI location = URI.create("/api/businessvehicles/" + createdBusinessVehicle.getId());
         return ResponseEntity.created(location).body(createdBusinessVehicle);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BusinessVehicle> updateBusinessVehicle(@PathVariable Long id, @Valid @RequestBody BusinessVehicle businessVehicle) {
-        BusinessVehicle updatedBusinessVehicle = businessVehicleService.updateBusinessVehicle(id, businessVehicle);
+    public ResponseEntity<BusinessVehicleOutputDto> updateBusinessVehicle(@PathVariable Long id, @Valid @RequestBody BusinessVehicleInputDto businessVehicle) {
+        BusinessVehicleOutputDto updatedBusinessVehicle = businessVehicleService.updateBusinessVehicle(id, businessVehicle);
         return ResponseEntity.ok(updatedBusinessVehicle);
     }
 
