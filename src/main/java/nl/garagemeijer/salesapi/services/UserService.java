@@ -1,5 +1,8 @@
 package nl.garagemeijer.salesapi.services;
 
+import nl.garagemeijer.salesapi.dtos.users.UserInputDto;
+import nl.garagemeijer.salesapi.dtos.users.UserOutputDto;
+import nl.garagemeijer.salesapi.mappers.UserMapper;
 import nl.garagemeijer.salesapi.models.User;
 import nl.garagemeijer.salesapi.repositories.UserRepository;
 import org.springframework.stereotype.Service;
@@ -12,33 +15,43 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public List<UserOutputDto> getUsers() {
+        return userMapper.usersToUserOutputDtos(userRepository.findAll());
     }
 
-    public User getUser(Long id) {
+    public UserOutputDto getUser(Long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
-            return user.get();
+            return userMapper.userToUserOutputDto(user.get());
         } else {
             throw new RuntimeException("User not found");
         }
     }
 
-    public User saveUser(User user) {
-        user.setCreationDate(LocalDate.now());
-        return userRepository.save(user);
+    public UserOutputDto saveUser(UserInputDto user) {
+        User userToSave = userMapper.userInputDtoToUser(user);
+        userToSave.setCreationDate(LocalDate.now());
+        userToSave.setIsActive(true);
+        userToSave.setLastLogin(LocalDate.now());
+
+        return userMapper.userToUserOutputDto(userRepository.save(userToSave));
     }
 
-    public User updateUser(Long id, User user) {
-        User userToUpdate = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-        userToUpdate.setUsername(user.getUsername());
-        return userRepository.save(userToUpdate);
+    public UserOutputDto updateUser(Long id, UserInputDto user) {
+        User getUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        User userToUpdate = userMapper.updateUserFromUserInputDto(user, getUser);
+        userToUpdate.setLastLogin(LocalDate.now());
+        if (!userToUpdate.getIsActive()) {
+            userToUpdate.setIsActive(true);
+        }
+        return userMapper.userToUserOutputDto(userRepository.save(userToUpdate));
     }
 
     public void deleteUser(Long id) {

@@ -46,6 +46,9 @@ public class AccountService {
     public AccountOutputDto updateAccount(Long id, AccountInputDto account) {
         Account getAccount = accountRepository.findById(id).orElseThrow(() -> new RuntimeException("Account with id " + id + " not found"));
         Account accountToUpdate = accountMapper.updateAccountFromAccountInputDto(account, getAccount);
+        if (accountToUpdate.getStatus().contains("NEW")) {
+            accountToUpdate.setStatus("OPEN");
+        }
         return accountMapper.accountToAccountOutputDto(accountRepository.save(accountToUpdate));
     }
 
