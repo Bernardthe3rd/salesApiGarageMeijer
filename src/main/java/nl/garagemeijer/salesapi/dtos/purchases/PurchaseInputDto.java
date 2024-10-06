@@ -11,8 +11,6 @@ import java.time.LocalDate;
 @Setter
 public class PurchaseInputDto {
 
-    @NotNull(message = "please fill in what type of order it is")
-    private String typeOrder;
     @NotNull(message = "please fill in which manufacturer you are buying from")
     private String supplier;
     @NotNull(message = "please fill in the total purchase price including tax and bpm")

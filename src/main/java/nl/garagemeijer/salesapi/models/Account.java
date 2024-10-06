@@ -3,6 +3,7 @@ package nl.garagemeijer.salesapi.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import nl.garagemeijer.salesapi.enums.Status;
 
 import java.time.LocalDate;
 
@@ -20,7 +21,7 @@ public class Account {
     @Column(nullable = false)
     private String accountType; // salesPerson, Admin or customer
     private LocalDate creationDate;
-    private String status;
+    private Status status;
     @Column(nullable = false)
     private String firstName;
     @Column(nullable = false)

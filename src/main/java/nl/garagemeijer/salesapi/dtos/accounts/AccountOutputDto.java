@@ -2,6 +2,7 @@ package nl.garagemeijer.salesapi.dtos.accounts;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.garagemeijer.salesapi.enums.Status;
 
 import java.time.LocalDate;
 
@@ -12,7 +13,7 @@ public class AccountOutputDto {
     private Long id;
     private String accountType;
     private LocalDate creationDate;
-    private String status;
+    private Status status;
     private String firstName;
     private String lastName;
     private String dateOfBirth;

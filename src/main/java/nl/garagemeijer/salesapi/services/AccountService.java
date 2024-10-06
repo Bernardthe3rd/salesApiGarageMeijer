@@ -2,6 +2,7 @@ package nl.garagemeijer.salesapi.services;
 
 import nl.garagemeijer.salesapi.dtos.accounts.AccountInputDto;
 import nl.garagemeijer.salesapi.dtos.accounts.AccountOutputDto;
+import nl.garagemeijer.salesapi.enums.Status;
 import nl.garagemeijer.salesapi.mappers.AccountMapper;
 import nl.garagemeijer.salesapi.models.Account;
 import nl.garagemeijer.salesapi.repositories.AccountRepository;
@@ -38,7 +39,7 @@ public class AccountService {
     public AccountOutputDto saveAccount(AccountInputDto account) {
         Account accountToSave = accountMapper.accountInputDtoToAccount(account);
         accountToSave.setCreationDate(LocalDate.now());
-        accountToSave.setStatus("NEW");
+        accountToSave.setStatus(Status.NEW);
 
         return accountMapper.accountToAccountOutputDto(accountRepository.save(accountToSave));
     }
@@ -46,8 +47,8 @@ public class AccountService {
     public AccountOutputDto updateAccount(Long id, AccountInputDto account) {
         Account getAccount = accountRepository.findById(id).orElseThrow(() -> new RuntimeException("Account with id " + id + " not found"));
         Account accountToUpdate = accountMapper.updateAccountFromAccountInputDto(account, getAccount);
-        if (accountToUpdate.getStatus().contains("NEW")) {
-            accountToUpdate.setStatus("OPEN");
+        if (accountToUpdate.getStatus() == Status.NEW) {
+            accountToUpdate.setStatus(Status.OPEN);
         }
         return accountMapper.accountToAccountOutputDto(accountRepository.save(accountToUpdate));
     }

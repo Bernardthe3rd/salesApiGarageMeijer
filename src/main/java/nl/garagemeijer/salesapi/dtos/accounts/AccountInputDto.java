@@ -4,6 +4,7 @@ package nl.garagemeijer.salesapi.dtos.accounts;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import nl.garagemeijer.salesapi.enums.Status;
 
 @Getter
 @Setter
@@ -12,7 +13,7 @@ public class AccountInputDto {
     @NotNull(message = "please fill in if the account is for a salesPerson or Admin or Customer")
     private String accountType;
     @NotNull(message = "please fill in if the account is open or closed")
-    private String status;
+    private Status status;
     @NotNull(message = "please fill in a firstname")
     private String firstName;
     @NotNull(message = "please fill in a lastname")

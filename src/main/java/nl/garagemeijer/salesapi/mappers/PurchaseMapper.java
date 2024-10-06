@@ -16,7 +16,6 @@ public class PurchaseMapper {
 
         dto.setId(purchase.getId());
         dto.setOrderDate(purchase.getOrderDate());
-        dto.setTypeOrder(purchase.getTypeOrder());
         dto.setSupplier(purchase.getSupplier());
         dto.setPurchasePriceEx(purchase.getPurchasePriceEx());
         dto.setTaxPrice(purchase.getTaxPrice());
@@ -32,7 +31,6 @@ public class PurchaseMapper {
     }
 
     public Purchase updatePurchaseFromPurchaseInputDto(PurchaseInputDto purchaseInputDto, Purchase purchase) {
-        purchase.setTypeOrder(purchaseInputDto.getTypeOrder());
         purchase.setSupplier(purchaseInputDto.getSupplier());
         purchase.setPurchasePriceIncl(purchaseInputDto.getPurchasePriceIncl());
         purchase.setExpectedDeliveryDate(purchaseInputDto.getExpectedDeliveryDate());
