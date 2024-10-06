@@ -3,7 +3,6 @@ package nl.garagemeijer.salesapi.controllers;
 import jakarta.validation.Valid;
 import nl.garagemeijer.salesapi.dtos.purchases.PurchaseInputDto;
 import nl.garagemeijer.salesapi.dtos.purchases.PurchaseOutputDto;
-import nl.garagemeijer.salesapi.models.Purchase;
 import nl.garagemeijer.salesapi.repositories.PurchaseRepository;
 import nl.garagemeijer.salesapi.services.PurchaseService;
 import org.springframework.http.ResponseEntity;

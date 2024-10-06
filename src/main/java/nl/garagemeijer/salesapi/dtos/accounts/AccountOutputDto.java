@@ -1,6 +1,5 @@
-package nl.garagemeijer.salesapi.models;
+package nl.garagemeijer.salesapi.dtos.accounts;
 
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,16 +7,10 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+public class AccountOutputDto {
 
-@Entity
-@Table(name = "Accounts")
-public class Account {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String accountType; // salesPerson, Admin or customer
+    private String accountType;
     private LocalDate creationDate;
     private String status;
     private String firstName;
@@ -29,10 +22,5 @@ public class Account {
     private String country;
     private String email;
     private String phoneNumber;
-
-//    private List<T> orders;
-
-//    private User user;
-
 
 }

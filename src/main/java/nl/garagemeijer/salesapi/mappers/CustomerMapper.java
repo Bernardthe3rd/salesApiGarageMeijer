@@ -45,7 +45,6 @@ public class CustomerMapper {
 
     public Customer customerInputDtoTocustomer(CustomerInputDto customerInputDto) {
         var customer = new Customer();
-//        iets met account
         return updateCustomerFromCustomerInputDto(customerInputDto, customer);
     }
 
