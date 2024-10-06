@@ -1,6 +1,7 @@
 package nl.garagemeijer.salesapi.helpers;
 
 import nl.garagemeijer.salesapi.models.Purchase;
+import nl.garagemeijer.salesapi.models.Sale;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -27,7 +28,7 @@ public class PriceCalculator {
         return priceIncl.subtract(taxPrice).subtract(bpmPrice);
     }
 
-    public List<BigDecimal> calculatePrices(Purchase purchase) {
+    public List<BigDecimal> calculatePricesPurchases(Purchase purchase) {
         List<BigDecimal> prices = new ArrayList<>();
 
         if (purchase.getBusinessOrPrivate().contains("business")) {
@@ -46,6 +47,30 @@ public class PriceCalculator {
             prices.add(purchase.getPurchasePriceEx());
         } else {
             throw new IllegalArgumentException("Unsupported purchase type: " + purchase.getBusinessOrPrivate());
+        }
+
+        return prices;
+    }
+
+    public List<BigDecimal> calculatePricesSales(Sale sale) {
+        List<BigDecimal> prices = new ArrayList<>();
+
+        if (sale.getBusinessOrPrivate().contains("business")) {
+            sale.setBpmPrice(new BigDecimal("0.00"));
+            prices.add(sale.getBpmPrice());
+            sale.setTaxPrice(new BigDecimal("0.00"));
+            prices.add(sale.getTaxPrice());
+            sale.setSalePriceEx(new BigDecimal(String.valueOf(sale.getSalePriceIncl())));
+            prices.add(sale.getSalePriceEx());
+        } else if (sale.getBusinessOrPrivate().contains("private")) {
+            sale.setTaxPrice(calculateTaxPrice(sale.getSalePriceIncl()));
+            prices.add(sale.getTaxPrice());
+            sale.setBpmPrice(calculateBpmPrice(sale.getSalePriceIncl()));
+            prices.add(sale.getBpmPrice());
+            sale.setSalePriceEx(calculatePriceEx(sale.getSalePriceIncl()));
+            prices.add(sale.getSalePriceEx());
+        } else {
+            throw new IllegalArgumentException("Unsupported sale type: " + sale.getBusinessOrPrivate());
         }
 
         return prices;

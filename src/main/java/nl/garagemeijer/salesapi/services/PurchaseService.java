@@ -50,10 +50,10 @@ public class PurchaseService {
         Purchase purchaseToSave = purchaseMapper.purchaseInputDtoToPurchase(purchase);
 
         purchaseToSave.setOrderDate(LocalDate.now());
-        purchaseToSave.setStatus(Status.OPEN);
+        purchaseToSave.setStatus(Status.NEW);
         purchaseToSave.setOrderNumber(getLastOrderNumber() + 1);
 
-        List<BigDecimal> prices = priceCalculator.calculatePrices(purchaseToSave);
+        List<BigDecimal> prices = priceCalculator.calculatePricesPurchases(purchaseToSave);
         purchaseToSave.setTaxPrice(prices.get(0));
         purchaseToSave.setBpmPrice(prices.get(1));
         purchaseToSave.setPurchasePriceEx(prices.get(2));
@@ -65,7 +65,7 @@ public class PurchaseService {
         Purchase getPurchase = purchaseRepository.findById(id).orElseThrow(() -> new RuntimeException("Purchase not found"));
         Purchase purchaseToUpdate = purchaseMapper.updatePurchaseFromPurchaseInputDto(purchase, getPurchase);
 
-        List<BigDecimal> prices = priceCalculator.calculatePrices(purchaseToUpdate);
+        List<BigDecimal> prices = priceCalculator.calculatePricesPurchases(purchaseToUpdate);
         purchaseToUpdate.setTaxPrice(prices.get(0));
         purchaseToUpdate.setBpmPrice(prices.get(1));
         purchaseToUpdate.setPurchasePriceEx(prices.get(2));
