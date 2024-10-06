@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import nl.garagemeijer.salesapi.enums.Addition;
+import nl.garagemeijer.salesapi.enums.Status;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,7 +26,9 @@ public class Sale {
     private BigDecimal taxPrice;
     @Column(nullable = false)
     private BigDecimal salePriceIncl;
-    private String status;
+    @Column(nullable = false)
+    private String typeOrder;
+    private Status status;
     private int orderNumber;
     private String comment;
     @Column(nullable = false)

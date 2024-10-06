@@ -2,6 +2,7 @@ package nl.garagemeijer.salesapi.services;
 
 import nl.garagemeijer.salesapi.dtos.sales.SaleInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
+import nl.garagemeijer.salesapi.enums.Status;
 import nl.garagemeijer.salesapi.mappers.SaleMapper;
 import nl.garagemeijer.salesapi.models.Sale;
 import nl.garagemeijer.salesapi.repositories.SaleRepository;
@@ -24,6 +25,12 @@ public class SaleService {
         this.saleMapper = saleMapper;
     }
 
+    public Integer getLastOrderNumber() {
+        Integer lastOrderNumber = saleRepository.findLastOrderNumber();
+        return (lastOrderNumber != null) ? lastOrderNumber : 0;
+    }
+
+
     public List<SaleOutputDto> getSales() {
         return saleMapper.salesToSalesOutputDtos(saleRepository.findAll());
     }
@@ -37,16 +44,11 @@ public class SaleService {
         }
     }
 
-    public Integer getLastOrderNumber() {
-        Integer lastOrderNumber = saleRepository.findLastOrderNumber();
-        return (lastOrderNumber != null) ? lastOrderNumber : 0;
-    }
-
     public SaleOutputDto saveSale(SaleInputDto sale) {
         Sale saleToSave = saleMapper.saleInputDtoToSale(sale);
 
         saleToSave.setSaleDate(LocalDate.now());
-        saleToSave.setStatus("Open");
+        saleToSave.setStatus(Status.NEW);
 
         if (saleToSave.getBusinessOrPrivate().contains("business")) {
             saleToSave.setBpmPrice(new BigDecimal("0.00"));
@@ -73,6 +75,8 @@ public class SaleService {
     public SaleOutputDto updateSale(Long id, SaleInputDto sale) {
         Sale getSale = saleRepository.findById(id).orElseThrow(() -> new RuntimeException("Sale not found"));
         Sale saleToUpdate = saleMapper.updateSaleFromSaleInputDto(sale, getSale);
+
+
         return saleMapper.saleTosaleOutputDto(saleRepository.save(saleToUpdate));
     }
 

@@ -3,6 +3,7 @@ package nl.garagemeijer.salesapi.dtos.sales;
 import lombok.Getter;
 import lombok.Setter;
 import nl.garagemeijer.salesapi.enums.Addition;
+import nl.garagemeijer.salesapi.enums.Status;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,7 +19,8 @@ public class SaleOutputDto {
     private BigDecimal taxPrice;
     private BigDecimal salePriceIncl;
     private Double discount;
-    private String status;
+    private String orderType;
+    private Status status;
     private String warranty;
     private int orderNumber;
     private String paymentMethod;
