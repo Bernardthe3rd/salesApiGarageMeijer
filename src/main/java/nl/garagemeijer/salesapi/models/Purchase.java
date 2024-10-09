@@ -40,4 +40,8 @@ public class Purchase {
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 
+    @ManyToOne
+    @JoinColumn(name = "profile_id")
+    private Profile admin;
+
 }

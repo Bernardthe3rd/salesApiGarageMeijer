@@ -1,5 +1,6 @@
 package nl.garagemeijer.salesapi.mappers;
 
+import nl.garagemeijer.salesapi.dtos.profiles.ProfileOutputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserInputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserOutputDto;
 import nl.garagemeijer.salesapi.models.User;
@@ -11,7 +12,7 @@ import java.util.List;
 @Component
 public class UserMapper {
 
-    public UserOutputDto userToUserOutputDto(User user) {
+    public static UserOutputDto userToUserOutputDto(User user) {
         var dto = new UserOutputDto();
 
         dto.setId(user.getId());
@@ -20,6 +21,27 @@ public class UserMapper {
         dto.setLastLogin(user.getLastLogin());
         dto.setIsActive(user.getIsActive());
         dto.setCreationDate(user.getCreationDate());
+//        if (user.getProfile() != null) {
+//            var simpleProfileDto = new ProfileOutputDto();
+//            simpleProfileDto.setId(user.getProfile().getId());
+//            simpleProfileDto.setCreationDate(user.getProfile().getCreationDate());
+//            simpleProfileDto.setRole(user.getProfile().getRole());
+//            simpleProfileDto.setFirstName(user.getProfile().getFirstName());
+//            simpleProfileDto.setLastName(user.getProfile().getLastName());
+//            simpleProfileDto.setDateOfBirth(user.getProfile().getDateOfBirth());
+//            simpleProfileDto.setStreet(user.getProfile().getStreet());
+//            simpleProfileDto.setPostalCode(user.getProfile().getPostalCode());
+//            simpleProfileDto.setCity(user.getProfile().getCity());
+//            simpleProfileDto.setCountry(user.getProfile().getCountry());
+//            simpleProfileDto.setEmail(user.getProfile().getEmail());
+//            simpleProfileDto.setPhoneNumber(user.getProfile().getPhoneNumber());
+//            simpleProfileDto.setSaleOrders(user.getProfile().getSaleOrders());
+//            simpleProfileDto.setPurchaseOrders(user.getProfile().getPurchaseOrders());
+//            dto.setProfile(simpleProfileDto);
+//        }
+        if (user.getProfile() != null) {
+            dto.setProfile(new ProfileOutputDto(user.getProfile()));
+        }
 
         return dto;
     }

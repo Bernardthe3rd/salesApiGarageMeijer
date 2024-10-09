@@ -1,19 +1,18 @@
-package nl.garagemeijer.salesapi.dtos.accounts;
+package nl.garagemeijer.salesapi.dtos.profiles;
 
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import nl.garagemeijer.salesapi.enums.Role;
 import nl.garagemeijer.salesapi.enums.Status;
 
 @Getter
 @Setter
-public class AccountInputDto {
+public class ProfileInputDto {
 
-    @NotNull(message = "please fill in if the account is for a salesPerson or Admin or Customer")
-    private String accountType;
-    @NotNull(message = "please fill in if the account is open or closed")
-    private Status status;
+    @NotNull(message = "please fill in if the account is for a SELLER or ADMIN")
+    private Role role;
     @NotNull(message = "please fill in a firstname")
     private String firstName;
     @NotNull(message = "please fill in a lastname")

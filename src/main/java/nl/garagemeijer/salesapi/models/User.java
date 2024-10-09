@@ -27,6 +27,9 @@ public class User {
     private Boolean isActive;
     private LocalDate creationDate;
 
+    @OneToOne(mappedBy = "user")
+    private Profile profile;
+
 //    private Security security;
 
 

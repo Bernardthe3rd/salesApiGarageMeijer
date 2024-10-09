@@ -3,25 +3,25 @@ package nl.garagemeijer.salesapi.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import nl.garagemeijer.salesapi.enums.Status;
+import nl.garagemeijer.salesapi.enums.Role;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
 
 @Entity
-@Table(name = "Accounts")
-public class Account {
+@Table(name = "Profiles")
+public class Profile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String accountType; // salesPerson, Admin or customer
     private LocalDate creationDate;
-    private Status status;
+    @Enumerated(EnumType.STRING)
+    private Role role;
     @Column(nullable = false)
     private String firstName;
     @Column(nullable = false)
@@ -41,8 +41,14 @@ public class Account {
     @Column(nullable = false)
     private String phoneNumber;
 
-//    private List<T> orders;
+    @OneToMany(mappedBy = "seller")
+    private List<Sale> saleOrders;
+    @OneToMany(mappedBy = "admin")
+    private List<Purchase> purchaseOrders;
 
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 //    private User user;
 
 

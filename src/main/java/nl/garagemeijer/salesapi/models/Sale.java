@@ -49,7 +49,10 @@ public class Sale {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @ManyToOne
+    @JoinColumn(name = "profile_id")
+    private Profile seller;
+
 //    private SignatureUpload signatureUpload;
-//    private Account salesPerson;
 
 }

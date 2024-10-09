@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import nl.garagemeijer.salesapi.dtos.VehicleOutputDto;
 import nl.garagemeijer.salesapi.enums.Status;
+import nl.garagemeijer.salesapi.models.Profile;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,5 +26,6 @@ public class PurchaseOutputDto {
     private int orderNumber;
     private String businessOrPrivate;
     private VehicleOutputDto vehicle;
+    private Profile admin;
 
 }
