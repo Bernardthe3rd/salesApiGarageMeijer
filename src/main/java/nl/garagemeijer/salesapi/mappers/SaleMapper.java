@@ -32,6 +32,9 @@ public class SaleMapper {
         if (sale.getVehicle() != null) {
             dto.setVehicle(VehicleMapper.vehicleToVehicleOutputDto(sale.getVehicle()));
         }
+        if (sale.getCustomer() != null) {
+            dto.setCustomer(CustomerMapper.customerTocustomerOutputDto(sale.getCustomer()));
+        }
 
         return dto;
     }

@@ -6,8 +6,10 @@ import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
 import nl.garagemeijer.salesapi.enums.Status;
 import nl.garagemeijer.salesapi.helpers.PriceCalculator;
 import nl.garagemeijer.salesapi.mappers.SaleMapper;
+import nl.garagemeijer.salesapi.models.Customer;
 import nl.garagemeijer.salesapi.models.Sale;
 import nl.garagemeijer.salesapi.models.Vehicle;
+import nl.garagemeijer.salesapi.repositories.CustomerRepository;
 import nl.garagemeijer.salesapi.repositories.SaleRepository;
 import nl.garagemeijer.salesapi.repositories.VehicleRepository;
 import org.springframework.stereotype.Service;
@@ -24,12 +26,14 @@ public class SaleService {
     private final SaleMapper saleMapper;
     private final PriceCalculator priceCalculator;
     private final VehicleRepository vehicleRepository;
+    private final CustomerRepository customerRepository;
 
-    public SaleService(SaleRepository saleRepository, SaleMapper saleMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository) {
+    public SaleService(SaleRepository saleRepository, SaleMapper saleMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository, CustomerRepository customerRepository) {
         this.saleRepository = saleRepository;
         this.saleMapper = saleMapper;
         this.priceCalculator = priceCalculator;
         this.vehicleRepository = vehicleRepository;
+        this.customerRepository = customerRepository;
     }
 
     public Integer getLastOrderNumber() {
@@ -97,6 +101,21 @@ public class SaleService {
             Sale sale = optionalSale.get();
             Vehicle vehicle = optionalVehicl.get();
             sale.setVehicle(vehicle);
+            return saleMapper.saleTosaleOutputDto(saleRepository.save(sale));
+        } else {
+            throw new RuntimeException("Sale not found");
+        }
+    }
+
+    public SaleOutputDto assignCustomerToSale(Long id, IdInputDto customerId) {
+        Optional<Sale> optionalSale = saleRepository.findById(id);
+        Optional<Customer> optionalCustomer = customerRepository.findById(customerId.getId());
+        if (optionalSale.isPresent() && optionalCustomer.isPresent()) {
+            Customer customer = optionalCustomer.get();
+            List<Sale> customerPurchaseList = customer.getPurchaseHistory();
+            Sale sale = optionalSale.get();
+            sale.setCustomer(customer);
+            customerPurchaseList.add(sale);
             return saleMapper.saleTosaleOutputDto(saleRepository.save(sale));
         } else {
             throw new RuntimeException("Sale not found");

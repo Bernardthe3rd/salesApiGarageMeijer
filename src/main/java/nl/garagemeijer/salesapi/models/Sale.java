@@ -45,8 +45,11 @@ public class Sale {
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
 //    private SignatureUpload signatureUpload;
-//    private Customer customer;
 //    private Account salesPerson;
 
 }

@@ -10,9 +10,7 @@ import java.time.LocalDate;
 public class CustomerOutputDto {
 
     private Long id;
-    private String accountType; // personal or customer
     private LocalDate creationDate;
-    private String status;
     private String firstName;
     private String lastName;
     private String dateOfBirth;
