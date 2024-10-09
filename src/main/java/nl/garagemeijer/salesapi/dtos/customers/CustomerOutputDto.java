@@ -2,8 +2,11 @@ package nl.garagemeijer.salesapi.dtos.customers;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.garagemeijer.salesapi.dtos.VehicleOutputDto;
+import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,8 +25,8 @@ public class CustomerOutputDto {
     private String phoneNumber;
     private String prefferedContactMethod;
     private String nameLastSalesPerson;
+    private List<SaleOutputDto> purchaseHistory;
 //    private int accountId;
-//    private vehicle;
 //    private sale purchasehistory;
 
 }

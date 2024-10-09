@@ -44,6 +44,4 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     private List<Sale> purchaseHistory;
 
-//    private List<Vehicle> vehicles;
-
 }

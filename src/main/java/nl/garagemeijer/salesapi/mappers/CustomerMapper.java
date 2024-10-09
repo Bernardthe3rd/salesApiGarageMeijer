@@ -2,6 +2,7 @@ package nl.garagemeijer.salesapi.mappers;
 
 import nl.garagemeijer.salesapi.dtos.customers.CustomerInputDto;
 import nl.garagemeijer.salesapi.dtos.customers.CustomerOutputDto;
+import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
 import nl.garagemeijer.salesapi.models.Customer;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @Component
 public class CustomerMapper {
 
-    public static CustomerOutputDto customerTocustomerOutputDto(Customer customer) {
+    public CustomerOutputDto customerTocustomerOutputDto(Customer customer) {
         var dto = new CustomerOutputDto();
 
         dto.setId(customer.getId());
@@ -27,6 +28,9 @@ public class CustomerMapper {
         dto.setPhoneNumber(customer.getPhoneNumber());
         dto.setPrefferedContactMethod(customer.getPrefferedContactMethod());
         dto.setNameLastSalesPerson(customer.getNameLastSalesPerson());
+        if (customer.getPurchaseHistory() != null) {
+            dto.setPurchaseHistory(SaleMapper.salesToSalesOutputDtos(customer.getPurchaseHistory()));
+        }
 
         return dto;
     }

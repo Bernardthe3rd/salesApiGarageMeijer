@@ -3,9 +3,13 @@ package nl.garagemeijer.salesapi.mappers;
 import nl.garagemeijer.salesapi.dtos.VehicleOutputDto;
 import nl.garagemeijer.salesapi.dtos.businessVehicles.BusinessVehicleOutputDto;
 import nl.garagemeijer.salesapi.dtos.cars.CarOutputDto;
+import nl.garagemeijer.salesapi.dtos.customers.CustomerOutputDto;
 import nl.garagemeijer.salesapi.dtos.motors.MotorOutputDto;
 import nl.garagemeijer.salesapi.models.*;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class VehicleMapper {
@@ -55,5 +59,14 @@ public class VehicleMapper {
 
         return dto;
     }
+
+//    public static List<VehicleOutputDto> vehiclesToVehiclesOutputDtos(List<Vehicle> vehicles) {
+//        List<VehicleOutputDto> vehicleOutputDtos = new ArrayList<>();
+//        for (Vehicle vehicle : vehicles) {
+//            VehicleOutputDto vehicleOutputDto = vehicleToVehicleOutputDto(vehicle);
+//            vehicleOutputDtos.add(vehicleOutputDto);
+//        }
+//        return vehicleOutputDtos;
+//    }
 
 }

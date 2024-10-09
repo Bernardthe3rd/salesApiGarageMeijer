@@ -79,9 +79,9 @@ public class SaleService {
         saleToUpdate.setBpmPrice(prices.get(1));
         saleToUpdate.setSalePriceEx(prices.get(2));
 
-        if (saleToUpdate.getStatus() == Status.NEW && saleToUpdate.getTypeOrder().contains("order")) {
+        if (saleToUpdate.getStatus() == Status.NEW) {
             saleToUpdate.setStatus(Status.PENDING);
-        } else if (saleToUpdate.getStatus() == Status.NEW && saleToUpdate.getTypeOrder().contains("offerte") && saleToUpdate.getSaleDate().isBefore(LocalDate.now())) {
+        } else if (saleToUpdate.getTypeOrder().contains("order") && saleToUpdate.getCustomer() != null) {
             saleToUpdate.setStatus(Status.CLOSED);
         } else {
             saleToUpdate.setStatus(Status.OPEN);
