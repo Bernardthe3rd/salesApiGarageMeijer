@@ -4,7 +4,6 @@ public enum Status {
     NEW("New"),
     OPEN("Open"),
     CLOSED("Closed"),
-    DELETED("Deleted"),
     PENDING("Pending"),
     ;
 

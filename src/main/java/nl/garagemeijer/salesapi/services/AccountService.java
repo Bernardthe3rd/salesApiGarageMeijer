@@ -1,5 +1,9 @@
 package nl.garagemeijer.salesapi.services;
 
+import nl.garagemeijer.salesapi.dtos.accounts.AccountInputDto;
+import nl.garagemeijer.salesapi.dtos.accounts.AccountOutputDto;
+import nl.garagemeijer.salesapi.enums.Status;
+import nl.garagemeijer.salesapi.mappers.AccountMapper;
 import nl.garagemeijer.salesapi.models.Account;
 import nl.garagemeijer.salesapi.repositories.AccountRepository;
 import org.springframework.stereotype.Service;
@@ -12,33 +16,41 @@ import java.util.Optional;
 public class AccountService {
 
     private final AccountRepository accountRepository;
+    private final AccountMapper accountMapper;
 
-    public AccountService(AccountRepository accountRepository) {
+    public AccountService(AccountRepository accountRepository, AccountMapper accountMapper) {
         this.accountRepository = accountRepository;
+        this.accountMapper = accountMapper;
     }
 
-    public List<Account> getAccounts() {
-        return accountRepository.findAll();
+    public List<AccountOutputDto> getAccounts() {
+        return accountMapper.accountsToAccountsOutputDtos(accountRepository.findAll());
     }
 
-    public Account getAccount(Long id) {
+    public AccountOutputDto getAccount(Long id) {
         Optional<Account> accountOptional = accountRepository.findById(id);
         if (accountOptional.isPresent()) {
-            return accountOptional.get();
+            return accountMapper.accountToAccountOutputDto(accountOptional.get());
         } else {
             throw new RuntimeException("Account with id " + id + " not found");
         }
     }
 
-    public Account saveAccount(Account account) {
-        account.setCreationDate(LocalDate.now());
-        return accountRepository.save(account);
+    public AccountOutputDto saveAccount(AccountInputDto account) {
+        Account accountToSave = accountMapper.accountInputDtoToAccount(account);
+        accountToSave.setCreationDate(LocalDate.now());
+        accountToSave.setStatus(Status.NEW);
+
+        return accountMapper.accountToAccountOutputDto(accountRepository.save(accountToSave));
     }
 
-    public Account updateAccount(Long id, Account account) {
-        Account accountToUpdate = accountRepository.findById(id).orElseThrow(() -> new RuntimeException("Account with id " + id + " not found"));
-        accountToUpdate.setFirstName(account.getFirstName());
-        return accountRepository.save(accountToUpdate);
+    public AccountOutputDto updateAccount(Long id, AccountInputDto account) {
+        Account getAccount = accountRepository.findById(id).orElseThrow(() -> new RuntimeException("Account with id " + id + " not found"));
+        Account accountToUpdate = accountMapper.updateAccountFromAccountInputDto(account, getAccount);
+        if (accountToUpdate.getStatus() == Status.NEW) {
+            accountToUpdate.setStatus(Status.OPEN);
+        }
+        return accountMapper.accountToAccountOutputDto(accountRepository.save(accountToUpdate));
     }
 
     public void deleteAccount(Long id) {

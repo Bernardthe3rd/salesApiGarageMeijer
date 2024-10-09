@@ -7,8 +7,11 @@ import nl.garagemeijer.salesapi.enums.BusinessUsageType;
 @Table(name = "BusinessVehicles")
 public class BusinessVehicle extends Vehicle {
 
+    @Column(nullable = false)
     private Boolean companyOwned;
+    @Column(nullable = false)
     private Double cargoCapacity;
+    @Column(nullable = false)
     private BusinessUsageType businessUsage;
 
     public Boolean getCompanyOwned() {

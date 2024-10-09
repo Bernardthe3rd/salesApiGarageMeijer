@@ -1,7 +1,8 @@
 package nl.garagemeijer.salesapi.controllers;
 
 import jakarta.validation.Valid;
-import nl.garagemeijer.salesapi.models.Purchase;
+import nl.garagemeijer.salesapi.dtos.purchases.PurchaseInputDto;
+import nl.garagemeijer.salesapi.dtos.purchases.PurchaseOutputDto;
 import nl.garagemeijer.salesapi.repositories.PurchaseRepository;
 import nl.garagemeijer.salesapi.services.PurchaseService;
 import org.springframework.http.ResponseEntity;
@@ -23,27 +24,27 @@ public class PurchaseController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Purchase>> getAllPurchases() {
-        List<Purchase> purchases = purchaseService.getPurchases();
+    public ResponseEntity<List<PurchaseOutputDto>> getAllPurchases() {
+        List<PurchaseOutputDto> purchases = purchaseService.getPurchases();
         return ResponseEntity.ok(purchases);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Purchase> getPurchaseById(@PathVariable Long id) {
-        Purchase selectedPurchase = purchaseService.getPurchase(id);
+    public ResponseEntity<PurchaseOutputDto> getPurchaseById(@PathVariable Long id) {
+        PurchaseOutputDto selectedPurchase = purchaseService.getPurchase(id);
         return ResponseEntity.ok(selectedPurchase);
     }
 
     @PostMapping
-    public ResponseEntity<Purchase> createPurchase(@Valid @RequestBody Purchase purchase) {
-        Purchase createdPurchase = purchaseService.savePurchase(purchase);
+    public ResponseEntity<PurchaseOutputDto> createPurchase(@Valid @RequestBody PurchaseInputDto purchase) {
+        PurchaseOutputDto createdPurchase = purchaseService.savePurchase(purchase);
         URI location = URI.create("/api/purchases/" + createdPurchase.getId());
         return ResponseEntity.created(location).body(createdPurchase);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Purchase> updatePurchase(@PathVariable Long id, @Valid @RequestBody Purchase purchase) {
-        Purchase updatedPurchase = purchaseService.updatePurchase(id, purchase);
+    public ResponseEntity<PurchaseOutputDto> updatePurchase(@PathVariable Long id, @Valid @RequestBody PurchaseInputDto purchase) {
+        PurchaseOutputDto updatedPurchase = purchaseService.updatePurchase(id, purchase);
         return ResponseEntity.ok(updatedPurchase);
     }
 

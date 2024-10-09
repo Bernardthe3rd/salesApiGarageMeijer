@@ -1,5 +1,8 @@
 package nl.garagemeijer.salesapi.services;
 
+import nl.garagemeijer.salesapi.dtos.businessVehicles.BusinessVehicleInputDto;
+import nl.garagemeijer.salesapi.dtos.businessVehicles.BusinessVehicleOutputDto;
+import nl.garagemeijer.salesapi.mappers.BusinessVehicleMapper;
 import nl.garagemeijer.salesapi.models.BusinessVehicle;
 import nl.garagemeijer.salesapi.repositories.BusinessVehicleRepository;
 import org.springframework.stereotype.Service;
@@ -11,32 +14,35 @@ import java.util.Optional;
 public class BusinessVehicleService {
 
     private final BusinessVehicleRepository businessVehicleRepository;
+    private final BusinessVehicleMapper businessVehicleMapper;
 
-    public BusinessVehicleService(BusinessVehicleRepository businessVehicleRepository) {
+    public BusinessVehicleService(BusinessVehicleRepository businessVehicleRepository, BusinessVehicleMapper businessVehicleMapper) {
         this.businessVehicleRepository = businessVehicleRepository;
+        this.businessVehicleMapper = businessVehicleMapper;
     }
 
-    public List<BusinessVehicle> getBusinessVehicles() {
-        return businessVehicleRepository.findAll();
+    public List<BusinessVehicleOutputDto> getBusinessVehicles() {
+        return businessVehicleMapper.businessVehiclesToBusinessVehiclesOutputDtos(businessVehicleRepository.findAll());
     }
 
-    public BusinessVehicle getBusinessVehicle(Long id) {
+    public BusinessVehicleOutputDto getBusinessVehicle(Long id) {
         Optional<BusinessVehicle> businessVehicleOptional = businessVehicleRepository.findById(id);
         if (businessVehicleOptional.isPresent()) {
-            return businessVehicleOptional.get();
+            return businessVehicleMapper.businessVehicleToBusinessVehicleOutputDto(businessVehicleOptional.get());
         } else {
             throw new RuntimeException("Business vehicle not found");
         }
     }
 
-    public BusinessVehicle saveBusinessVehicle(BusinessVehicle businessVehicle) {
-        return businessVehicleRepository.save(businessVehicle);
+    public BusinessVehicleOutputDto saveBusinessVehicle(BusinessVehicleInputDto businessVehicle) {
+        BusinessVehicle businessVehicleToSave = businessVehicleMapper.businessVehicleInputDtoToBusinessVehicle(businessVehicle);
+        return businessVehicleMapper.businessVehicleToBusinessVehicleOutputDto(businessVehicleRepository.save(businessVehicleToSave));
     }
 
-    public BusinessVehicle updateBusinessVehicle(Long id, BusinessVehicle businessVehicle) {
-        BusinessVehicle businessVehicleToUpdate = businessVehicleRepository.findById(id).orElseThrow(() -> new RuntimeException("Business vehicle not found"));
-        businessVehicleToUpdate.setBusinessUsage(businessVehicle.getBusinessUsage());
-        return businessVehicleRepository.save(businessVehicleToUpdate);
+    public BusinessVehicleOutputDto updateBusinessVehicle(Long id, BusinessVehicleInputDto businessVehicle) {
+        BusinessVehicle getBusinessVehicle = businessVehicleRepository.findById(id).orElseThrow(() -> new RuntimeException("Business vehicle not found"));
+        BusinessVehicle businessVehicleToUpdate = businessVehicleMapper.updateBusinessVehicleFromBusinessVehicleInputDto(businessVehicle, getBusinessVehicle);
+        return businessVehicleMapper.businessVehicleToBusinessVehicleOutputDto(businessVehicleRepository.save(businessVehicleToUpdate));
     }
 
     public void deleteBusinessVehicle(Long id) {

@@ -1,5 +1,8 @@
 package nl.garagemeijer.salesapi.services;
 
+import nl.garagemeijer.salesapi.dtos.cars.CarInputDto;
+import nl.garagemeijer.salesapi.dtos.cars.CarOutputDto;
+import nl.garagemeijer.salesapi.mappers.CarMapper;
 import nl.garagemeijer.salesapi.models.Car;
 import nl.garagemeijer.salesapi.repositories.CarRepository;
 import org.springframework.stereotype.Service;
@@ -11,33 +14,35 @@ import java.util.Optional;
 public class CarService {
 
     private final CarRepository carRepository;
+    private final CarMapper carMapper;
 
-    public CarService(CarRepository carRepository) {
+    public CarService(CarRepository carRepository, CarMapper carMapper) {
         this.carRepository = carRepository;
+        this.carMapper = carMapper;
     }
 
-    public List<Car> getCars() {
-        return carRepository.findAll();
+    public List<CarOutputDto> getCars() {
+        return carMapper.carsToCarsOutputDtos(carRepository.findAll());
     }
 
-    public Car getCar(Long id) {
+    public CarOutputDto getCar(Long id) {
         Optional<Car> carOptional = carRepository.findById(id);
         if (carOptional.isPresent()) {
-            return carOptional.get();
+            return carMapper.carToCarOutputDto(carOptional.get());
         } else {
             throw new RuntimeException("Car not found");
         }
     }
 
-    public Car saveCar(Car car) {
-        return carRepository.save(car);
+    public CarOutputDto saveCar(CarInputDto car) {
+        Car carToSave = carMapper.carInputDtoToCar(car);
+        return carMapper.carToCarOutputDto(carRepository.save(carToSave));
     }
 
-    public Car updateCar(Long id, Car car) {
+    public CarOutputDto updateCar(Long id, CarInputDto car) {
         Car getCar = carRepository.findById(id).orElseThrow(() -> new RuntimeException("Car not found"));
-        getCar.setTransmission(car.getTransmission());
-//        straks mapper etc toevoegen hiervoor
-        return carRepository.save(getCar);
+        Car carToUpdate = carMapper.updateCarFromCarInputDto(car, getCar);
+        return carMapper.carToCarOutputDto(carRepository.save(carToUpdate));
     }
 
     public void deleteCar(Long id) {

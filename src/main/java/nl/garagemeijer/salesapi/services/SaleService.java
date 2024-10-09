@@ -1,11 +1,15 @@
 package nl.garagemeijer.salesapi.services;
 
+import nl.garagemeijer.salesapi.dtos.sales.SaleInputDto;
+import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
+import nl.garagemeijer.salesapi.enums.Status;
+import nl.garagemeijer.salesapi.helpers.PriceCalculator;
+import nl.garagemeijer.salesapi.mappers.SaleMapper;
 import nl.garagemeijer.salesapi.models.Sale;
 import nl.garagemeijer.salesapi.repositories.SaleRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -14,22 +18,13 @@ import java.util.Optional;
 public class SaleService {
 
     private final SaleRepository saleRepository;
+    private final SaleMapper saleMapper;
+    private final PriceCalculator priceCalculator;
 
-    public SaleService(SaleRepository saleRepository) {
+    public SaleService(SaleRepository saleRepository, SaleMapper saleMapper, PriceCalculator priceCalculator) {
         this.saleRepository = saleRepository;
-    }
-
-    public List<Sale> getSales() {
-        return saleRepository.findAll();
-    }
-
-    public Sale getSale(Long id) {
-        Optional<Sale> saleOptional = saleRepository.findById(id);
-        if (saleOptional.isPresent()) {
-            return saleOptional.get();
-        } else {
-            throw new RuntimeException("Sale not found");
-        }
+        this.saleMapper = saleMapper;
+        this.priceCalculator = priceCalculator;
     }
 
     public Integer getLastOrderNumber() {
@@ -37,36 +32,53 @@ public class SaleService {
         return (lastOrderNumber != null) ? lastOrderNumber : 0;
     }
 
-    public Sale saveSale(Sale sale) {
-        sale.setSaleDate(LocalDate.now());
-        sale.setStatus("Open");
 
-        if (sale.getBusinessOrPrivate().contains("business")) {
-            sale.setBpmPrice(new BigDecimal("0.00"));
-            sale.setTaxPrice(new BigDecimal("0.00"));
-            sale.setSalePriceEx(new BigDecimal(String.valueOf(sale.getSalePriceIncl())));
-        } else if (sale.getBusinessOrPrivate().contains("private")) {
-            BigDecimal taxRate = new BigDecimal("21.00");
-            BigDecimal taxOne = sale.getSalePriceIncl().divide(new BigDecimal("121.00"), 2, RoundingMode.HALF_UP);
-            BigDecimal taxTwo = taxOne.multiply(taxRate);
-
-            sale.setTaxPrice(taxTwo);
-            sale.setBpmPrice(new BigDecimal(String.valueOf(sale.getSalePriceIncl().multiply(new BigDecimal("0.1")))));
-            BigDecimal saleExOne = sale.getSalePriceIncl().subtract(sale.getBpmPrice());
-            sale.setSalePriceEx(saleExOne.subtract(sale.getTaxPrice()));
-            if (sale.getDiscount() != null) {
-                sale.setSalePriceEx(new BigDecimal(String.valueOf(sale.getSalePriceEx().subtract(BigDecimal.valueOf(sale.getDiscount())))));
-            }
-        }
-
-        sale.setOrderNumber(getLastOrderNumber() + 1);
-        return saleRepository.save(sale);
+    public List<SaleOutputDto> getSales() {
+        return saleMapper.salesToSalesOutputDtos(saleRepository.findAll());
     }
 
-    public Sale updateSale(Long id, Sale sale) {
-        Sale saleToUpdate = saleRepository.findById(id).orElseThrow(() -> new RuntimeException("Sale not found"));
-        saleToUpdate.setStatus(sale.getStatus());
-        return saleRepository.save(saleToUpdate);
+    public SaleOutputDto getSale(Long id) {
+        Optional<Sale> saleOptional = saleRepository.findById(id);
+        if (saleOptional.isPresent()) {
+            return saleMapper.saleTosaleOutputDto(saleOptional.get());
+        } else {
+            throw new RuntimeException("Sale not found");
+        }
+    }
+
+    public SaleOutputDto saveSale(SaleInputDto sale) {
+        Sale saleToSave = saleMapper.saleInputDtoToSale(sale);
+
+        saleToSave.setSaleDate(LocalDate.now());
+        saleToSave.setStatus(Status.NEW);
+        saleToSave.setOrderNumber(getLastOrderNumber() + 1);
+
+        List<BigDecimal> prices = priceCalculator.calculatePricesSales(saleToSave);
+        saleToSave.setTaxPrice(prices.get(0));
+        saleToSave.setBpmPrice(prices.get(1));
+        saleToSave.setSalePriceEx(prices.get(2));
+
+        return saleMapper.saleTosaleOutputDto(saleRepository.save(saleToSave));
+    }
+
+    public SaleOutputDto updateSale(Long id, SaleInputDto sale) {
+        Sale getSale = saleRepository.findById(id).orElseThrow(() -> new RuntimeException("Sale not found"));
+        Sale saleToUpdate = saleMapper.updateSaleFromSaleInputDto(sale, getSale);
+
+        List<BigDecimal> prices = priceCalculator.calculatePricesSales(saleToUpdate);
+        saleToUpdate.setTaxPrice(prices.get(0));
+        saleToUpdate.setBpmPrice(prices.get(1));
+        saleToUpdate.setSalePriceEx(prices.get(2));
+
+        if (saleToUpdate.getStatus() == Status.NEW && saleToUpdate.getTypeOrder().contains("order")) {
+            saleToUpdate.setStatus(Status.PENDING);
+        } else if (saleToUpdate.getStatus() == Status.NEW && saleToUpdate.getTypeOrder().contains("offerte") && saleToUpdate.getSaleDate().isBefore(LocalDate.now())) {
+            saleToUpdate.setStatus(Status.CLOSED);
+        } else {
+            saleToUpdate.setStatus(Status.OPEN);
+        }
+
+        return saleMapper.saleTosaleOutputDto(saleRepository.save(saleToUpdate));
     }
 
     public void deleteSale(Long id) {
