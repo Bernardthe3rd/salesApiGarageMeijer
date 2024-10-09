@@ -22,7 +22,7 @@ public class SaleInputDto {
     @NotNull(message = "please fill in if the vehicle is for business or private use")
     private String businessOrPrivate;
     @NotNull(message = "please fill in what type this is, offerte or order")
-    private String orderType;
+    private String typeOrder;
     private String comment;
     private Addition addition;
 

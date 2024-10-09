@@ -4,7 +4,6 @@ import nl.garagemeijer.salesapi.dtos.VehicleOutputDto;
 import nl.garagemeijer.salesapi.dtos.businessVehicles.BusinessVehicleOutputDto;
 import nl.garagemeijer.salesapi.dtos.cars.CarOutputDto;
 import nl.garagemeijer.salesapi.dtos.motors.MotorOutputDto;
-import nl.garagemeijer.salesapi.dtos.purchases.PurchaseOutputDto;
 import nl.garagemeijer.salesapi.models.*;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +13,6 @@ public class VehicleMapper {
     public static VehicleOutputDto vehicleToVehicleOutputDto(Vehicle vehicle) {
         VehicleOutputDto dto;
 
-        // Check the type of vehicle and create the corresponding DTO
         switch (vehicle) {
             case Car car -> {
                 CarOutputDto carOutputDto = new CarOutputDto();
@@ -22,28 +20,25 @@ public class VehicleMapper {
                 carOutputDto.setTransmission(car.getTransmission());
                 carOutputDto.setTrunkCapacity(car.getTrunkCapacity());
                 carOutputDto.setSeatingCapacity(car.getSeatingCapacity());
-                dto = carOutputDto;  // Set dto to CarOutputDto
+                dto = carOutputDto;
             }
             case Motor motor -> {
                 MotorOutputDto motorOutputDto = new MotorOutputDto();
                 motorOutputDto.setTypeMotorcycle(motor.getTypeMotorcycle());
                 motorOutputDto.setWheelbase(motor.getWheelbase());
                 motorOutputDto.setHandlebarType(motor.getHandlebarType());
-                dto = motorOutputDto;  // Set dto to MotorOutputDto
+                dto = motorOutputDto;
             }
             case BusinessVehicle businessVehicle -> {
                 BusinessVehicleOutputDto businessVehicleOutputDto = new BusinessVehicleOutputDto();
                 businessVehicleOutputDto.setCompanyOwned(businessVehicle.getCompanyOwned());
                 businessVehicleOutputDto.setBusinessUsage(businessVehicle.getBusinessUsage());
                 businessVehicleOutputDto.setCargoCapacity(businessVehicle.getCargoCapacity());
-                dto = businessVehicleOutputDto;  // Set dto to BusinessVehicleOutputDto
+                dto = businessVehicleOutputDto;
             }
-            case null, default ->
-                // If no specific type is matched, use a generic VehicleOutputDto
-                    dto = new VehicleOutputDto();
+            case null, default -> dto = new VehicleOutputDto();
         }
 
-        // Set common properties in all cases
         dto.setId(vehicle.getId());
         dto.setVinNumber(vehicle.getVinNumber());
         dto.setBrand(vehicle.getBrand());

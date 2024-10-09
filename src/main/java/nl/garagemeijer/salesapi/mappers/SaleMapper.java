@@ -24,10 +24,14 @@ public class SaleMapper {
         dto.setOrderNumber(sale.getOrderNumber());
         dto.setComment(sale.getComment());
         dto.setDiscount(sale.getDiscount());
+        dto.setTypeOrder(sale.getTypeOrder());
         dto.setWarranty(sale.getWarranty());
         dto.setPaymentMethod(sale.getPaymentMethod());
         dto.setBusinessOrPrivate(sale.getBusinessOrPrivate());
         dto.setAddition(sale.getAddition());
+        if (sale.getVehicle() != null) {
+            dto.setVehicle(VehicleMapper.vehicleToVehicleOutputDto(sale.getVehicle()));
+        }
 
         return dto;
     }
@@ -35,6 +39,7 @@ public class SaleMapper {
     public Sale updateSaleFromSaleInputDto(SaleInputDto saleInputDto, Sale sale) {
         sale.setSalePriceIncl(saleInputDto.getSalePriceIncl());
         sale.setDiscount(saleInputDto.getDiscount());
+        sale.setTypeOrder(saleInputDto.getTypeOrder());
         sale.setWarranty(saleInputDto.getWarranty());
         sale.setPaymentMethod(saleInputDto.getPaymentMethod());
         sale.setBusinessOrPrivate(saleInputDto.getBusinessOrPrivate());

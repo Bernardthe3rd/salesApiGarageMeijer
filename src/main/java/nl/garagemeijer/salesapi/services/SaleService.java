@@ -1,12 +1,15 @@
 package nl.garagemeijer.salesapi.services;
 
+import nl.garagemeijer.salesapi.dtos.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
 import nl.garagemeijer.salesapi.enums.Status;
 import nl.garagemeijer.salesapi.helpers.PriceCalculator;
 import nl.garagemeijer.salesapi.mappers.SaleMapper;
 import nl.garagemeijer.salesapi.models.Sale;
+import nl.garagemeijer.salesapi.models.Vehicle;
 import nl.garagemeijer.salesapi.repositories.SaleRepository;
+import nl.garagemeijer.salesapi.repositories.VehicleRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -20,11 +23,13 @@ public class SaleService {
     private final SaleRepository saleRepository;
     private final SaleMapper saleMapper;
     private final PriceCalculator priceCalculator;
+    private final VehicleRepository vehicleRepository;
 
-    public SaleService(SaleRepository saleRepository, SaleMapper saleMapper, PriceCalculator priceCalculator) {
+    public SaleService(SaleRepository saleRepository, SaleMapper saleMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository) {
         this.saleRepository = saleRepository;
         this.saleMapper = saleMapper;
         this.priceCalculator = priceCalculator;
+        this.vehicleRepository = vehicleRepository;
     }
 
     public Integer getLastOrderNumber() {
@@ -83,5 +88,18 @@ public class SaleService {
 
     public void deleteSale(Long id) {
         saleRepository.deleteById(id);
+    }
+
+    public SaleOutputDto assignVehicleToSale(Long id, IdInputDto vehicleId) {
+        Optional<Sale> optionalSale = saleRepository.findById(id);
+        Optional<Vehicle> optionalVehicl = vehicleRepository.findById(vehicleId.getId());
+        if (optionalSale.isPresent() && optionalVehicl.isPresent()) {
+            Sale sale = optionalSale.get();
+            Vehicle vehicle = optionalVehicl.get();
+            sale.setVehicle(vehicle);
+            return saleMapper.saleTosaleOutputDto(saleRepository.save(sale));
+        } else {
+            throw new RuntimeException("Sale not found");
+        }
     }
 }

@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import nl.garagemeijer.salesapi.dtos.VehicleOutputDto;
 import nl.garagemeijer.salesapi.enums.Status;
-import nl.garagemeijer.salesapi.models.Vehicle;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
