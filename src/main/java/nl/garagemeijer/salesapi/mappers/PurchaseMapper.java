@@ -26,6 +26,9 @@ public class PurchaseMapper {
         dto.setStatus(purchase.getStatus());
         dto.setOrderNumber(purchase.getOrderNumber());
         dto.setBusinessOrPrivate(purchase.getBusinessOrPrivate());
+        if (purchase.getVehicle() != null) {
+            dto.setVehicle(VehicleMapper.vehicleToVehicleOutputDto(purchase.getVehicle()));
+        }
 
         return dto;
     }

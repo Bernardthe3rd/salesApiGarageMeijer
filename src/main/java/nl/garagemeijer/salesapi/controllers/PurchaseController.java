@@ -1,6 +1,7 @@
 package nl.garagemeijer.salesapi.controllers;
 
 import jakarta.validation.Valid;
+import nl.garagemeijer.salesapi.dtos.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.purchases.PurchaseInputDto;
 import nl.garagemeijer.salesapi.dtos.purchases.PurchaseOutputDto;
 import nl.garagemeijer.salesapi.repositories.PurchaseRepository;
@@ -47,6 +48,13 @@ public class PurchaseController {
         PurchaseOutputDto updatedPurchase = purchaseService.updatePurchase(id, purchase);
         return ResponseEntity.ok(updatedPurchase);
     }
+
+    @PutMapping("/{id}/vehicle")
+    public ResponseEntity<PurchaseOutputDto> addVehicleToPurchase(@PathVariable Long id, @Valid @RequestBody IdInputDto vehicleId) {
+        PurchaseOutputDto updatedPurchase = purchaseService.assignVehicleToPurchase(id, vehicleId);
+        return ResponseEntity.ok(updatedPurchase);
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePurchase(@PathVariable Long id) {

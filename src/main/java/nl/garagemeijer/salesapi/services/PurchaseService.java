@@ -1,12 +1,15 @@
 package nl.garagemeijer.salesapi.services;
 
+import nl.garagemeijer.salesapi.dtos.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.purchases.PurchaseInputDto;
 import nl.garagemeijer.salesapi.dtos.purchases.PurchaseOutputDto;
 import nl.garagemeijer.salesapi.enums.Status;
 import nl.garagemeijer.salesapi.helpers.PriceCalculator;
 import nl.garagemeijer.salesapi.mappers.PurchaseMapper;
 import nl.garagemeijer.salesapi.models.Purchase;
+import nl.garagemeijer.salesapi.models.Vehicle;
 import nl.garagemeijer.salesapi.repositories.PurchaseRepository;
+import nl.garagemeijer.salesapi.repositories.VehicleRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -20,11 +23,13 @@ public class PurchaseService {
     private final PurchaseRepository purchaseRepository;
     private final PurchaseMapper purchaseMapper;
     private final PriceCalculator priceCalculator;
+    private final VehicleRepository vehicleRepository;
 
-    public PurchaseService(PurchaseRepository purchaseRepository, PurchaseMapper purchaseMapper, PriceCalculator priceCalculator) {
+    public PurchaseService(PurchaseRepository purchaseRepository, PurchaseMapper purchaseMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository) {
         this.purchaseRepository = purchaseRepository;
         this.purchaseMapper = purchaseMapper;
         this.priceCalculator = priceCalculator;
+        this.vehicleRepository = vehicleRepository;
     }
 
     public Integer getLastOrderNumber() {
@@ -82,5 +87,18 @@ public class PurchaseService {
 
     public void deletePurchase(Long id) {
         purchaseRepository.deleteById(id);
+    }
+
+    public PurchaseOutputDto assignVehicleToPurchase(Long id, IdInputDto vehicleId) {
+        Optional<Vehicle> optionalVehicle = vehicleRepository.findById(vehicleId.getId());
+        Optional<Purchase> purchaseOptional = purchaseRepository.findById(id);
+        if (purchaseOptional.isPresent() && optionalVehicle.isPresent()) {
+            Purchase purchase = purchaseOptional.get();
+            Vehicle vehicle = optionalVehicle.get();
+            purchase.setVehicle(vehicle);
+            return purchaseMapper.purchaseToPurchaseOutputDto(purchaseRepository.save(purchase));
+        } else {
+            throw new RuntimeException("Purchase not found");
+        }
     }
 }
