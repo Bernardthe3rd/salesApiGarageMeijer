@@ -61,6 +61,11 @@ public class SaleController {
         return ResponseEntity.ok(updatedSale);
     }
 
+    @PutMapping("/{id}/seller")
+    public ResponseEntity<SaleOutputDto> addSellerToSale(@PathVariable Long id, @Valid @RequestBody IdInputDto sellerId) {
+        SaleOutputDto updatedSale = saleService.assignSellerToSale(id, sellerId);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSale(@PathVariable Long id) {
         saleService.deleteSale(id);

@@ -12,7 +12,13 @@ import java.util.List;
 @Component
 public class UserMapper {
 
-    public static UserOutputDto userToUserOutputDto(User user) {
+    private final ProfileMapper profileMapper;
+
+    public UserMapper(ProfileMapper profileMapper) {
+        this.profileMapper = profileMapper;
+    }
+
+    public UserOutputDto userToUserOutputDto(User user) {
         var dto = new UserOutputDto();
 
         dto.setId(user.getId());
@@ -39,10 +45,7 @@ public class UserMapper {
 //            simpleProfileDto.setPurchaseOrders(user.getProfile().getPurchaseOrders());
 //            dto.setProfile(simpleProfileDto);
 //        }
-        if (user.getProfile() != null) {
-            dto.setProfile(new ProfileOutputDto(user.getProfile()));
-        }
-
+        dto.setProfile(profileMapper.profileToProfileOutputDto(user.getProfile()));
         return dto;
     }
 

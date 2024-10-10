@@ -12,6 +12,12 @@ import java.util.List;
 @Component
 public class CustomerMapper {
 
+    private final SaleMapper saleMapper;
+
+    public CustomerMapper(SaleMapper saleMapper) {
+        this.saleMapper = saleMapper;
+    }
+
     public CustomerOutputDto customerTocustomerOutputDto(Customer customer) {
         var dto = new CustomerOutputDto();
 
@@ -29,7 +35,7 @@ public class CustomerMapper {
         dto.setPrefferedContactMethod(customer.getPrefferedContactMethod());
         dto.setNameLastSalesPerson(customer.getNameLastSalesPerson());
         if (customer.getPurchaseHistory() != null) {
-            dto.setPurchaseHistory(SaleMapper.salesToSalesOutputDtos(customer.getPurchaseHistory()));
+            dto.setPurchaseHistory(saleMapper.salesToSalesOutputDtos(customer.getPurchaseHistory()));
         }
 
         return dto;

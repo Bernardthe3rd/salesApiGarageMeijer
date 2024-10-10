@@ -32,7 +32,7 @@ public class SaleOutputDto {
     private Addition addition;
     private VehicleOutputDto vehicle;
     private CustomerOutputDto customer;
-    private ProfileOutputDto seller;
+    private Long sellerId;
 
 //    private SignatureUpload signatureUpload;
 //    private Account salesPerson;

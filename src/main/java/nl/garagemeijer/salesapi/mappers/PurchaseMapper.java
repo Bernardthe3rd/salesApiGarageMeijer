@@ -11,6 +11,12 @@ import java.util.List;
 @Component
 public class PurchaseMapper {
 
+    private final VehicleMapper vehicleMapper;
+
+    public PurchaseMapper(VehicleMapper vehicleMapper) {
+        this.vehicleMapper = vehicleMapper;
+    }
+
     public PurchaseOutputDto purchaseToPurchaseOutputDto(Purchase purchase) {
         var dto = new PurchaseOutputDto();
 
@@ -27,7 +33,10 @@ public class PurchaseMapper {
         dto.setOrderNumber(purchase.getOrderNumber());
         dto.setBusinessOrPrivate(purchase.getBusinessOrPrivate());
         if (purchase.getVehicle() != null) {
-            dto.setVehicle(VehicleMapper.vehicleToVehicleOutputDto(purchase.getVehicle()));
+            dto.setVehicle(vehicleMapper.vehicleToVehicleOutputDto(purchase.getVehicle()));
+        }
+        if (purchase.getAdminId() != null) {
+            dto.setAdminId(purchase.getAdminId());
         }
 
         return dto;

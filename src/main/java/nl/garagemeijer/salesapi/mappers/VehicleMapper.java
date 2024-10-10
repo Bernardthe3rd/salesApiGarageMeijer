@@ -14,7 +14,7 @@ import java.util.List;
 @Component
 public class VehicleMapper {
 
-    public static VehicleOutputDto vehicleToVehicleOutputDto(Vehicle vehicle) {
+    public VehicleOutputDto vehicleToVehicleOutputDto(Vehicle vehicle) {
         VehicleOutputDto dto;
 
         switch (vehicle) {

@@ -41,15 +41,19 @@ public class Profile {
     @Column(nullable = false)
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "seller")
-    private List<Sale> saleOrders;
-    @OneToMany(mappedBy = "admin")
-    private List<Purchase> purchaseOrders;
+    @ElementCollection
+    @CollectionTable(name = "admin_order_numbers", joinColumns = @JoinColumn(name = "admin_id"))
+    @Column(name = "order_number")
+    private List<Integer> purchaseOrderNumbers;
 
-    @OneToOne
+    @ElementCollection
+    @CollectionTable(name = "seller_order_numbers", joinColumns = @JoinColumn(name = "seller_id"))
+    private List<Integer> saleOrderNumbers;
+
+
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
-//    private User user;
 
 
 }

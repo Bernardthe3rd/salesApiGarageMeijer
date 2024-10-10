@@ -3,6 +3,7 @@ package nl.garagemeijer.salesapi.mappers;
 import nl.garagemeijer.salesapi.dtos.profiles.ProfileInputDto;
 import nl.garagemeijer.salesapi.dtos.profiles.ProfileOutputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserOutputDto;
+import nl.garagemeijer.salesapi.enums.Role;
 import nl.garagemeijer.salesapi.models.Profile;
 import org.springframework.stereotype.Component;
 
@@ -12,8 +13,14 @@ import java.util.List;
 @Component
 public class ProfileMapper {
 
-    public static ProfileOutputDto profileToProfileOutputDto(Profile profile) {
-        var dto = new ProfileOutputDto(profile);
+    private final PurchaseMapper purchaseMapper;
+
+    public ProfileMapper(PurchaseMapper purchaseMapper) {
+        this.purchaseMapper = purchaseMapper;
+    }
+
+    public ProfileOutputDto profileToProfileOutputDto(Profile profile) {
+        var dto = new ProfileOutputDto();
 
         dto.setId(profile.getId());
         dto.setCreationDate(profile.getCreationDate());
@@ -34,6 +41,9 @@ public class ProfileMapper {
             simpleUserDto.setLastLogin(profile.getUser().getLastLogin());
             simpleUserDto.setCreationDate(profile.getUser().getCreationDate());
             dto.setUser(simpleUserDto);
+        }
+        if (profile.getRole().equals(Role.ADMIN)) {
+            dto.setPurchaseOrderNumbers(profile.getPurchaseOrderNumbers());
         }
 
         return dto;

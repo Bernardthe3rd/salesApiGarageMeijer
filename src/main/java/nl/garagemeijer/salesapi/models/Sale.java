@@ -40,6 +40,7 @@ public class Sale {
     @Column(nullable = false)
     private String businessOrPrivate;
     private Addition addition;
+    private Long sellerId;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "vehicle_id")
@@ -48,10 +49,6 @@ public class Sale {
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private Customer customer;
-
-    @ManyToOne
-    @JoinColumn(name = "profile_id")
-    private Profile seller;
 
 //    private SignatureUpload signatureUpload;
 

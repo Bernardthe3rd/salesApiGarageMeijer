@@ -27,7 +27,7 @@ public class User {
     private Boolean isActive;
     private LocalDate creationDate;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Profile profile;
 
 //    private Security security;

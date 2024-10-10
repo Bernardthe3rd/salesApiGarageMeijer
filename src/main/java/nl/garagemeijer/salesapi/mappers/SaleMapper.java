@@ -12,7 +12,13 @@ import java.util.List;
 @Component
 public class SaleMapper {
 
-    public static SaleOutputDto saleTosaleOutputDto(Sale sale) {
+    private final VehicleMapper vehicleMapper;
+
+    public SaleMapper(VehicleMapper vehicleMapper) {
+        this.vehicleMapper = vehicleMapper;
+    }
+
+    public SaleOutputDto saleTosaleOutputDto(Sale sale) {
         var dto = new SaleOutputDto();
 
         dto.setId(sale.getId());
@@ -31,7 +37,7 @@ public class SaleMapper {
         dto.setBusinessOrPrivate(sale.getBusinessOrPrivate());
         dto.setAddition(sale.getAddition());
         if (sale.getVehicle() != null) {
-            dto.setVehicle(VehicleMapper.vehicleToVehicleOutputDto(sale.getVehicle()));
+            dto.setVehicle(vehicleMapper.vehicleToVehicleOutputDto(sale.getVehicle()));
         }
         if (sale.getCustomer() != null) {
             var simpleCustomerDto = new CustomerOutputDto();
@@ -48,6 +54,9 @@ public class SaleMapper {
             simpleCustomerDto.setPrefferedContactMethod(sale.getCustomer().getPrefferedContactMethod());
             simpleCustomerDto.setNameLastSalesPerson(sale.getCustomer().getNameLastSalesPerson());
             dto.setCustomer(simpleCustomerDto);
+        }
+        if (sale.getSellerId() != null) {
+            dto.setSellerId(sale.getSellerId());
         }
 
         return dto;
@@ -71,7 +80,7 @@ public class SaleMapper {
         return updateSaleFromSaleInputDto(saleInputDto, sale);
     }
 
-    public static List<SaleOutputDto> salesToSalesOutputDtos(List<Sale> sales) {
+    public List<SaleOutputDto> salesToSalesOutputDtos(List<Sale> sales) {
         List<SaleOutputDto> saleOutputDtos = new ArrayList<>();
         for (Sale sale : sales) {
             SaleOutputDto saleDto = saleTosaleOutputDto(sale);

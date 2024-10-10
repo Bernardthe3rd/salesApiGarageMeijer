@@ -55,6 +55,12 @@ public class PurchaseController {
         return ResponseEntity.ok(updatedPurchase);
     }
 
+    @PutMapping("/{id}/admin")
+    public ResponseEntity<PurchaseOutputDto> addAdminToPurchase(@PathVariable Long id, @Valid @RequestBody IdInputDto adminId) {
+        PurchaseOutputDto updatedPurchase = purchaseService.assignAdminToPurchase(id, adminId);
+        return ResponseEntity.ok(updatedPurchase);
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePurchase(@PathVariable Long id) {
