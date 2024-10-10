@@ -113,10 +113,10 @@ public class PurchaseService {
         if (optionalPurchase.isPresent() && optionalProfile.isPresent()) {
             Purchase purchase = optionalPurchase.get();
             Profile profile = optionalProfile.get();
-            List<Integer> listOfPurchases = profile.getPurchaseOrderNumbers();
+            List<Integer> adminListOfPurchases = profile.getPurchaseOrderNumbers();
             if (profile.getRole().equals(Role.ADMIN)) {
                 purchase.setAdminId(profile.getId());
-                listOfPurchases.add(purchase.getOrderNumber());
+                adminListOfPurchases.add(purchase.getOrderNumber());
                 return purchaseMapper.purchaseToPurchaseOutputDto(purchaseRepository.save(purchase));
             } else {
                 throw new RuntimeException("Only profiles with role admin can be assigned to purchases");

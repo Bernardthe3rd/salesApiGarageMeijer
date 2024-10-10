@@ -45,6 +45,9 @@ public class ProfileMapper {
         if (profile.getRole().equals(Role.ADMIN)) {
             dto.setPurchaseOrderNumbers(profile.getPurchaseOrderNumbers());
         }
+        if (profile.getRole().equals(Role.SELLER)) {
+            dto.setSaleOrders(profile.getSaleOrderNumbers());
+        }
 
         return dto;
     }

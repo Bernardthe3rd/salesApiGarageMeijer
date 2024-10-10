@@ -64,6 +64,7 @@ public class SaleController {
     @PutMapping("/{id}/seller")
     public ResponseEntity<SaleOutputDto> addSellerToSale(@PathVariable Long id, @Valid @RequestBody IdInputDto sellerId) {
         SaleOutputDto updatedSale = saleService.assignSellerToSale(id, sellerId);
+        return ResponseEntity.ok(updatedSale);
     }
 
     @DeleteMapping("/{id}")

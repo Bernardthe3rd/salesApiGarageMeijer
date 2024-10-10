@@ -1,5 +1,6 @@
 package nl.garagemeijer.salesapi.dtos.profiles;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 import nl.garagemeijer.salesapi.dtos.users.UserOutputDto;
@@ -24,7 +25,9 @@ public class ProfileOutputDto {
     private String country;
     private String email;
     private String phoneNumber;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Integer> saleOrders;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Integer> purchaseOrderNumbers;
     private UserOutputDto user;
 

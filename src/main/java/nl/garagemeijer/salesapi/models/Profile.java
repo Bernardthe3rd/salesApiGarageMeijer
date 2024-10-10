@@ -1,5 +1,6 @@
 package nl.garagemeijer.salesapi.models;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,12 +49,12 @@ public class Profile {
 
     @ElementCollection
     @CollectionTable(name = "seller_order_numbers", joinColumns = @JoinColumn(name = "seller_id"))
+    @Column(name = "order_nummber")
     private List<Integer> saleOrderNumbers;
 
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
-
 
 }

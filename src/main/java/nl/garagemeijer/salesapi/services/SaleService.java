@@ -3,13 +3,16 @@ package nl.garagemeijer.salesapi.services;
 import nl.garagemeijer.salesapi.dtos.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
+import nl.garagemeijer.salesapi.enums.Role;
 import nl.garagemeijer.salesapi.enums.Status;
 import nl.garagemeijer.salesapi.helpers.PriceCalculator;
 import nl.garagemeijer.salesapi.mappers.SaleMapper;
 import nl.garagemeijer.salesapi.models.Customer;
+import nl.garagemeijer.salesapi.models.Profile;
 import nl.garagemeijer.salesapi.models.Sale;
 import nl.garagemeijer.salesapi.models.Vehicle;
 import nl.garagemeijer.salesapi.repositories.CustomerRepository;
+import nl.garagemeijer.salesapi.repositories.ProfileRepository;
 import nl.garagemeijer.salesapi.repositories.SaleRepository;
 import nl.garagemeijer.salesapi.repositories.VehicleRepository;
 import org.springframework.stereotype.Service;
@@ -27,13 +30,15 @@ public class SaleService {
     private final PriceCalculator priceCalculator;
     private final VehicleRepository vehicleRepository;
     private final CustomerRepository customerRepository;
+    private final ProfileRepository profileRepository;
 
-    public SaleService(SaleRepository saleRepository, SaleMapper saleMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository, CustomerRepository customerRepository) {
+    public SaleService(SaleRepository saleRepository, SaleMapper saleMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository, CustomerRepository customerRepository, ProfileRepository profileRepository) {
         this.saleRepository = saleRepository;
         this.saleMapper = saleMapper;
         this.priceCalculator = priceCalculator;
         this.vehicleRepository = vehicleRepository;
         this.customerRepository = customerRepository;
+        this.profileRepository = profileRepository;
     }
 
     public Integer getLastOrderNumber() {
@@ -117,6 +122,25 @@ public class SaleService {
             sale.setCustomer(customer);
             customerPurchaseList.add(sale);
             return saleMapper.saleTosaleOutputDto(saleRepository.save(sale));
+        } else {
+            throw new RuntimeException("Sale not found");
+        }
+    }
+
+    public SaleOutputDto assignSellerToSale(Long id, IdInputDto sellerId) {
+        Optional<Sale> optionalSale = saleRepository.findById(id);
+        Optional<Profile> optionalSeller = profileRepository.findById(sellerId.getId());
+        if (optionalSale.isPresent() && optionalSeller.isPresent()) {
+            Sale sale = optionalSale.get();
+            Profile seller = optionalSeller.get();
+            List<Integer> sellerListOfOrderNumbers = seller.getSaleOrderNumbers();
+            if (seller.getRole().equals(Role.SELLER)) {
+                sellerListOfOrderNumbers.add(sale.getOrderNumber());
+                sale.setSellerId(seller.getId());
+                return saleMapper.saleTosaleOutputDto(saleRepository.save(sale));
+            } else {
+                throw new RuntimeException("Only profiles with role SELLER can be assigned");
+            }
         } else {
             throw new RuntimeException("Sale not found");
         }
