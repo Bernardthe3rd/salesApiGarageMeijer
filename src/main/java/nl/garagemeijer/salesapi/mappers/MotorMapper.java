@@ -26,6 +26,7 @@ public class MotorMapper {
         dto.setFuelType(motor.getFuelType());
         dto.setEngineCapacity(motor.getEngineCapacity());
         dto.setFirstRegistrationDate(motor.getFirstRegistrationDate());
+        dto.setAmountInStock(motor.getAmountInStock());
         dto.setTypeMotorcycle(motor.getTypeMotorcycle());
         dto.setWheelbase(motor.getWheelbase());
         dto.setHandlebarType(motor.getHandlebarType());

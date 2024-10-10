@@ -36,6 +36,7 @@ public class MotorService {
 
     public MotorOutputDto saveMotor(MotorInputDto motor) {
         Motor motorToSave = motorMapper.motorInputDtoTomotor(motor);
+        motorToSave.setAmountInStock(0);
         return motorMapper.motorTomotorOutputDto(motorRepository.save(motorToSave));
     }
 

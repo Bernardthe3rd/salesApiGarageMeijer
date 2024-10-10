@@ -36,6 +36,7 @@ public class CarService {
 
     public CarOutputDto saveCar(CarInputDto car) {
         Car carToSave = carMapper.carInputDtoToCar(car);
+        carToSave.setAmountInStock(0);
         return carMapper.carToCarOutputDto(carRepository.save(carToSave));
     }
 

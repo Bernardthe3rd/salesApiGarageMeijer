@@ -2,6 +2,8 @@ package nl.garagemeijer.salesapi.dtos.users;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.garagemeijer.salesapi.dtos.profiles.ProfileOutputDto;
+import nl.garagemeijer.salesapi.models.Profile;
 
 import java.time.LocalDate;
 
@@ -15,5 +17,6 @@ public class UserOutputDto {
     private LocalDate lastLogin;
     private Boolean isActive;
     private LocalDate creationDate;
+    private ProfileOutputDto profile;
 
 }
