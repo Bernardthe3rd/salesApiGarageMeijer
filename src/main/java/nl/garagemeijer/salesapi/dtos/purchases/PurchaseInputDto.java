@@ -3,6 +3,7 @@ package nl.garagemeijer.salesapi.dtos.purchases;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import nl.garagemeijer.salesapi.enums.BusinessOrPrivate;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,6 +21,6 @@ public class PurchaseInputDto {
     @NotNull(message = "please fill in how many cars we are buying of this kind")
     private int quantity;
     @NotNull(message = "please fill in if the car is for business use or private")
-    private String businessOrPrivate;
+    private BusinessOrPrivate businessOrPrivate;
 
 }

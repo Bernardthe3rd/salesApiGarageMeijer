@@ -2,7 +2,6 @@ package nl.garagemeijer.salesapi.dtos.customers;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.garagemeijer.salesapi.dtos.VehicleOutputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
 
 import java.time.LocalDate;

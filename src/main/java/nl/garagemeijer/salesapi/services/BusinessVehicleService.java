@@ -2,6 +2,7 @@ package nl.garagemeijer.salesapi.services;
 
 import nl.garagemeijer.salesapi.dtos.businessVehicles.BusinessVehicleInputDto;
 import nl.garagemeijer.salesapi.dtos.businessVehicles.BusinessVehicleOutputDto;
+import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
 import nl.garagemeijer.salesapi.mappers.BusinessVehicleMapper;
 import nl.garagemeijer.salesapi.models.BusinessVehicle;
 import nl.garagemeijer.salesapi.repositories.BusinessVehicleRepository;
@@ -30,7 +31,7 @@ public class BusinessVehicleService {
         if (businessVehicleOptional.isPresent()) {
             return businessVehicleMapper.businessVehicleToBusinessVehicleOutputDto(businessVehicleOptional.get());
         } else {
-            throw new RuntimeException("Business vehicle not found");
+            throw new RecordNotFoundException("Business vehicle with id: " + id + " not found");
         }
     }
 
@@ -41,7 +42,7 @@ public class BusinessVehicleService {
     }
 
     public BusinessVehicleOutputDto updateBusinessVehicle(Long id, BusinessVehicleInputDto businessVehicle) {
-        BusinessVehicle getBusinessVehicle = businessVehicleRepository.findById(id).orElseThrow(() -> new RuntimeException("Business vehicle not found"));
+        BusinessVehicle getBusinessVehicle = businessVehicleRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Business vehicle with id: " + id + " not found"));
         BusinessVehicle businessVehicleToUpdate = businessVehicleMapper.updateBusinessVehicleFromBusinessVehicleInputDto(businessVehicle, getBusinessVehicle);
         return businessVehicleMapper.businessVehicleToBusinessVehicleOutputDto(businessVehicleRepository.save(businessVehicleToUpdate));
     }

@@ -1,7 +1,7 @@
 package nl.garagemeijer.salesapi.controllers;
 
 import jakarta.validation.Valid;
-import nl.garagemeijer.salesapi.dtos.IdInputDto;
+import nl.garagemeijer.salesapi.dtos.ids.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.purchases.PurchaseInputDto;
 import nl.garagemeijer.salesapi.dtos.purchases.PurchaseOutputDto;
 import nl.garagemeijer.salesapi.repositories.PurchaseRepository;

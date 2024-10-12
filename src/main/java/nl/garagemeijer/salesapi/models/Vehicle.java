@@ -17,16 +17,27 @@ public abstract class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String vinNumber;
+    @Column(nullable = false)
     private String brand;
+    @Column(nullable = false)
     private String model;
+    @Column(nullable = false)
     private String type;
+    @Column(nullable = false)
     private int year;
+    @Column(nullable = false)
     private String licensePlate;
+    @Column(nullable = false)
     private int mileage;
+    @Column(nullable = false)
     private String color;
+    @Column(nullable = false)
     private String fuelType;
+    @Column(nullable = false)
     private Double engineCapacity;
+    @Column(nullable = false)
     private LocalDate firstRegistrationDate;
     private int amountInStock;
 

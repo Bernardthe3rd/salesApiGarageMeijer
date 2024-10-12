@@ -2,9 +2,7 @@ package nl.garagemeijer.salesapi.dtos.cars;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.garagemeijer.salesapi.dtos.VehicleOutputDto;
-
-import java.time.LocalDate;
+import nl.garagemeijer.salesapi.dtos.vehicles.VehicleOutputDto;
 
 @Getter
 @Setter

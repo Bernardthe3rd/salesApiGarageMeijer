@@ -1,7 +1,9 @@
 package nl.garagemeijer.salesapi.services;
 
+import jakarta.validation.Valid;
 import nl.garagemeijer.salesapi.dtos.cars.CarInputDto;
 import nl.garagemeijer.salesapi.dtos.cars.CarOutputDto;
+import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
 import nl.garagemeijer.salesapi.mappers.CarMapper;
 import nl.garagemeijer.salesapi.models.Car;
 import nl.garagemeijer.salesapi.repositories.CarRepository;
@@ -30,18 +32,18 @@ public class CarService {
         if (carOptional.isPresent()) {
             return carMapper.carToCarOutputDto(carOptional.get());
         } else {
-            throw new RuntimeException("Car not found");
+            throw new RecordNotFoundException("Car with id: " + id + " not found");
         }
     }
 
-    public CarOutputDto saveCar(CarInputDto car) {
+    public CarOutputDto saveCar(@Valid CarInputDto car) {
         Car carToSave = carMapper.carInputDtoToCar(car);
         carToSave.setAmountInStock(0);
         return carMapper.carToCarOutputDto(carRepository.save(carToSave));
     }
 
     public CarOutputDto updateCar(Long id, CarInputDto car) {
-        Car getCar = carRepository.findById(id).orElseThrow(() -> new RuntimeException("Car not found"));
+        Car getCar = carRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Car with id: " + id + " not found"));
         Car carToUpdate = carMapper.updateCarFromCarInputDto(car, getCar);
         return carMapper.carToCarOutputDto(carRepository.save(carToUpdate));
     }

@@ -1,8 +1,9 @@
 package nl.garagemeijer.salesapi.services;
 
-import nl.garagemeijer.salesapi.dtos.IdInputDto;
+import nl.garagemeijer.salesapi.dtos.ids.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.profiles.ProfileInputDto;
 import nl.garagemeijer.salesapi.dtos.profiles.ProfileOutputDto;
+import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
 import nl.garagemeijer.salesapi.mappers.ProfileMapper;
 import nl.garagemeijer.salesapi.models.Profile;
 import nl.garagemeijer.salesapi.models.User;
@@ -36,7 +37,7 @@ public class ProfileService {
         if (accountOptional.isPresent()) {
             return profileMapper.profileToProfileOutputDto(accountOptional.get());
         } else {
-            throw new RuntimeException("Profile with id " + id + " not found");
+            throw new RecordNotFoundException("Profile with id " + id + " not found");
         }
     }
 
@@ -47,7 +48,7 @@ public class ProfileService {
     }
 
     public ProfileOutputDto updateProfile(Long id, ProfileInputDto profile) {
-        Profile getProfile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile with id " + id + " not found"));
+        Profile getProfile = profileRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Profile with id " + id + " not found"));
         Profile profileToUpdate = profileMapper.updateProfileFromProfileInputDto(profile, getProfile);
         return profileMapper.profileToProfileOutputDto(profileRepository.save(profileToUpdate));
     }
@@ -65,8 +66,10 @@ public class ProfileService {
             user.setProfile(profile);
             profile.setUser(user);
             return profileMapper.profileToProfileOutputDto(profileRepository.save(profile));
+        } else if (optionalProfile.isEmpty()) {
+            throw new RecordNotFoundException("Profile with id " + id + " not found");
         } else {
-            throw new RuntimeException("Profile with id " + id + " not found");
+            throw new RecordNotFoundException("User with id " + userId.getId() + " not found");
         }
     }
 }

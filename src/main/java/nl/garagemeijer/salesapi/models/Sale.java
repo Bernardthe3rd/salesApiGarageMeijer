@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import nl.garagemeijer.salesapi.enums.Addition;
+import nl.garagemeijer.salesapi.enums.BusinessOrPrivate;
 import nl.garagemeijer.salesapi.enums.Status;
 
 import java.math.BigDecimal;
@@ -40,7 +41,7 @@ public class Sale {
     @Column(nullable = false)
     private String paymentMethod;
     @Column(nullable = false)
-    private String businessOrPrivate;
+    private BusinessOrPrivate businessOrPrivate;
     private Addition addition;
     private Long sellerId;
 
