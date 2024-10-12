@@ -21,6 +21,8 @@ public class Sale {
     private Long id;
 
     private LocalDate saleDate;
+    @Column(nullable = false)
+    private int quantity;
     private BigDecimal salePriceEx;
     private BigDecimal bpmPrice;
     private BigDecimal taxPrice;

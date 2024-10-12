@@ -7,14 +7,8 @@ import nl.garagemeijer.salesapi.enums.Role;
 import nl.garagemeijer.salesapi.enums.Status;
 import nl.garagemeijer.salesapi.helpers.PriceCalculator;
 import nl.garagemeijer.salesapi.mappers.SaleMapper;
-import nl.garagemeijer.salesapi.models.Customer;
-import nl.garagemeijer.salesapi.models.Profile;
-import nl.garagemeijer.salesapi.models.Sale;
-import nl.garagemeijer.salesapi.models.Vehicle;
-import nl.garagemeijer.salesapi.repositories.CustomerRepository;
-import nl.garagemeijer.salesapi.repositories.ProfileRepository;
-import nl.garagemeijer.salesapi.repositories.SaleRepository;
-import nl.garagemeijer.salesapi.repositories.VehicleRepository;
+import nl.garagemeijer.salesapi.models.*;
+import nl.garagemeijer.salesapi.repositories.*;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -31,19 +25,35 @@ public class SaleService {
     private final VehicleRepository vehicleRepository;
     private final CustomerRepository customerRepository;
     private final ProfileRepository profileRepository;
+    private final PurchaseRepository purchaseRepository;
 
-    public SaleService(SaleRepository saleRepository, SaleMapper saleMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository, CustomerRepository customerRepository, ProfileRepository profileRepository) {
+    public SaleService(SaleRepository saleRepository, SaleMapper saleMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository, CustomerRepository customerRepository, ProfileRepository profileRepository, PurchaseRepository purchaseRepository) {
         this.saleRepository = saleRepository;
         this.saleMapper = saleMapper;
         this.priceCalculator = priceCalculator;
         this.vehicleRepository = vehicleRepository;
         this.customerRepository = customerRepository;
         this.profileRepository = profileRepository;
+        this.purchaseRepository = purchaseRepository;
     }
 
     public Integer getLastOrderNumber() {
         Integer lastOrderNumber = saleRepository.findLastOrderNumber();
         return (lastOrderNumber != null) ? lastOrderNumber : 0;
+    }
+
+    public void checkVehicleInStockElseCreatePurchase(Vehicle vehicle, int saleQuantity) {
+        if (vehicle.getAmountInStock() > 0) {
+            vehicle.setAmountInStock(vehicle.getAmountInStock() - saleQuantity);
+        } else {
+            Purchase purchaseFromSale = new Purchase();
+            purchaseFromSale.setVehicle(vehicle);
+            purchaseFromSale.setQuantity(saleQuantity);
+            purchaseFromSale.setOrderDate(LocalDate.now());
+            purchaseFromSale.setStatus(Status.PENDING);
+            purchaseFromSale.setOrderNumber(helper);
+            purchaseRepository.save(purchaseFromSale);
+        }
     }
 
 
@@ -106,6 +116,7 @@ public class SaleService {
             Sale sale = optionalSale.get();
             Vehicle vehicle = optionalVehicl.get();
             sale.setVehicle(vehicle);
+            checkVehicleInStockElseCreatePurchase(vehicle, sale.getQuantity());
             return saleMapper.saleTosaleOutputDto(saleRepository.save(sale));
         } else {
             throw new RuntimeException("Sale not found");

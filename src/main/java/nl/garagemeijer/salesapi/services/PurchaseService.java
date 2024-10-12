@@ -101,6 +101,7 @@ public class PurchaseService {
             Purchase purchase = purchaseOptional.get();
             Vehicle vehicle = optionalVehicle.get();
             purchase.setVehicle(vehicle);
+            vehicle.setAmountInStock(vehicle.getAmountInStock() + purchase.getQuantity());
             return purchaseMapper.purchaseToPurchaseOutputDto(purchaseRepository.save(purchase));
         } else {
             throw new RuntimeException("Purchase not found");

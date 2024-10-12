@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import nl.garagemeijer.salesapi.dtos.VehicleOutputDto;
 import nl.garagemeijer.salesapi.dtos.customers.CustomerOutputDto;
-import nl.garagemeijer.salesapi.dtos.profiles.ProfileOutputDto;
 import nl.garagemeijer.salesapi.enums.Addition;
 import nl.garagemeijer.salesapi.enums.Status;
 
@@ -21,6 +20,7 @@ public class SaleOutputDto {
     private BigDecimal bpmPrice;
     private BigDecimal taxPrice;
     private BigDecimal salePriceIncl;
+    private int quantity;
     private Double discount;
     private String typeOrder;
     private Status status;
@@ -35,5 +35,4 @@ public class SaleOutputDto {
     private Long sellerId;
 
 //    private SignatureUpload signatureUpload;
-//    private Account salesPerson;
 }
