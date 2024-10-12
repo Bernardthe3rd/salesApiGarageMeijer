@@ -23,7 +23,7 @@ public class BusinessVehicleInputDto {
     private String fuelType;
     private Double engineCapacity;
     private LocalDate firstRegistrationDate;
-    @NotEmpty(message = "please set true if the vehicle is company owned else set false")
+    @NotNull(message = "please set true if the vehicle is company owned else set false")
     private Boolean companyOwned;
     @NotNull(message = "please fill in the cargo capacity in liters")
     private Double cargoCapacity;

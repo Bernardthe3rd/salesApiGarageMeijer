@@ -36,6 +36,7 @@ public class BusinessVehicleService {
 
     public BusinessVehicleOutputDto saveBusinessVehicle(BusinessVehicleInputDto businessVehicle) {
         BusinessVehicle businessVehicleToSave = businessVehicleMapper.businessVehicleInputDtoToBusinessVehicle(businessVehicle);
+        businessVehicleToSave.setAmountInStock(0);
         return businessVehicleMapper.businessVehicleToBusinessVehicleOutputDto(businessVehicleRepository.save(businessVehicleToSave));
     }
 

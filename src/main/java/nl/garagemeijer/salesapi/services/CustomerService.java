@@ -36,10 +36,7 @@ public class CustomerService {
 
     public CustomerOutputDto saveCustomer(CustomerInputDto customer) {
         Customer customerToSave = customerMapper.customerInputDtoTocustomer(customer);
-//        Account newAccount = new Account();
-//        newAccount.setFirstName(customer);
-//        newaccount.setaccounttype("customer");
-//        in customerInputDto deze informatie uitvragen
+
         return customerMapper.customerTocustomerOutputDto(customerRepository.save(customerToSave));
     }
 
@@ -53,7 +50,5 @@ public class CustomerService {
         customerRepository.deleteById(id);
     }
 
-    public void getLastSalesPerson() {
-//        check in de laatste salesorder gekoppeld aan de klant wat daarvan de salesperson is geweest
-    }
+
 }

@@ -1,12 +1,19 @@
 package nl.garagemeijer.salesapi.services;
 
+import nl.garagemeijer.salesapi.dtos.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.purchases.PurchaseInputDto;
 import nl.garagemeijer.salesapi.dtos.purchases.PurchaseOutputDto;
+import nl.garagemeijer.salesapi.enums.Role;
 import nl.garagemeijer.salesapi.enums.Status;
+import nl.garagemeijer.salesapi.helpers.GetLastOrderNumber;
 import nl.garagemeijer.salesapi.helpers.PriceCalculator;
 import nl.garagemeijer.salesapi.mappers.PurchaseMapper;
+import nl.garagemeijer.salesapi.models.Profile;
 import nl.garagemeijer.salesapi.models.Purchase;
+import nl.garagemeijer.salesapi.models.Vehicle;
+import nl.garagemeijer.salesapi.repositories.ProfileRepository;
 import nl.garagemeijer.salesapi.repositories.PurchaseRepository;
+import nl.garagemeijer.salesapi.repositories.VehicleRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -20,16 +27,17 @@ public class PurchaseService {
     private final PurchaseRepository purchaseRepository;
     private final PurchaseMapper purchaseMapper;
     private final PriceCalculator priceCalculator;
+    private final GetLastOrderNumber getLastOrderNumber;
+    private final VehicleRepository vehicleRepository;
+    private final ProfileRepository profileRepository;
 
-    public PurchaseService(PurchaseRepository purchaseRepository, PurchaseMapper purchaseMapper, PriceCalculator priceCalculator) {
+    public PurchaseService(PurchaseRepository purchaseRepository, PurchaseMapper purchaseMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository, ProfileRepository profileRepository, GetLastOrderNumber getLastOrderNumber) {
         this.purchaseRepository = purchaseRepository;
         this.purchaseMapper = purchaseMapper;
         this.priceCalculator = priceCalculator;
-    }
-
-    public Integer getLastOrderNumber() {
-        Integer lastOrderNumber = purchaseRepository.findLastOrderNumber();
-        return (lastOrderNumber != null) ? lastOrderNumber : 0;
+        this.vehicleRepository = vehicleRepository;
+        this.profileRepository = profileRepository;
+        this.getLastOrderNumber = getLastOrderNumber;
     }
 
 
@@ -51,7 +59,7 @@ public class PurchaseService {
 
         purchaseToSave.setOrderDate(LocalDate.now());
         purchaseToSave.setStatus(Status.NEW);
-        purchaseToSave.setOrderNumber(getLastOrderNumber() + 1);
+        purchaseToSave.setOrderNumber(getLastOrderNumber.forPurchase());
 
         List<BigDecimal> prices = priceCalculator.calculatePricesPurchases(purchaseToSave);
         purchaseToSave.setTaxPrice(prices.get(0));
@@ -82,5 +90,38 @@ public class PurchaseService {
 
     public void deletePurchase(Long id) {
         purchaseRepository.deleteById(id);
+    }
+
+    public PurchaseOutputDto assignVehicleToPurchase(Long id, IdInputDto vehicleId) {
+        Optional<Vehicle> optionalVehicle = vehicleRepository.findById(vehicleId.getId());
+        Optional<Purchase> purchaseOptional = purchaseRepository.findById(id);
+        if (purchaseOptional.isPresent() && optionalVehicle.isPresent()) {
+            Purchase purchase = purchaseOptional.get();
+            Vehicle vehicle = optionalVehicle.get();
+            purchase.setVehicle(vehicle);
+            vehicle.setAmountInStock(vehicle.getAmountInStock() + purchase.getQuantity());
+            return purchaseMapper.purchaseToPurchaseOutputDto(purchaseRepository.save(purchase));
+        } else {
+            throw new RuntimeException("Purchase not found");
+        }
+    }
+
+    public PurchaseOutputDto assignAdminToPurchase(Long id, IdInputDto adminId) {
+        Optional<Purchase> optionalPurchase = purchaseRepository.findById(id);
+        Optional<Profile> optionalProfile = profileRepository.findById(adminId.getId());
+        if (optionalPurchase.isPresent() && optionalProfile.isPresent()) {
+            Purchase purchase = optionalPurchase.get();
+            Profile profile = optionalProfile.get();
+            List<Integer> adminListOfPurchases = profile.getPurchaseOrderNumbers();
+            if (profile.getRole().equals(Role.ADMIN)) {
+                purchase.setAdminId(profile.getId());
+                adminListOfPurchases.add(purchase.getOrderNumber());
+                return purchaseMapper.purchaseToPurchaseOutputDto(purchaseRepository.save(purchase));
+            } else {
+                throw new RuntimeException("Only profiles with role admin can be assigned to purchases");
+            }
+        } else {
+            throw new RuntimeException("Purchase not found");
+        }
     }
 }

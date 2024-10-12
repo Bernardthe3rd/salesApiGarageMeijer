@@ -26,6 +26,7 @@ public class BusinessVehicleMapper {
         dto.setFuelType(businessVehicle.getFuelType());
         dto.setEngineCapacity(businessVehicle.getEngineCapacity());
         dto.setFirstRegistrationDate(businessVehicle.getFirstRegistrationDate());
+        dto.setAmountInStock(businessVehicle.getAmountInStock());
         dto.setCompanyOwned(businessVehicle.getCompanyOwned());
         dto.setCargoCapacity(businessVehicle.getCargoCapacity());
         dto.setBusinessUsage(businessVehicle.getBusinessUsage());

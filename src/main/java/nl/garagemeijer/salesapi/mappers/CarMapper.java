@@ -26,6 +26,7 @@ public class CarMapper {
         dto.setFuelType(car.getFuelType());
         dto.setEngineCapacity(car.getEngineCapacity());
         dto.setFirstRegistrationDate(car.getFirstRegistrationDate());
+        dto.setAmountInStock(car.getAmountInStock());
         dto.setNumberOfDoors(car.getNumberOfDoors());
         dto.setTrunkCapacity(car.getTrunkCapacity());
         dto.setTransmission(car.getTransmission());

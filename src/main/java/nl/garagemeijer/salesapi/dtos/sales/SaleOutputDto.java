@@ -2,6 +2,8 @@ package nl.garagemeijer.salesapi.dtos.sales;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.garagemeijer.salesapi.dtos.VehicleOutputDto;
+import nl.garagemeijer.salesapi.dtos.customers.CustomerOutputDto;
 import nl.garagemeijer.salesapi.enums.Addition;
 import nl.garagemeijer.salesapi.enums.Status;
 
@@ -18,8 +20,9 @@ public class SaleOutputDto {
     private BigDecimal bpmPrice;
     private BigDecimal taxPrice;
     private BigDecimal salePriceIncl;
+    private int quantity;
     private Double discount;
-    private String orderType;
+    private String typeOrder;
     private Status status;
     private String warranty;
     private int orderNumber;
@@ -27,8 +30,9 @@ public class SaleOutputDto {
     private String businessOrPrivate;
     private String comment;
     private Addition addition;
+    private VehicleOutputDto vehicle;
+    private CustomerOutputDto customer;
+    private Long sellerId;
 
 //    private SignatureUpload signatureUpload;
-//    private Customer customer;
-//    private Account salesPerson;
 }

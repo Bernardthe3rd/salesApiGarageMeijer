@@ -21,6 +21,8 @@ public class Sale {
     private Long id;
 
     private LocalDate saleDate;
+    @Column(nullable = false)
+    private int quantity;
     private BigDecimal salePriceEx;
     private BigDecimal bpmPrice;
     private BigDecimal taxPrice;
@@ -40,9 +42,16 @@ public class Sale {
     @Column(nullable = false)
     private String businessOrPrivate;
     private Addition addition;
+    private Long sellerId;
+
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "vehicle_id")
+    private Vehicle vehicle;
+
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
 //    private SignatureUpload signatureUpload;
-//    private Customer customer;
-//    private Account salesPerson;
 
 }

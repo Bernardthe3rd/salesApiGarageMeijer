@@ -34,9 +34,12 @@ public class Purchase {
     private Status status;
     private int orderNumber;
     @Column(nullable = false)
-    private String businessOrPrivate; //aan de hand van deze variabele laat je zien of er BPM en/of BTW betaald moet worden.
+    private String businessOrPrivate;
+    private Long adminId;
 
-//    private Vehicle vehicle;
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "vehicle_id")
+    private Vehicle vehicle;
 
 
 }
