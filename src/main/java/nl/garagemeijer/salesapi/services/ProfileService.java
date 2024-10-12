@@ -36,7 +36,7 @@ public class ProfileService {
         if (accountOptional.isPresent()) {
             return profileMapper.profileToProfileOutputDto(accountOptional.get());
         } else {
-            throw new RuntimeException("Account with id " + id + " not found");
+            throw new RuntimeException("Profile with id " + id + " not found");
         }
     }
 
@@ -47,7 +47,7 @@ public class ProfileService {
     }
 
     public ProfileOutputDto updateProfile(Long id, ProfileInputDto profile) {
-        Profile getProfile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Account with id " + id + " not found"));
+        Profile getProfile = profileRepository.findById(id).orElseThrow(() -> new RuntimeException("Profile with id " + id + " not found"));
         Profile profileToUpdate = profileMapper.updateProfileFromProfileInputDto(profile, getProfile);
         return profileMapper.profileToProfileOutputDto(profileRepository.save(profileToUpdate));
     }
