@@ -5,6 +5,7 @@ import nl.garagemeijer.salesapi.dtos.sales.SaleInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
 import nl.garagemeijer.salesapi.enums.Role;
 import nl.garagemeijer.salesapi.enums.Status;
+import nl.garagemeijer.salesapi.helpers.GetLastOrderNumber;
 import nl.garagemeijer.salesapi.helpers.PriceCalculator;
 import nl.garagemeijer.salesapi.mappers.SaleMapper;
 import nl.garagemeijer.salesapi.models.*;
@@ -22,12 +23,13 @@ public class SaleService {
     private final SaleRepository saleRepository;
     private final SaleMapper saleMapper;
     private final PriceCalculator priceCalculator;
+    private final GetLastOrderNumber getLastOrderNumber;
     private final VehicleRepository vehicleRepository;
     private final CustomerRepository customerRepository;
     private final ProfileRepository profileRepository;
     private final PurchaseRepository purchaseRepository;
 
-    public SaleService(SaleRepository saleRepository, SaleMapper saleMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository, CustomerRepository customerRepository, ProfileRepository profileRepository, PurchaseRepository purchaseRepository) {
+    public SaleService(SaleRepository saleRepository, SaleMapper saleMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository, CustomerRepository customerRepository, ProfileRepository profileRepository, PurchaseRepository purchaseRepository, GetLastOrderNumber getLastOrderNumber) {
         this.saleRepository = saleRepository;
         this.saleMapper = saleMapper;
         this.priceCalculator = priceCalculator;
@@ -35,12 +37,9 @@ public class SaleService {
         this.customerRepository = customerRepository;
         this.profileRepository = profileRepository;
         this.purchaseRepository = purchaseRepository;
+        this.getLastOrderNumber = getLastOrderNumber;
     }
 
-    public Integer getLastOrderNumber() {
-        Integer lastOrderNumber = saleRepository.findLastOrderNumber();
-        return (lastOrderNumber != null) ? lastOrderNumber : 0;
-    }
 
     public void checkVehicleInStockElseCreatePurchase(Vehicle vehicle, int saleQuantity) {
         if (vehicle.getAmountInStock() > 0) {
@@ -51,7 +50,7 @@ public class SaleService {
             purchaseFromSale.setQuantity(saleQuantity);
             purchaseFromSale.setOrderDate(LocalDate.now());
             purchaseFromSale.setStatus(Status.PENDING);
-            purchaseFromSale.setOrderNumber(helper);
+            purchaseFromSale.setOrderNumber(getLastOrderNumber.forSale());
             purchaseRepository.save(purchaseFromSale);
         }
     }
@@ -75,7 +74,7 @@ public class SaleService {
 
         saleToSave.setSaleDate(LocalDate.now());
         saleToSave.setStatus(Status.NEW);
-        saleToSave.setOrderNumber(getLastOrderNumber() + 1);
+        saleToSave.setOrderNumber(getLastOrderNumber.forSale());
 
         List<BigDecimal> prices = priceCalculator.calculatePricesSales(saleToSave);
         saleToSave.setTaxPrice(prices.get(0));

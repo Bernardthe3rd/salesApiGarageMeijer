@@ -5,6 +5,7 @@ import nl.garagemeijer.salesapi.dtos.purchases.PurchaseInputDto;
 import nl.garagemeijer.salesapi.dtos.purchases.PurchaseOutputDto;
 import nl.garagemeijer.salesapi.enums.Role;
 import nl.garagemeijer.salesapi.enums.Status;
+import nl.garagemeijer.salesapi.helpers.GetLastOrderNumber;
 import nl.garagemeijer.salesapi.helpers.PriceCalculator;
 import nl.garagemeijer.salesapi.mappers.PurchaseMapper;
 import nl.garagemeijer.salesapi.models.Profile;
@@ -26,20 +27,17 @@ public class PurchaseService {
     private final PurchaseRepository purchaseRepository;
     private final PurchaseMapper purchaseMapper;
     private final PriceCalculator priceCalculator;
+    private final GetLastOrderNumber getLastOrderNumber;
     private final VehicleRepository vehicleRepository;
     private final ProfileRepository profileRepository;
 
-    public PurchaseService(PurchaseRepository purchaseRepository, PurchaseMapper purchaseMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository, ProfileRepository profileRepository) {
+    public PurchaseService(PurchaseRepository purchaseRepository, PurchaseMapper purchaseMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository, ProfileRepository profileRepository, GetLastOrderNumber getLastOrderNumber) {
         this.purchaseRepository = purchaseRepository;
         this.purchaseMapper = purchaseMapper;
         this.priceCalculator = priceCalculator;
         this.vehicleRepository = vehicleRepository;
         this.profileRepository = profileRepository;
-    }
-
-    public Integer getLastOrderNumber() {
-        Integer lastOrderNumber = purchaseRepository.findLastOrderNumber();
-        return (lastOrderNumber != null) ? lastOrderNumber : 0;
+        this.getLastOrderNumber = getLastOrderNumber;
     }
 
 
@@ -61,7 +59,7 @@ public class PurchaseService {
 
         purchaseToSave.setOrderDate(LocalDate.now());
         purchaseToSave.setStatus(Status.NEW);
-        purchaseToSave.setOrderNumber(getLastOrderNumber() + 1);
+        purchaseToSave.setOrderNumber(getLastOrderNumber.forPurchase());
 
         List<BigDecimal> prices = priceCalculator.calculatePricesPurchases(purchaseToSave);
         purchaseToSave.setTaxPrice(prices.get(0));
