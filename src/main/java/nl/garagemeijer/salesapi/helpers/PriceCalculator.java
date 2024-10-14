@@ -1,5 +1,6 @@
 package nl.garagemeijer.salesapi.helpers;
 
+import nl.garagemeijer.salesapi.enums.BusinessOrPrivate;
 import nl.garagemeijer.salesapi.models.Purchase;
 import nl.garagemeijer.salesapi.models.Sale;
 import org.springframework.stereotype.Component;
@@ -31,14 +32,14 @@ public class PriceCalculator {
     public List<BigDecimal> calculatePricesPurchases(Purchase purchase) {
         List<BigDecimal> prices = new ArrayList<>();
 
-        if (purchase.getBusinessOrPrivate().contains("business")) {
+        if (purchase.getBusinessOrPrivate() == BusinessOrPrivate.BUSINESS) {
             purchase.setBpmPrice(new BigDecimal("0.00"));
             prices.add(purchase.getBpmPrice());
             purchase.setTaxPrice(new BigDecimal("0.00"));
             prices.add(purchase.getTaxPrice());
             purchase.setPurchasePriceEx(new BigDecimal(String.valueOf(purchase.getPurchasePriceIncl())));
             prices.add(purchase.getPurchasePriceEx());
-        } else if (purchase.getBusinessOrPrivate().contains("private")) {
+        } else if (purchase.getBusinessOrPrivate() == BusinessOrPrivate.PRIVATE) {
             purchase.setTaxPrice(calculateTaxPrice(purchase.getPurchasePriceIncl()));
             prices.add(purchase.getTaxPrice());
             purchase.setBpmPrice(calculateBpmPrice(purchase.getPurchasePriceIncl()));
@@ -55,14 +56,14 @@ public class PriceCalculator {
     public List<BigDecimal> calculatePricesSales(Sale sale) {
         List<BigDecimal> prices = new ArrayList<>();
 
-        if (sale.getBusinessOrPrivate().contains("business")) {
+        if (sale.getBusinessOrPrivate() == BusinessOrPrivate.BUSINESS) {
             sale.setBpmPrice(new BigDecimal("0.00"));
             prices.add(sale.getBpmPrice());
             sale.setTaxPrice(new BigDecimal("0.00"));
             prices.add(sale.getTaxPrice());
             sale.setSalePriceEx(new BigDecimal(String.valueOf(sale.getSalePriceIncl())));
             prices.add(sale.getSalePriceEx());
-        } else if (sale.getBusinessOrPrivate().contains("private")) {
+        } else if (sale.getBusinessOrPrivate() == BusinessOrPrivate.PRIVATE) {
             sale.setTaxPrice(calculateTaxPrice(sale.getSalePriceIncl()));
             prices.add(sale.getTaxPrice());
             sale.setBpmPrice(calculateBpmPrice(sale.getSalePriceIncl()));

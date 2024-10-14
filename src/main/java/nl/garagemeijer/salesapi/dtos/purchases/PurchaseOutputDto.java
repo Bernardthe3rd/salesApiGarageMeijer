@@ -2,8 +2,8 @@ package nl.garagemeijer.salesapi.dtos.purchases;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.garagemeijer.salesapi.dtos.VehicleOutputDto;
-import nl.garagemeijer.salesapi.dtos.profiles.ProfileOutputDto;
+import nl.garagemeijer.salesapi.dtos.vehicles.VehicleOutputDto;
+import nl.garagemeijer.salesapi.enums.BusinessOrPrivate;
 import nl.garagemeijer.salesapi.enums.Status;
 
 import java.math.BigDecimal;
@@ -24,7 +24,7 @@ public class PurchaseOutputDto {
     private int quantity;
     private Status status;
     private int orderNumber;
-    private String businessOrPrivate;
+    private BusinessOrPrivate businessOrPrivate;
     private VehicleOutputDto vehicle;
     private Long adminId;
 

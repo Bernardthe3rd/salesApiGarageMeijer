@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import nl.garagemeijer.salesapi.enums.Addition;
+import nl.garagemeijer.salesapi.enums.BusinessOrPrivate;
 
 import java.math.BigDecimal;
 
@@ -22,7 +23,7 @@ public class SaleInputDto {
     @NotNull(message = "please fill in which method the customer is going to pay")
     private String paymentMethod;
     @NotNull(message = "please fill in if the vehicle is for business or private use")
-    private String businessOrPrivate;
+    private BusinessOrPrivate businessOrPrivate;
     @NotNull(message = "please fill in what type this is, offerte or order")
     private String typeOrder;
     private String comment;

@@ -7,6 +7,7 @@ import nl.garagemeijer.salesapi.repositories.MotorRepository;
 import nl.garagemeijer.salesapi.services.MotorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -38,8 +39,12 @@ public class MotorController {
     @PostMapping
     public ResponseEntity<MotorOutputDto> createMotor(@Valid @RequestBody MotorInputDto Motor) {
         MotorOutputDto createdMotor = motorService.saveMotor(Motor);
-        URI location = URI.create("/api/motors/" + createdMotor.getId());
-        return ResponseEntity.created(location).body(createdMotor);
+        URI locationDynamic = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdMotor.getId())
+                .toUri();
+        return ResponseEntity.created(locationDynamic).body(createdMotor);
     }
 
     @PutMapping("/{id}")

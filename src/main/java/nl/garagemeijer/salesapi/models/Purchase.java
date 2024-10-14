@@ -3,6 +3,7 @@ package nl.garagemeijer.salesapi.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import nl.garagemeijer.salesapi.enums.BusinessOrPrivate;
 import nl.garagemeijer.salesapi.enums.Status;
 
 import java.math.BigDecimal;
@@ -34,7 +35,7 @@ public class Purchase {
     private Status status;
     private int orderNumber;
     @Column(nullable = false)
-    private String businessOrPrivate;
+    private BusinessOrPrivate businessOrPrivate;
     private Long adminId;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)

@@ -2,6 +2,7 @@ package nl.garagemeijer.salesapi.services;
 
 import nl.garagemeijer.salesapi.dtos.users.UserInputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserOutputDto;
+import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
 import nl.garagemeijer.salesapi.mappers.UserMapper;
 import nl.garagemeijer.salesapi.models.User;
 import nl.garagemeijer.salesapi.repositories.UserRepository;
@@ -31,7 +32,7 @@ public class UserService {
         if (user.isPresent()) {
             return userMapper.userToUserOutputDto(user.get());
         } else {
-            throw new RuntimeException("User not found");
+            throw new RecordNotFoundException("User with id: " + id + " not found");
         }
     }
 
@@ -45,7 +46,7 @@ public class UserService {
     }
 
     public UserOutputDto updateUser(Long id, UserInputDto user) {
-        User getUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        User getUser = userRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("User with id: " + id + " not found"));
         User userToUpdate = userMapper.updateUserFromUserInputDto(user, getUser);
         userToUpdate.setLastLogin(LocalDate.now());
         if (!userToUpdate.getIsActive()) {

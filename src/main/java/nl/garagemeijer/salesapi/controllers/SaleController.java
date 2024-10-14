@@ -1,13 +1,14 @@
 package nl.garagemeijer.salesapi.controllers;
 
 import jakarta.validation.Valid;
-import nl.garagemeijer.salesapi.dtos.IdInputDto;
+import nl.garagemeijer.salesapi.dtos.ids.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
 import nl.garagemeijer.salesapi.repositories.SaleRepository;
 import nl.garagemeijer.salesapi.services.SaleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -39,8 +40,12 @@ public class SaleController {
     @PostMapping
     public ResponseEntity<SaleOutputDto> createSale(@Valid @RequestBody SaleInputDto sale) {
         SaleOutputDto createdSale = saleService.saveSale(sale);
-        URI location = URI.create("/api/sales/" + createdSale.getId());
-        return ResponseEntity.created(location).body(createdSale);
+        URI locationDynamic = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdSale.getId())
+                .toUri();
+        return ResponseEntity.created(locationDynamic).body(createdSale);
     }
 
     @PutMapping("/{id}")

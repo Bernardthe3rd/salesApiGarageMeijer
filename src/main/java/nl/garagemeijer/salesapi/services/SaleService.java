@@ -1,10 +1,13 @@
 package nl.garagemeijer.salesapi.services;
 
-import nl.garagemeijer.salesapi.dtos.IdInputDto;
+import nl.garagemeijer.salesapi.dtos.ids.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
+import nl.garagemeijer.salesapi.enums.BusinessOrPrivate;
 import nl.garagemeijer.salesapi.enums.Role;
 import nl.garagemeijer.salesapi.enums.Status;
+import nl.garagemeijer.salesapi.exceptions.BadRequestException;
+import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
 import nl.garagemeijer.salesapi.helpers.GetLastOrderNumber;
 import nl.garagemeijer.salesapi.helpers.PriceCalculator;
 import nl.garagemeijer.salesapi.mappers.SaleMapper;
@@ -41,16 +44,20 @@ public class SaleService {
     }
 
 
-    public void checkVehicleInStockElseCreatePurchase(Vehicle vehicle, int saleQuantity) {
+    public void checkVehicleInStockElseCreatePurchase(Vehicle vehicle, Sale sale) {
         if (vehicle.getAmountInStock() > 0) {
-            vehicle.setAmountInStock(vehicle.getAmountInStock() - saleQuantity);
+            vehicle.setAmountInStock(vehicle.getAmountInStock() - sale.getQuantity());
         } else {
             Purchase purchaseFromSale = new Purchase();
             purchaseFromSale.setVehicle(vehicle);
-            purchaseFromSale.setQuantity(saleQuantity);
+            purchaseFromSale.setQuantity(sale.getQuantity());
             purchaseFromSale.setOrderDate(LocalDate.now());
-            purchaseFromSale.setStatus(Status.PENDING);
-            purchaseFromSale.setOrderNumber(getLastOrderNumber.forSale());
+            purchaseFromSale.setStatus(Status.OPEN);
+            purchaseFromSale.setOrderNumber(getLastOrderNumber.forPurchase());
+            purchaseFromSale.setExpectedDeliveryDate(LocalDate.of(2044, 1, 1));
+            purchaseFromSale.setPurchasePriceIncl(sale.getSalePriceEx());
+            purchaseFromSale.setBusinessOrPrivate(sale.getBusinessOrPrivate());
+            purchaseFromSale.setSupplier("Please update me");
             purchaseRepository.save(purchaseFromSale);
         }
     }
@@ -65,7 +72,7 @@ public class SaleService {
         if (saleOptional.isPresent()) {
             return saleMapper.saleTosaleOutputDto(saleOptional.get());
         } else {
-            throw new RuntimeException("Sale not found");
+            throw new RecordNotFoundException("Sale with id: " + id + " not found");
         }
     }
 
@@ -85,7 +92,7 @@ public class SaleService {
     }
 
     public SaleOutputDto updateSale(Long id, SaleInputDto sale) {
-        Sale getSale = saleRepository.findById(id).orElseThrow(() -> new RuntimeException("Sale not found"));
+        Sale getSale = saleRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Sale with id: " + id + " not found"));
         Sale saleToUpdate = saleMapper.updateSaleFromSaleInputDto(sale, getSale);
 
         List<BigDecimal> prices = priceCalculator.calculatePricesSales(saleToUpdate);
@@ -110,15 +117,25 @@ public class SaleService {
 
     public SaleOutputDto assignVehicleToSale(Long id, IdInputDto vehicleId) {
         Optional<Sale> optionalSale = saleRepository.findById(id);
-        Optional<Vehicle> optionalVehicl = vehicleRepository.findById(vehicleId.getId());
-        if (optionalSale.isPresent() && optionalVehicl.isPresent()) {
+        Optional<Vehicle> optionalVehicle = vehicleRepository.findById(vehicleId.getId());
+        if (optionalSale.isPresent() && optionalVehicle.isPresent()) {
             Sale sale = optionalSale.get();
-            Vehicle vehicle = optionalVehicl.get();
-            sale.setVehicle(vehicle);
-            checkVehicleInStockElseCreatePurchase(vehicle, sale.getQuantity());
-            return saleMapper.saleTosaleOutputDto(saleRepository.save(sale));
+            Vehicle vehicle = optionalVehicle.get();
+            if (sale.getBusinessOrPrivate() == BusinessOrPrivate.BUSINESS && vehicle.getLicensePlate().startsWith("V")) {
+                sale.setVehicle(vehicle);
+                checkVehicleInStockElseCreatePurchase(vehicle, sale);
+                return saleMapper.saleTosaleOutputDto(saleRepository.save(sale));
+            } else if (sale.getBusinessOrPrivate() == BusinessOrPrivate.PRIVATE) {
+                sale.setVehicle(vehicle);
+                checkVehicleInStockElseCreatePurchase(vehicle, sale);
+                return saleMapper.saleTosaleOutputDto(saleRepository.save(sale));
+            } else {
+                throw new BadRequestException("You can only add a business vehicle to a order which are set for business");
+            }
+        } else if (optionalVehicle.isEmpty()) {
+            throw new RecordNotFoundException("Vehicle with id: " + vehicleId.getId() + " not found");
         } else {
-            throw new RuntimeException("Sale not found");
+            throw new RecordNotFoundException("Sale with id: " + id + " not found");
         }
     }
 
@@ -132,8 +149,10 @@ public class SaleService {
             sale.setCustomer(customer);
             customerPurchaseList.add(sale);
             return saleMapper.saleTosaleOutputDto(saleRepository.save(sale));
+        } else if (optionalCustomer.isEmpty()) {
+            throw new RecordNotFoundException("Customer with id: " + customerId.getId() + " not found");
         } else {
-            throw new RuntimeException("Sale not found");
+            throw new RecordNotFoundException("Sale with id: " + id + " not found");
         }
     }
 
@@ -149,10 +168,12 @@ public class SaleService {
                 sale.setSellerId(seller.getId());
                 return saleMapper.saleTosaleOutputDto(saleRepository.save(sale));
             } else {
-                throw new RuntimeException("Only profiles with role SELLER can be assigned");
+                throw new RuntimeException("The ProfileId you entered has role Admin but only profiles with role SELLER can be assigned");
             }
+        } else if (optionalSeller.isEmpty()) {
+            throw new RecordNotFoundException("Seller with id: " + sellerId.getId() + " not found");
         } else {
-            throw new RuntimeException("Sale not found");
+            throw new RecordNotFoundException("Sale with id: " + id + " not found");
         }
     }
 }

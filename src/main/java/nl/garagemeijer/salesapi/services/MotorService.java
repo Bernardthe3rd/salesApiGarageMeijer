@@ -2,6 +2,7 @@ package nl.garagemeijer.salesapi.services;
 
 import nl.garagemeijer.salesapi.dtos.motors.MotorInputDto;
 import nl.garagemeijer.salesapi.dtos.motors.MotorOutputDto;
+import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
 import nl.garagemeijer.salesapi.mappers.MotorMapper;
 import nl.garagemeijer.salesapi.models.Motor;
 import nl.garagemeijer.salesapi.repositories.MotorRepository;
@@ -30,7 +31,7 @@ public class MotorService {
         if (motorOptional.isPresent()) {
             return motorMapper.motorTomotorOutputDto(motorOptional.get());
         } else {
-            throw new RuntimeException("Motor with id " + id + " not found");
+            throw new RecordNotFoundException("Motor with id " + id + " not found");
         }
     }
 
@@ -41,7 +42,7 @@ public class MotorService {
     }
 
     public MotorOutputDto updateMotor(Long id, MotorInputDto motor) {
-        Motor getMotor = motorRepository.findById(id).orElseThrow(() -> new RuntimeException("Motor with id " + id + " not found"));
+        Motor getMotor = motorRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Motor with id " + id + " not found"));
         Motor motorToUpdate = motorMapper.updatemotorFrommotorInputDto(motor, getMotor);
         return motorMapper.motorTomotorOutputDto(motorRepository.save(motorToUpdate));
     }

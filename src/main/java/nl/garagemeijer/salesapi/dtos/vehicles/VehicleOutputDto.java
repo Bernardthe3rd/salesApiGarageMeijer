@@ -1,9 +1,7 @@
-package nl.garagemeijer.salesapi.dtos;
+package nl.garagemeijer.salesapi.dtos.vehicles;
 
-import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
-import nl.garagemeijer.salesapi.enums.BusinessUsageType;
 
 import java.time.LocalDate;
 
@@ -24,18 +22,5 @@ public class VehicleOutputDto {
     private Double engineCapacity;
     private LocalDate firstRegistrationDate;
     private int amountInStock;
-
-//    private int numberOfDoors;
-//    private Double trunkCapacity;
-//    private String transmission;
-//    private int seatingCapacity;
-//
-//    private Boolean companyOwned;
-//    private Double cargoCapacity;
-//    private BusinessUsageType businessUsage;
-//
-//    private String typeMotorcycle;
-//    private int wheelbase;
-//    private String handlebarType;
 
 }

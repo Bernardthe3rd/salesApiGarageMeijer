@@ -8,6 +8,7 @@ import nl.garagemeijer.salesapi.repositories.UserRepository;
 import nl.garagemeijer.salesapi.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -39,8 +40,12 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserOutputDto> createUser(@Valid @RequestBody UserInputDto user) {
         UserOutputDto createdUser = userService.saveUser(user);
-        URI location = URI.create("/api/users/" + createdUser.getId());
-        return ResponseEntity.created(location).body(createdUser);
+        URI locationDynamic = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdUser.getId())
+                .toUri();
+        return ResponseEntity.created(locationDynamic).body(createdUser);
     }
 
     @PutMapping("/{id}")

@@ -7,6 +7,7 @@ import nl.garagemeijer.salesapi.repositories.BusinessVehicleRepository;
 import nl.garagemeijer.salesapi.services.BusinessVehicleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -38,8 +39,13 @@ public class BusinessVehicleController {
     @PostMapping
     public ResponseEntity<BusinessVehicleOutputDto> createBusinessVehicle(@Valid @RequestBody BusinessVehicleInputDto businessVehicle) {
         BusinessVehicleOutputDto createdBusinessVehicle = businessVehicleService.saveBusinessVehicle(businessVehicle);
-        URI location = URI.create("/api/businessvehicles/" + createdBusinessVehicle.getId());
-        return ResponseEntity.created(location).body(createdBusinessVehicle);
+        URI locationDynamic = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdBusinessVehicle.getId())
+                .toUri();
+        System.out.println(locationDynamic);
+        return ResponseEntity.created(locationDynamic).body(createdBusinessVehicle);
     }
 
     @PutMapping("/{id}")

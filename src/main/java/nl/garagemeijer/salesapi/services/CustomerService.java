@@ -2,6 +2,7 @@ package nl.garagemeijer.salesapi.services;
 
 import nl.garagemeijer.salesapi.dtos.customers.CustomerInputDto;
 import nl.garagemeijer.salesapi.dtos.customers.CustomerOutputDto;
+import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
 import nl.garagemeijer.salesapi.mappers.CustomerMapper;
 import nl.garagemeijer.salesapi.models.Customer;
 import nl.garagemeijer.salesapi.repositories.CustomerRepository;
@@ -30,7 +31,7 @@ public class CustomerService {
         if (customerOptional.isPresent()) {
             return customerMapper.customerTocustomerOutputDto(customerOptional.get());
         } else {
-            throw new RuntimeException("Customer with id " + id + " not found");
+            throw new RecordNotFoundException("Customer with id " + id + " not found");
         }
     }
 
@@ -41,7 +42,7 @@ public class CustomerService {
     }
 
     public CustomerOutputDto updateCustomer(Long id, CustomerInputDto customer) {
-        Customer getCustomer = customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer with id " + id + " not found"));
+        Customer getCustomer = customerRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Customer with id " + id + " not found"));
         Customer customerToUpdate = customerMapper.updateCustomerFromCustomerInputDto(customer, getCustomer);
         return customerMapper.customerTocustomerOutputDto(customerRepository.save(customerToUpdate));
     }

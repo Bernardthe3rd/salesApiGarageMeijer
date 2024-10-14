@@ -1,10 +1,12 @@
 package nl.garagemeijer.salesapi.services;
 
-import nl.garagemeijer.salesapi.dtos.IdInputDto;
+import nl.garagemeijer.salesapi.dtos.ids.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.purchases.PurchaseInputDto;
 import nl.garagemeijer.salesapi.dtos.purchases.PurchaseOutputDto;
 import nl.garagemeijer.salesapi.enums.Role;
 import nl.garagemeijer.salesapi.enums.Status;
+import nl.garagemeijer.salesapi.exceptions.BadRequestException;
+import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
 import nl.garagemeijer.salesapi.helpers.GetLastOrderNumber;
 import nl.garagemeijer.salesapi.helpers.PriceCalculator;
 import nl.garagemeijer.salesapi.mappers.PurchaseMapper;
@@ -50,7 +52,7 @@ public class PurchaseService {
         if (purchaseOptional.isPresent()) {
             return purchaseMapper.purchaseToPurchaseOutputDto(purchaseOptional.get());
         } else {
-            throw new RuntimeException("Purchase not found");
+            throw new RecordNotFoundException("Purchase with id: " + id + " not found");
         }
     }
 
@@ -70,7 +72,7 @@ public class PurchaseService {
     }
 
     public PurchaseOutputDto updatePurchase(Long id, PurchaseInputDto purchase) {
-        Purchase getPurchase = purchaseRepository.findById(id).orElseThrow(() -> new RuntimeException("Purchase not found"));
+        Purchase getPurchase = purchaseRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Purchase with id: " + id + " not found"));
         Purchase purchaseToUpdate = purchaseMapper.updatePurchaseFromPurchaseInputDto(purchase, getPurchase);
 
         List<BigDecimal> prices = priceCalculator.calculatePricesPurchases(purchaseToUpdate);
@@ -78,7 +80,7 @@ public class PurchaseService {
         purchaseToUpdate.setBpmPrice(prices.get(1));
         purchaseToUpdate.setPurchasePriceEx(prices.get(2));
 
-        if (purchaseToUpdate.getStatus() == Status.OPEN && purchaseToUpdate.getExpectedDeliveryDate().isBefore(LocalDate.now())) {
+        if (purchaseToUpdate.getExpectedDeliveryDate().isBefore(LocalDate.now())) {
             purchaseToUpdate.setStatus(Status.CLOSED);
         } else {
             purchaseToUpdate.setStatus(Status.PENDING);
@@ -101,8 +103,10 @@ public class PurchaseService {
             purchase.setVehicle(vehicle);
             vehicle.setAmountInStock(vehicle.getAmountInStock() + purchase.getQuantity());
             return purchaseMapper.purchaseToPurchaseOutputDto(purchaseRepository.save(purchase));
+        } else if (optionalVehicle.isEmpty()) {
+            throw new RecordNotFoundException("Vehicle with id " + vehicleId.getId() + " not found");
         } else {
-            throw new RuntimeException("Purchase not found");
+            throw new RecordNotFoundException("Purchase with id: " + id + " not found");
         }
     }
 
@@ -118,10 +122,12 @@ public class PurchaseService {
                 adminListOfPurchases.add(purchase.getOrderNumber());
                 return purchaseMapper.purchaseToPurchaseOutputDto(purchaseRepository.save(purchase));
             } else {
-                throw new RuntimeException("Only profiles with role admin can be assigned to purchases");
+                throw new BadRequestException("The ProfileId you selected has role SELLER but only profiles with role admin can be assigned to purchases");
             }
+        } else if (optionalPurchase.isEmpty()) {
+            throw new RecordNotFoundException("Purchase with id: " + id + " not found");
         } else {
-            throw new RuntimeException("Purchase not found");
+            throw new RecordNotFoundException("Profile with id: " + adminId.getId() + " not found");
         }
     }
 }

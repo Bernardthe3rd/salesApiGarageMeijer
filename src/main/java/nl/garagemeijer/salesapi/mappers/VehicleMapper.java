@@ -1,15 +1,11 @@
 package nl.garagemeijer.salesapi.mappers;
 
-import nl.garagemeijer.salesapi.dtos.VehicleOutputDto;
+import nl.garagemeijer.salesapi.dtos.vehicles.VehicleOutputDto;
 import nl.garagemeijer.salesapi.dtos.businessVehicles.BusinessVehicleOutputDto;
 import nl.garagemeijer.salesapi.dtos.cars.CarOutputDto;
-import nl.garagemeijer.salesapi.dtos.customers.CustomerOutputDto;
 import nl.garagemeijer.salesapi.dtos.motors.MotorOutputDto;
 import nl.garagemeijer.salesapi.models.*;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class VehicleMapper {
