@@ -8,6 +8,7 @@ import nl.garagemeijer.salesapi.repositories.ProfileRepository;
 import nl.garagemeijer.salesapi.services.ProfileService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -39,8 +40,12 @@ public class ProfileController {
     @PostMapping
     public ResponseEntity<ProfileOutputDto> createAccount(@Valid @RequestBody ProfileInputDto account) {
         ProfileOutputDto createdAccount = profileService.saveProfile(account);
-        URI location = URI.create("/api/profiles/" + createdAccount.getId());
-        return ResponseEntity.created(location).body(createdAccount);
+        URI locationDynamic = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdAccount.getId())
+                .toUri();
+        return ResponseEntity.created(locationDynamic).body(createdAccount);
     }
 
     @PutMapping("/{id}")

@@ -8,6 +8,7 @@ import nl.garagemeijer.salesapi.repositories.PurchaseRepository;
 import nl.garagemeijer.salesapi.services.PurchaseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -39,8 +40,12 @@ public class PurchaseController {
     @PostMapping
     public ResponseEntity<PurchaseOutputDto> createPurchase(@Valid @RequestBody PurchaseInputDto purchase) {
         PurchaseOutputDto createdPurchase = purchaseService.savePurchase(purchase);
-        URI location = URI.create("/api/purchases/" + createdPurchase.getId());
-        return ResponseEntity.created(location).body(createdPurchase);
+        URI locationDynamic = ServletUriComponentsBuilder
+                .fromCurrentRequest()
+                .path("/{id}")
+                .buildAndExpand(createdPurchase.getId())
+                .toUri();
+        return ResponseEntity.created(locationDynamic).body(createdPurchase);
     }
 
     @PutMapping("/{id}")

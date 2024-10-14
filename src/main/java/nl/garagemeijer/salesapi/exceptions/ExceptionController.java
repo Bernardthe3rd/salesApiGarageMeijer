@@ -1,6 +1,5 @@
 package nl.garagemeijer.salesapi.exceptions;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -30,6 +29,12 @@ public class ExceptionController {
     public ResponseEntity<Object> handleBadRequestException(BadRequestException ex) {
         String message = "Bad request: " + ex.getMessage();
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<Object> handleUnauthorizedException(UnauthorizedException ex) {
+        String message = "Unauthorized: " + ex.getMessage();
+        return new ResponseEntity<>(message, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
