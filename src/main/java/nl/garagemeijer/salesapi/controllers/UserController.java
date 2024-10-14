@@ -1,9 +1,9 @@
 package nl.garagemeijer.salesapi.controllers;
 
 import jakarta.validation.Valid;
+import nl.garagemeijer.salesapi.dtos.ids.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserInputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserOutputDto;
-import nl.garagemeijer.salesapi.models.User;
 import nl.garagemeijer.salesapi.repositories.UserRepository;
 import nl.garagemeijer.salesapi.services.UserService;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +51,12 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserOutputDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserInputDto user) {
         UserOutputDto updatedUser = userService.updateUser(id, user);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @PutMapping("/{id}/profile")
+    public ResponseEntity<UserOutputDto> addProfileToUser(@PathVariable Long id, @Valid @RequestBody IdInputDto profileId) {
+        UserOutputDto updatedUser = userService.assignProfileToUser(id, profileId);
         return ResponseEntity.ok(updatedUser);
     }
 

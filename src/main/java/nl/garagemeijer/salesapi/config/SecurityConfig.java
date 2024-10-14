@@ -3,6 +3,7 @@ package nl.garagemeijer.salesapi.config;
 import nl.garagemeijer.salesapi.services.security.AuthenticationUserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -33,9 +34,16 @@ public class SecurityConfig {
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/purchases").hasRole("ADMIN")
-                        .requestMatchers("api/sales").hasRole("SELLER")
-                        .anyRequest().denyAll()
+                                .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+//                        .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/users").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.POST, "/api/profiles").permitAll()
+                                .requestMatchers(HttpMethod.PUT, "/api/profiles").permitAll()
+                                .requestMatchers(HttpMethod.DELETE, "/api/profiles").hasRole("ADMIN")
+                                .requestMatchers("/api/cars").permitAll()
+                                .requestMatchers("/api/purchases").hasRole("ADMIN")
+                                .requestMatchers("/api/sales").hasRole("SELLER")
+                                .anyRequest().permitAll()
                 )
         ;
         return http.build();

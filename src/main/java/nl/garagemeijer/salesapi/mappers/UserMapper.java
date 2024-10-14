@@ -1,6 +1,5 @@
 package nl.garagemeijer.salesapi.mappers;
 
-import nl.garagemeijer.salesapi.dtos.profiles.ProfileOutputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserInputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserOutputDto;
 import nl.garagemeijer.salesapi.models.User;
@@ -45,7 +44,9 @@ public class UserMapper {
 //            simpleProfileDto.setPurchaseOrders(user.getProfile().getPurchaseOrders());
 //            dto.setProfile(simpleProfileDto);
 //        }
-        dto.setProfile(profileMapper.profileToProfileOutputDto(user.getProfile()));
+        if (user.getProfile() != null) {
+            dto.setProfile(profileMapper.profileToProfileOutputDto(user.getProfile()));
+        }
         return dto;
     }
 

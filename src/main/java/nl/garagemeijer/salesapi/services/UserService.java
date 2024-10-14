@@ -1,10 +1,14 @@
 package nl.garagemeijer.salesapi.services;
 
+import jakarta.validation.Valid;
+import nl.garagemeijer.salesapi.dtos.ids.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserInputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserOutputDto;
 import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
 import nl.garagemeijer.salesapi.mappers.UserMapper;
+import nl.garagemeijer.salesapi.models.Profile;
 import nl.garagemeijer.salesapi.models.User;
+import nl.garagemeijer.salesapi.repositories.ProfileRepository;
 import nl.garagemeijer.salesapi.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +21,12 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final ProfileRepository profileRepository;
 
-    public UserService(UserRepository userRepository, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, ProfileRepository profileRepository) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.profileRepository = profileRepository;
     }
 
     public List<UserOutputDto> getUsers() {
@@ -41,6 +47,8 @@ public class UserService {
         userToSave.setCreationDate(LocalDate.now());
         userToSave.setIsActive(true);
         userToSave.setLastLogin(LocalDate.now());
+        Profile profile = new Profile();
+        userToSave.setProfile(profile);
 
         return userMapper.userToUserOutputDto(userRepository.save(userToSave));
     }
@@ -59,4 +67,19 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    public UserOutputDto assignProfileToUser(Long id, @Valid IdInputDto profileId) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        Optional<Profile> optionalProfile = profileRepository.findById(profileId.getId());
+        if (optionalUser.isPresent() && optionalProfile.isPresent()) {
+            User user = optionalUser.get();
+            Profile profile = optionalProfile.get();
+            user.setProfile(profile);
+            profile.setUser(user);
+            return userMapper.userToUserOutputDto(userRepository.save(user));
+        } else if (optionalUser.isEmpty()) {
+            throw new RecordNotFoundException("User with id: " + id + " not found");
+        } else {
+            throw new RecordNotFoundException("Profile with id: " + profileId.getId() + " not found");
+        }
+    }
 }
