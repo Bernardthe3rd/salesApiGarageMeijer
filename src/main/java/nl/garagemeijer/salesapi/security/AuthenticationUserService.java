@@ -1,4 +1,4 @@
-package nl.garagemeijer.salesapi.services.security;
+package nl.garagemeijer.salesapi.security;
 
 import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
 import nl.garagemeijer.salesapi.models.User;

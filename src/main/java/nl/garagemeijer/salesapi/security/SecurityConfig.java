@@ -1,6 +1,5 @@
-package nl.garagemeijer.salesapi.config;
+package nl.garagemeijer.salesapi.security;
 
-import nl.garagemeijer.salesapi.services.security.AuthenticationUserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

@@ -22,7 +22,7 @@ public class UserMapper {
 
         dto.setId(user.getId());
         dto.setUsername(user.getUsername());
-        dto.setPassword(user.getPassword());
+        dto.setPassword(user.getPassword()); //passwordEncoder moet hier
         dto.setLastLogin(user.getLastLogin());
         dto.setIsActive(user.getIsActive());
         dto.setCreationDate(user.getCreationDate());
