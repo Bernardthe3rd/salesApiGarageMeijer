@@ -1,8 +1,10 @@
 package nl.garagemeijer.salesapi.mappers;
 
+import nl.garagemeijer.salesapi.dtos.users.UserChangePasswordInputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserInputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserOutputDto;
 import nl.garagemeijer.salesapi.models.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,9 +14,11 @@ import java.util.List;
 public class UserMapper {
 
     private final ProfileMapper profileMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserMapper(ProfileMapper profileMapper) {
+    public UserMapper(ProfileMapper profileMapper, PasswordEncoder passwordEncoder) {
         this.profileMapper = profileMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public UserOutputDto userToUserOutputDto(User user) {
@@ -22,7 +26,6 @@ public class UserMapper {
 
         dto.setId(user.getId());
         dto.setUsername(user.getUsername());
-        dto.setPassword(user.getPassword()); //passwordEncoder moet hier
         dto.setLastLogin(user.getLastLogin());
         dto.setIsActive(user.getIsActive());
         dto.setCreationDate(user.getCreationDate());
@@ -50,16 +53,18 @@ public class UserMapper {
         return dto;
     }
 
-    public User updateUserFromUserInputDto(UserInputDto dto, User user) {
-        user.setUsername(dto.getUsername());
-        user.setPassword(dto.getPassword());
+    public User updatePasswordFromPasswordDto(UserChangePasswordInputDto dto, User user) {
+        String encodedPassword = passwordEncoder.encode(dto.getNewPassword());
+        user.setPassword(encodedPassword);
 
         return user;
     }
 
     public User userInputDtoToUser(UserInputDto userInputDto) {
         var user = new User();
-        return updateUserFromUserInputDto(userInputDto, user);
+        user.setUsername(userInputDto.getUsername());
+        user.setPassword(userInputDto.getPassword());
+        return user;
     }
 
     public List<UserOutputDto> usersToUserOutputDtos(List<User> users) {
