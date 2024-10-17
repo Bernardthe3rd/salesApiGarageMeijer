@@ -45,8 +45,12 @@ VALUES (1, 'John', 'Doe', '1985-06-15', 'Maple Street 10', '1234AB', 'Amsterdam'
 
 -- Users
 INSERT INTO public.users (id, username, password, last_login, is_active, creation_date)
-VALUES (1, 'markjohnson', 'password123', '2024-01-01', TRUE, '2024-01-01'),
-       (2, 'emilysmith', 'password456', '2024-01-15', TRUE, '2024-01-15');
+VALUES (1, 'markjohnson', '$2a$10$CLwWDPy2bR52uTKx7ZIvqOGmA6TMby64U10zKn0Zk4IxibTRBn4eG', '2024-01-01', TRUE,
+        '2024-01-01'),
+       (2, 'emilysmith', '$2a$10$kjXWp5bhlPGLaNnrMOe.b.lBzucZMsvXIlxWeFyzgDeW.imGe7Y9m', '2024-01-15', TRUE,
+        '2024-01-15');
+-- password voor user1 = password123
+-- password voor user2 = password456
 
 -- Profiles
 INSERT INTO public.profiles (id, creation_date, role, first_name, last_name, date_of_birth, street, postal_code, city,

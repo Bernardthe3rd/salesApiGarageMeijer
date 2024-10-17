@@ -34,6 +34,16 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+//    public void seePasswords() {
+//        String rawPassword1 = "password123";
+//        String rawPassword2 = "password456";
+//        String encoded1 = passwordEncoder.encode(rawPassword1);
+//        String encoded2 = passwordEncoder.encode(rawPassword2);
+//
+//        System.out.println("hashed pw 1: " + encoded1);
+//        System.out.println("hashed pw 2: " + encoded2);
+//    }
+
     public List<UserOutputDto> getUsers() {
         return userMapper.usersToUserOutputDtos(userRepository.findAll());
     }
