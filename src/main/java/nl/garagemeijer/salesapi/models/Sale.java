@@ -31,6 +31,7 @@ public class Sale {
     private BigDecimal salePriceIncl;
     @Column(nullable = false)
     private String typeOrder;
+    @Enumerated(EnumType.STRING)
     private Status status;
     private int orderNumber;
     private String comment;
@@ -41,7 +42,9 @@ public class Sale {
     @Column(nullable = false)
     private String paymentMethod;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private BusinessOrPrivate businessOrPrivate;
+    @Enumerated(EnumType.STRING)
     private Addition addition;
     private Long sellerId;
 

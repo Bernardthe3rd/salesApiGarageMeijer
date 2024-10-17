@@ -42,11 +42,13 @@ public class ProfileMapper {
             simpleUserDto.setCreationDate(profile.getUser().getCreationDate());
             dto.setUser(simpleUserDto);
         }
-        if (profile.getRole().equals(Role.ADMIN)) {
-            dto.setPurchaseOrderNumbers(profile.getPurchaseOrderNumbers());
-        }
-        if (profile.getRole().equals(Role.SELLER)) {
-            dto.setSaleOrders(profile.getSaleOrderNumbers());
+        if (profile.getRole() != null) {
+            if (profile.getRole().equals(Role.ADMIN)) {
+                dto.setPurchaseOrderNumbers(profile.getPurchaseOrderNumbers());
+            }
+            if (profile.getRole().equals(Role.SELLER)) {
+                dto.setSaleOrders(profile.getSaleOrderNumbers());
+            }
         }
 
         return dto;

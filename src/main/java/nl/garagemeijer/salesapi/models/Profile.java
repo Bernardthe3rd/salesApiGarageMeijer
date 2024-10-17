@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 
 @Entity
-@Table(name = "Profiles")
+@Table(name = "profiles")
 public class Profile {
 
     @Id
@@ -22,23 +22,14 @@ public class Profile {
     private LocalDate creationDate;
     @Enumerated(EnumType.STRING)
     private Role role;
-    @Column(nullable = false)
     private String firstName;
-    @Column(nullable = false)
     private String lastName;
-    @Column(nullable = false)
     private String dateOfBirth;
-    @Column(nullable = false)
     private String street;
-    @Column(nullable = false)
     private String postalCode;
-    @Column(nullable = false)
     private String city;
-    @Column(nullable = false)
     private String country;
-    @Column(nullable = false)
     private String email;
-    @Column(nullable = false)
     private String phoneNumber;
 
     @ElementCollection

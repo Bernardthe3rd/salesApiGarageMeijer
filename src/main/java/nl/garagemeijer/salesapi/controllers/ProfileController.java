@@ -54,18 +54,10 @@ public class ProfileController {
         return ResponseEntity.ok(updatedProfile);
     }
 
-    @PutMapping("/{id}/user")
-    public ResponseEntity<ProfileOutputDto> addUserToProfile(@PathVariable Long id, @Valid @RequestBody IdInputDto profileId) {
-        ProfileOutputDto updatedProfile = profileService.assignUserToProfile(id, profileId);
-        return ResponseEntity.ok(updatedProfile);
-    }
-
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
         profileService.deleteProfile(id);
         return ResponseEntity.noContent().build();
     }
 
-//    put mapping voor addUserToAccount ook in postman
 }

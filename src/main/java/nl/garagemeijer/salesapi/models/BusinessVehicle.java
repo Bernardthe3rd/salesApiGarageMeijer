@@ -9,7 +9,7 @@ import nl.garagemeijer.salesapi.enums.BusinessUsageType;
 @Setter
 
 @Entity
-@Table(name = "BusinessVehicles")
+@Table(name = "businessVehicles")
 public class BusinessVehicle extends Vehicle {
 
     @Column(nullable = false)
@@ -17,6 +17,7 @@ public class BusinessVehicle extends Vehicle {
     @Column(nullable = false)
     private Double cargoCapacity;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private BusinessUsageType businessUsage;
 
 }

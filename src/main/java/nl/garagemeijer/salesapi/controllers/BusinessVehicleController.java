@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/businessvehicles")
+@RequestMapping("/api/businessvehicles")
 public class BusinessVehicleController {
 
     private final BusinessVehicleService businessVehicleService;
