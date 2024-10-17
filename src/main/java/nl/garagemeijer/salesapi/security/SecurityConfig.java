@@ -18,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     @Bean
-    public AuthenticationManager authManager(HttpSecurity http, PasswordEncoder encoder, AuthenticationUserService myUserDetailsService) throws Exception {
+    public AuthenticationManager authManager(HttpSecurity http, PasswordEncoder encoder, CustomUserDetailService myUserDetailsService) throws Exception {
         var builder = http.getSharedObject(AuthenticationManagerBuilder.class);
         builder.userDetailsService(myUserDetailsService).passwordEncoder(encoder);
         return builder.build();

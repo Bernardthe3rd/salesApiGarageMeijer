@@ -10,12 +10,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthenticationUserService implements UserDetailsService {
+public class CustomUserDetailService implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    public AuthenticationUserService(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+    public CustomUserDetailService(PasswordEncoder passwordEncoder, UserRepository userRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
     }
