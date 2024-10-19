@@ -176,4 +176,14 @@ public class SaleService {
             throw new RecordNotFoundException("Sale with id: " + id + " not found");
         }
     }
+
+    public SaleOutputDto assignSignatureToSale(Long id, Signature signature) {
+        Optional<Sale> optionalSale = saleRepository.findById(id);
+        if (optionalSale.isEmpty()) {
+            throw new RecordNotFoundException("Sale with id: " + id + " not found");
+        }
+        Sale sale = optionalSale.get();
+        sale.setSignature(signature);
+        return saleMapper.saleTosaleOutputDto(saleRepository.save(sale));
+    }
 }

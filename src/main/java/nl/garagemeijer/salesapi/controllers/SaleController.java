@@ -4,22 +4,29 @@ import jakarta.validation.Valid;
 import nl.garagemeijer.salesapi.dtos.ids.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
+import nl.garagemeijer.salesapi.models.Signature;
 import nl.garagemeijer.salesapi.services.SaleService;
+import nl.garagemeijer.salesapi.services.SignatureService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/sales")
 public class SaleController {
 
     private final SaleService saleService;
+    private final SignatureService signatureService;
 
-    public SaleController(SaleService saleService) {
+    public SaleController(SaleService saleService, SignatureService signatureService) {
         this.saleService = saleService;
+        this.signatureService = signatureService;
     }
 
     @GetMapping
@@ -68,6 +75,19 @@ public class SaleController {
         SaleOutputDto updatedSale = saleService.assignSellerToSale(id, sellerId);
         return ResponseEntity.ok(updatedSale);
     }
+
+    @PutMapping("/{id}/signature")
+    public ResponseEntity<SaleOutputDto> addSignatureToSale(@PathVariable Long id, @Valid @RequestParam("file") MultipartFile file) throws IOException {
+        String url = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/sales/")
+                .path(Objects.requireNonNull(id.toString()))
+                .path("/signature")
+                .toUriString();
+        Signature signature = signatureService.storeSignature(file, url);
+        SaleOutputDto updatedSale = saleService.assignSignatureToSale(id, signature);
+        return ResponseEntity.created(URI.create(url)).body(updatedSale);
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSale(@PathVariable Long id) {

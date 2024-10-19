@@ -56,6 +56,7 @@ public class Sale {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-//    private SignatureUpload signatureUpload;
+    @OneToOne(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Signature signature;
 
 }
