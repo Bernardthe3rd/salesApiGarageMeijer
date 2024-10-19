@@ -7,6 +7,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class SignatureMapper {
 
+    private final SaleMapper saleMapper;
+
+    public SignatureMapper(SaleMapper saleMapper) {
+        this.saleMapper = saleMapper;
+    }
+
     public SignatureOutputDto signatureToOutputDto(Signature signature) {
         var dto = new SignatureOutputDto();
 
@@ -16,6 +22,7 @@ public class SignatureMapper {
         dto.setUrl(signature.getUrl());
         dto.setUploadDate(signature.getUploadDate());
         dto.setContents(signature.getContents());
+        dto.setSale(saleMapper.saleTosaleOutputDto(signature.getSale()));
 
         return dto;
     }

@@ -2,6 +2,7 @@ package nl.garagemeijer.salesapi.dtos.signature;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
 
 import java.time.LocalDate;
 
@@ -15,5 +16,6 @@ public class SignatureOutputDto {
     private String url;
     private LocalDate uploadDate;
     private byte[] contents;
+    private SaleOutputDto sale;
 
 }

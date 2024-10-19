@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
@@ -99,7 +98,7 @@ public class SaleController {
     }
 
     @PutMapping("/{id}/signature")
-    public ResponseEntity<SaleOutputDto> addSignatureToSale(@PathVariable Long id, @Valid @RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity<SaleOutputDto> addSignatureToSale(@PathVariable Long id, @Valid @RequestParam("file") MultipartFile file) {
         String url = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/sales/")
                 .path(Objects.requireNonNull(id.toString()))
