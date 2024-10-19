@@ -42,8 +42,4 @@ public abstract class Vehicle {
     private LocalDate firstRegistrationDate;
     private int amountInStock;
 
-//    public String getVehicleType() {
-//        return this.getClass().
-//    }
-
 }

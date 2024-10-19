@@ -51,4 +51,10 @@ public class ExceptionController {
         String message = "Invalid format: " + ex.getMessage();
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<String> handleSignatureException(SignatureException ex) {
+        String message = "Signature exception: " + ex.getMessage();
+        return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+    }
 }

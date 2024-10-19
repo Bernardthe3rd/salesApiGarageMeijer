@@ -33,6 +33,7 @@ public class AuthController {
 
         try {
             Authentication auth = authenticationManager.authenticate(uploadedDetails);
+            System.out.println("role " + auth.getAuthorities());
             var userDetails = userDetailsService.loadUserByUsername(auth.getName());
             String token = jwtService.generateToken(userDetails);
             AuthenticationOutputDto response = new AuthenticationOutputDto(token, "login succesful");

@@ -1,6 +1,5 @@
 package nl.garagemeijer.salesapi.mappers;
 
-import nl.garagemeijer.salesapi.dtos.customers.CustomerOutputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
 import nl.garagemeijer.salesapi.models.Sale;
@@ -11,12 +10,6 @@ import java.util.List;
 
 @Component
 public class SaleMapper {
-
-    private final VehicleMapper vehicleMapper;
-
-    public SaleMapper(VehicleMapper vehicleMapper) {
-        this.vehicleMapper = vehicleMapper;
-    }
 
     public SaleOutputDto saleTosaleOutputDto(Sale sale) {
         var dto = new SaleOutputDto();
@@ -37,26 +30,16 @@ public class SaleMapper {
         dto.setBusinessOrPrivate(sale.getBusinessOrPrivate());
         dto.setAddition(sale.getAddition());
         if (sale.getVehicle() != null) {
-            dto.setVehicle(vehicleMapper.vehicleToVehicleOutputDto(sale.getVehicle()));
+            dto.setVehicleId(sale.getVehicle().getId());
         }
         if (sale.getCustomer() != null) {
-            var simpleCustomerDto = new CustomerOutputDto();
-            simpleCustomerDto.setId(sale.getCustomer().getId());
-            simpleCustomerDto.setFirstName(sale.getCustomer().getFirstName());
-            simpleCustomerDto.setLastName(sale.getCustomer().getLastName());
-            simpleCustomerDto.setDateOfBirth(sale.getCustomer().getDateOfBirth());
-            simpleCustomerDto.setStreet(sale.getCustomer().getStreet());
-            simpleCustomerDto.setPostalCode(sale.getCustomer().getPostalCode());
-            simpleCustomerDto.setCity(sale.getCustomer().getCity());
-            simpleCustomerDto.setCountry(sale.getCustomer().getCountry());
-            simpleCustomerDto.setEmail(sale.getCustomer().getEmail());
-            simpleCustomerDto.setPhoneNumber(sale.getCustomer().getPhoneNumber());
-            simpleCustomerDto.setPrefferedContactMethod(sale.getCustomer().getPrefferedContactMethod());
-            simpleCustomerDto.setNameLastSalesPerson(sale.getCustomer().getNameLastSalesPerson());
-            dto.setCustomer(simpleCustomerDto);
+            dto.setCustomerId(sale.getCustomer().getId());
         }
         if (sale.getSellerId() != null) {
             dto.setSellerId(sale.getSellerId());
+        }
+        if (sale.getSignature() != null) {
+            dto.setSignatureId(sale.getSignature().getId());
         }
 
         return dto;

@@ -3,6 +3,8 @@ package nl.garagemeijer.salesapi.services;
 import nl.garagemeijer.salesapi.dtos.ids.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
+import nl.garagemeijer.salesapi.dtos.signature.SignatureInputDto;
+import nl.garagemeijer.salesapi.dtos.signature.SignatureOutputDto;
 import nl.garagemeijer.salesapi.enums.BusinessOrPrivate;
 import nl.garagemeijer.salesapi.enums.Role;
 import nl.garagemeijer.salesapi.enums.Status;
@@ -11,6 +13,7 @@ import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
 import nl.garagemeijer.salesapi.helpers.GetLastOrderNumber;
 import nl.garagemeijer.salesapi.helpers.PriceCalculator;
 import nl.garagemeijer.salesapi.mappers.SaleMapper;
+import nl.garagemeijer.salesapi.mappers.SignatureMapper;
 import nl.garagemeijer.salesapi.models.*;
 import nl.garagemeijer.salesapi.repositories.*;
 import org.springframework.stereotype.Service;
@@ -31,8 +34,9 @@ public class SaleService {
     private final CustomerRepository customerRepository;
     private final ProfileRepository profileRepository;
     private final PurchaseRepository purchaseRepository;
+    private final SignatureMapper signatureMapper;
 
-    public SaleService(SaleRepository saleRepository, SaleMapper saleMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository, CustomerRepository customerRepository, ProfileRepository profileRepository, PurchaseRepository purchaseRepository, GetLastOrderNumber getLastOrderNumber) {
+    public SaleService(SaleRepository saleRepository, SaleMapper saleMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository, CustomerRepository customerRepository, ProfileRepository profileRepository, PurchaseRepository purchaseRepository, GetLastOrderNumber getLastOrderNumber, SignatureMapper signatureMapper) {
         this.saleRepository = saleRepository;
         this.saleMapper = saleMapper;
         this.priceCalculator = priceCalculator;
@@ -41,6 +45,7 @@ public class SaleService {
         this.profileRepository = profileRepository;
         this.purchaseRepository = purchaseRepository;
         this.getLastOrderNumber = getLastOrderNumber;
+        this.signatureMapper = signatureMapper;
     }
 
 
@@ -175,5 +180,29 @@ public class SaleService {
         } else {
             throw new RecordNotFoundException("Sale with id: " + id + " not found");
         }
+    }
+
+    public SaleOutputDto assignSignatureToSale(Long id, SignatureOutputDto signatureDto) {
+        Optional<Sale> optionalSale = saleRepository.findById(id);
+        Signature signature = signatureMapper.signatureOutputDtoToSignature(signatureDto);
+        if (optionalSale.isEmpty()) {
+            throw new RecordNotFoundException("Sale with id: " + id + " not found");
+        }
+        Sale sale = optionalSale.get();
+        signature.setSale(sale);
+        sale.setSignature(signature);
+        return saleMapper.saleTosaleOutputDto(saleRepository.save(sale));
+    }
+
+    public SignatureOutputDto getSignatureFromSale(Long id) {
+        Optional<Sale> optionalSale = saleRepository.findById(id);
+        if (optionalSale.isEmpty()) {
+            throw new RecordNotFoundException("Sale with id: " + id + " not found");
+        }
+        if (optionalSale.get().getSignature() == null) {
+            throw new RecordNotFoundException("This sale has no signature yet");
+        }
+        Sale sale = optionalSale.get();
+        return signatureMapper.signatureToOutputDto(sale.getSignature());
     }
 }
