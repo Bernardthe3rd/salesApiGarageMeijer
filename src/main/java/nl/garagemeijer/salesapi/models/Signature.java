@@ -26,7 +26,7 @@ public class Signature {
     private byte[] contents;
 
     @OneToOne
-    @JoinColumn(name = "sale_id", nullable = false)
+    @JoinColumn(name = "sale_id")
     private Sale sale;
 
     public Signature(String fileName, String contentType, String url, byte[] contents) {

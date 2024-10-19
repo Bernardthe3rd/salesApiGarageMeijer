@@ -22,8 +22,22 @@ public class SignatureMapper {
         dto.setUrl(signature.getUrl());
         dto.setUploadDate(signature.getUploadDate());
         dto.setContents(signature.getContents());
-        dto.setSale(saleMapper.saleTosaleOutputDto(signature.getSale()));
+        if (signature.getSale() != null) {
+            dto.setSale(saleMapper.saleTosaleOutputDto(signature.getSale()));
+        }
 
         return dto;
+    }
+
+    public Signature signatureOutputDtoToSignature(SignatureOutputDto dto) {
+        var signature = new Signature();
+        signature.setId(dto.getId());
+        signature.setFileName(dto.getFileName());
+        signature.setContentType(dto.getContentType());
+        signature.setUrl(dto.getUrl());
+        signature.setUploadDate(dto.getUploadDate());
+        signature.setContents(dto.getContents());
+
+        return signature;
     }
 }

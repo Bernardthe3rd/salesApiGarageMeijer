@@ -4,8 +4,9 @@ import jakarta.validation.Valid;
 import nl.garagemeijer.salesapi.dtos.ids.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
+import nl.garagemeijer.salesapi.dtos.signature.SignatureInputDto;
 import nl.garagemeijer.salesapi.dtos.signature.SignatureOutputDto;
-import nl.garagemeijer.salesapi.models.Signature;
+import nl.garagemeijer.salesapi.exceptions.SignatureException;
 import nl.garagemeijer.salesapi.services.SaleService;
 import nl.garagemeijer.salesapi.services.SignatureService;
 import org.springframework.http.HttpHeaders;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Objects;
@@ -99,14 +101,23 @@ public class SaleController {
 
     @PutMapping("/{id}/signature")
     public ResponseEntity<SaleOutputDto> addSignatureToSale(@PathVariable Long id, @Valid @RequestParam("file") MultipartFile file) {
-        String url = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/sales/")
-                .path(Objects.requireNonNull(id.toString()))
-                .path("/signature")
-                .toUriString();
-        Signature signature = signatureService.storeSignature(file, url);
-        SaleOutputDto updatedSale = saleService.assignSignatureToSale(id, signature);
-        return ResponseEntity.created(URI.create(url)).body(updatedSale);
+        try {
+            SignatureInputDto input = new SignatureInputDto();
+            input.setOriginalFileName(file.getOriginalFilename());
+            input.setContentType(file.getContentType());
+            input.setContents(file.getBytes());
+            String url = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/sales/")
+                    .path(Objects.requireNonNull(id.toString()))
+                    .path("/signature")
+                    .toUriString();
+            SignatureOutputDto signature = signatureService.storeSignature(input, url);
+            SaleOutputDto updatedSale = saleService.assignSignatureToSale(id, signature);
+            return ResponseEntity.created(URI.create(url)).body(updatedSale);
+        } catch (IOException e) {
+            throw new SignatureException(e.getMessage());
+        }
+
     }
 
     @DeleteMapping("/{id}")

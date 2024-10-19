@@ -1,5 +1,6 @@
 package nl.garagemeijer.salesapi.services;
 
+import nl.garagemeijer.salesapi.dtos.signature.SignatureInputDto;
 import nl.garagemeijer.salesapi.dtos.signature.SignatureOutputDto;
 import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
 import nl.garagemeijer.salesapi.exceptions.SignatureException;
@@ -11,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 public class SignatureService {
@@ -23,21 +25,18 @@ public class SignatureService {
         this.signatureMapper = signatureMapper;
     }
 
-    public SignatureOutputDto storeSignature(MultipartFile file, String url) {
-        try {
-            String originalFilename = file.getOriginalFilename();
-            String contentType = file.getContentType();
-            byte[] bytes = file.getBytes();
-            Signature signature = new Signature(originalFilename, contentType, url, bytes);
-            signature.setUploadDate(LocalDate.now());
-            return signatureRepository.save(signature);
-        } catch (IOException e) {
-            throw new SignatureException("Fout bij het opslaan van de handtekening", e);
-        }
-
+    public SignatureOutputDto storeSignature(SignatureInputDto file, String url) {
+        Signature signature = new Signature(file.getOriginalFileName(), file.getContentType(), url, file.getContents());
+        signature.setUploadDate(LocalDate.now());
+        return signatureMapper.signatureToOutputDto(signatureRepository.save(signature));
     }
 
     public SignatureOutputDto getSignatureById(Long id) {
-        return signatureRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Signature with id: " + id + " not found"));
+        Optional<Signature> signature = signatureRepository.findById(id);
+        if (signature.isPresent()) {
+            return signatureMapper.signatureToOutputDto(signature.get());
+        } else {
+            throw new RecordNotFoundException("Signature with id " + id + " not found");
+        }
     }
 }

@@ -9,5 +9,6 @@ public class SignatureInputDto {
 
     private String originalFileName;
     private String contentType;
+    private byte[] contents;
 
 }
