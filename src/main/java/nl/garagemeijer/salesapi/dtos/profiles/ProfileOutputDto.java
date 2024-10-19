@@ -29,6 +29,5 @@ public class ProfileOutputDto {
     private List<Integer> saleOrders;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Integer> purchaseOrderNumbers;
-    private UserOutputDto user;
 
 }

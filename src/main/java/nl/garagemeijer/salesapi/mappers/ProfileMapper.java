@@ -13,12 +13,6 @@ import java.util.List;
 @Component
 public class ProfileMapper {
 
-    private final PurchaseMapper purchaseMapper;
-
-    public ProfileMapper(PurchaseMapper purchaseMapper) {
-        this.purchaseMapper = purchaseMapper;
-    }
-
     public ProfileOutputDto profileToProfileOutputDto(Profile profile) {
         var dto = new ProfileOutputDto();
 
@@ -34,14 +28,6 @@ public class ProfileMapper {
         dto.setCountry(profile.getCountry());
         dto.setEmail(profile.getEmail());
         dto.setPhoneNumber(profile.getPhoneNumber());
-        if (profile.getUser() != null) {
-            var simpleUserDto = new UserOutputDto();
-            simpleUserDto.setId(profile.getUser().getId());
-            simpleUserDto.setIsActive(profile.getUser().getIsActive());
-            simpleUserDto.setLastLogin(profile.getUser().getLastLogin());
-            simpleUserDto.setCreationDate(profile.getUser().getCreationDate());
-            dto.setUser(simpleUserDto);
-        }
         if (profile.getRole() != null) {
             if (profile.getRole().equals(Role.ADMIN)) {
                 dto.setPurchaseOrderNumbers(profile.getPurchaseOrderNumbers());
