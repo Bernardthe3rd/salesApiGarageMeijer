@@ -32,9 +32,11 @@ public class Purchase {
     private LocalDate expectedDeliveryDate;
     @Column(nullable = false)
     private int quantity;
+    @Enumerated(EnumType.STRING)
     private Status status;
     private int orderNumber;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private BusinessOrPrivate businessOrPrivate;
     private Long adminId;
 

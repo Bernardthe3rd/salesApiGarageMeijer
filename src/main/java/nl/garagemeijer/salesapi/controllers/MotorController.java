@@ -3,7 +3,6 @@ package nl.garagemeijer.salesapi.controllers;
 import jakarta.validation.Valid;
 import nl.garagemeijer.salesapi.dtos.motors.MotorInputDto;
 import nl.garagemeijer.salesapi.dtos.motors.MotorOutputDto;
-import nl.garagemeijer.salesapi.repositories.MotorRepository;
 import nl.garagemeijer.salesapi.services.MotorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,15 +12,13 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/motors")
+@RequestMapping("/vehicles/motors")
 public class MotorController {
 
     private final MotorService motorService;
-    private final MotorRepository motorRepository;
 
-    public MotorController(MotorService motorService, MotorRepository motorRepository) {
+    public MotorController(MotorService motorService) {
         this.motorService = motorService;
-        this.motorRepository = motorRepository;
     }
 
     @GetMapping

@@ -1,10 +1,8 @@
 package nl.garagemeijer.salesapi.controllers;
 
 import jakarta.validation.Valid;
-import nl.garagemeijer.salesapi.dtos.ids.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.profiles.ProfileInputDto;
 import nl.garagemeijer.salesapi.dtos.profiles.ProfileOutputDto;
-import nl.garagemeijer.salesapi.repositories.ProfileRepository;
 import nl.garagemeijer.salesapi.services.ProfileService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,15 +12,13 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/profiles")
+@RequestMapping("/profiles")
 public class ProfileController {
 
     private final ProfileService profileService;
-    private final ProfileRepository profileRepository;
 
-    public ProfileController(ProfileService profileService, ProfileRepository profileRepository) {
+    public ProfileController(ProfileService profileService) {
         this.profileService = profileService;
-        this.profileRepository = profileRepository;
     }
 
     @GetMapping
@@ -54,18 +50,10 @@ public class ProfileController {
         return ResponseEntity.ok(updatedProfile);
     }
 
-    @PutMapping("/{id}/user")
-    public ResponseEntity<ProfileOutputDto> addUserToProfile(@PathVariable Long id, @Valid @RequestBody IdInputDto profileId) {
-        ProfileOutputDto updatedProfile = profileService.assignUserToProfile(id, profileId);
-        return ResponseEntity.ok(updatedProfile);
-    }
-
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
         profileService.deleteProfile(id);
         return ResponseEntity.noContent().build();
     }
 
-//    put mapping voor addUserToAccount ook in postman
 }

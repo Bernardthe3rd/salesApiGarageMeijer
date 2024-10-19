@@ -3,6 +3,7 @@ package nl.garagemeijer.salesapi.services;
 import nl.garagemeijer.salesapi.dtos.ids.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.purchases.PurchaseInputDto;
 import nl.garagemeijer.salesapi.dtos.purchases.PurchaseOutputDto;
+import nl.garagemeijer.salesapi.enums.BusinessOrPrivate;
 import nl.garagemeijer.salesapi.enums.Role;
 import nl.garagemeijer.salesapi.enums.Status;
 import nl.garagemeijer.salesapi.exceptions.BadRequestException;
@@ -100,9 +101,13 @@ public class PurchaseService {
         if (purchaseOptional.isPresent() && optionalVehicle.isPresent()) {
             Purchase purchase = purchaseOptional.get();
             Vehicle vehicle = optionalVehicle.get();
-            purchase.setVehicle(vehicle);
-            vehicle.setAmountInStock(vehicle.getAmountInStock() + purchase.getQuantity());
-            return purchaseMapper.purchaseToPurchaseOutputDto(purchaseRepository.save(purchase));
+            if (vehicle.getClass().getSimpleName().equals("BusinessVehicle") && purchase.getBusinessOrPrivate().equals(BusinessOrPrivate.PRIVATE)) {
+                throw new BadRequestException("Only vehicles with type car or motor can be added to a private purchase");
+            } else {
+                purchase.setVehicle(vehicle);
+                vehicle.setAmountInStock(vehicle.getAmountInStock() + purchase.getQuantity());
+                return purchaseMapper.purchaseToPurchaseOutputDto(purchaseRepository.save(purchase));
+            }
         } else if (optionalVehicle.isEmpty()) {
             throw new RecordNotFoundException("Vehicle with id " + vehicleId.getId() + " not found");
         } else {

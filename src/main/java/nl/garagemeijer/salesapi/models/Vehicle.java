@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "vehicle_type")
+@Table(name = "vehicles")
 public abstract class Vehicle {
 
     @Id
@@ -41,5 +42,8 @@ public abstract class Vehicle {
     private LocalDate firstRegistrationDate;
     private int amountInStock;
 
+//    public String getVehicleType() {
+//        return this.getClass().
+//    }
 
 }

@@ -1,10 +1,10 @@
 package nl.garagemeijer.salesapi.controllers;
 
 import jakarta.validation.Valid;
+import nl.garagemeijer.salesapi.dtos.ids.IdInputDto;
+import nl.garagemeijer.salesapi.dtos.users.UserChangePasswordInputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserInputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserOutputDto;
-import nl.garagemeijer.salesapi.models.User;
-import nl.garagemeijer.salesapi.repositories.UserRepository;
 import nl.garagemeijer.salesapi.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,15 +14,13 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
-    private final UserRepository userRepository;
 
-    public UserController(UserService userService, UserRepository userRepository) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.userRepository = userRepository;
     }
 
     @GetMapping
@@ -48,9 +46,16 @@ public class UserController {
         return ResponseEntity.created(locationDynamic).body(createdUser);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserOutputDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserInputDto user) {
-        UserOutputDto updatedUser = userService.updateUser(id, user);
+    @PutMapping("/{id}/password")
+    public ResponseEntity<UserOutputDto> updatePassword(@PathVariable Long id, @Valid @RequestBody UserChangePasswordInputDto passwordInputDto) {
+        UserOutputDto updatedUser = userService.updatePassword(id, passwordInputDto);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+
+    @PutMapping("/{id}/profile")
+    public ResponseEntity<UserOutputDto> addProfileToUser(@PathVariable Long id, @Valid @RequestBody IdInputDto profileId) {
+        UserOutputDto updatedUser = userService.assignProfileToUser(id, profileId);
         return ResponseEntity.ok(updatedUser);
     }
 

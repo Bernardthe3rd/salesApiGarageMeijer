@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import nl.garagemeijer.salesapi.dtos.ids.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.purchases.PurchaseInputDto;
 import nl.garagemeijer.salesapi.dtos.purchases.PurchaseOutputDto;
-import nl.garagemeijer.salesapi.repositories.PurchaseRepository;
 import nl.garagemeijer.salesapi.services.PurchaseService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,15 +13,13 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/purchases")
+@RequestMapping("/purchases")
 public class PurchaseController {
 
     private final PurchaseService purchaseService;
-    private final PurchaseRepository purchaseRepository;
 
-    public PurchaseController(PurchaseService purchaseService, PurchaseRepository purchaseRepository) {
+    public PurchaseController(PurchaseService purchaseService) {
         this.purchaseService = purchaseService;
-        this.purchaseRepository = purchaseRepository;
     }
 
     @GetMapping
