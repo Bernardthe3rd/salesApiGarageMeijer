@@ -4,7 +4,7 @@ INSERT INTO public.vehicles (vin_number, brand, model, type, year, license_plate
 VALUES ('2HGCM82633A123457', 'Toyota', 'Corolla', 'Sedan', 2021, 'Z-123-KL', 20000, 'White', 'Gasoline', 1.8,
         '2021-02-10', 5, 'Car'),
        ('JH4KA8260MC123458', 'Volkswagen', 'Golf', 'Hatchback', 2020, 'Z789-NO', 18000, 'Silver', 'Diesel', 2.0,
-        '2020-06-30', 3, 'Car');
+        '2020-06-30', 1, 'Car');
 
 INSERT INTO public.cars (id, number_of_doors, trunk_capacity, transmission, seating_capacity)
 VALUES (1, 4, 450.0, 'Automatic', 5),
