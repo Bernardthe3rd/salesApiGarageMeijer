@@ -7,11 +7,15 @@ import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
 import nl.garagemeijer.salesapi.models.Signature;
 import nl.garagemeijer.salesapi.services.SaleService;
 import nl.garagemeijer.salesapi.services.SignatureService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.InvalidMediaTypeException;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.print.attribute.standard.Media;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
@@ -39,6 +43,24 @@ public class SaleController {
     public ResponseEntity<SaleOutputDto> getSaleById(@PathVariable Long id) {
         SaleOutputDto selectedSale = saleService.getSale(id);
         return ResponseEntity.ok(selectedSale);
+    }
+
+    @GetMapping("/{id}/signature")
+    public ResponseEntity<byte[]> getSaleSignature(@PathVariable Long id) {
+        Signature signature = saleService.getSignatureFromSale(id);
+        MediaType mediaType;
+
+        try {
+            mediaType = MediaType.parseMediaType(signature.getContentType());
+        } catch (InvalidMediaTypeException ignored) {
+            mediaType = MediaType.APPLICATION_OCTET_STREAM;
+        }
+
+        return ResponseEntity
+                .ok()
+                .contentType(mediaType)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline;fileName=" + signature.getFileName())
+                .body(signature.getContents());
     }
 
     @PostMapping
@@ -87,7 +109,6 @@ public class SaleController {
         SaleOutputDto updatedSale = saleService.assignSignatureToSale(id, signature);
         return ResponseEntity.created(URI.create(url)).body(updatedSale);
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSale(@PathVariable Long id) {

@@ -186,4 +186,12 @@ public class SaleService {
         sale.setSignature(signature);
         return saleMapper.saleTosaleOutputDto(saleRepository.save(sale));
     }
+
+    public Signature getSignatureFromSale(Long id) {
+        Optional<Sale> optionalSale = saleRepository.findById(id);
+        if (optionalSale.isEmpty()) {
+            throw new RecordNotFoundException("Sale with id: " + id + " not found");
+        }
+        return optionalSale.get().getSignature();
+    }
 }
