@@ -12,6 +12,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -25,24 +26,41 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtRequestFilter jwtRequestFilter) throws Exception {
         http
                 .httpBasic(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> {
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
-//                        .requestMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.DELETE, "/api/users").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/api/profiles").permitAll()
-                                .requestMatchers(HttpMethod.PUT, "/api/profiles").permitAll()
-                                .requestMatchers(HttpMethod.DELETE, "/api/profiles").hasRole("ADMIN")
-                                .requestMatchers("/api/cars").permitAll()
-                                .requestMatchers("/api/purchases").hasRole("ADMIN")
-                                .requestMatchers("/api/sales").hasRole("SELLER")
-                                .anyRequest().permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/vehicles/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/vehicles/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/vehicles/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/vehicles/**").hasAuthority("ADMIN")
+
+                        .requestMatchers("purchases/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/sales/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/sales/**").hasAuthority("SELLER")
+                        .requestMatchers(HttpMethod.POST, "/sales/**").hasAuthority("SELLER")
+                        .requestMatchers(HttpMethod.PUT, "/sales/**").hasAuthority("SELLER")
+                        .requestMatchers(HttpMethod.DELETE, "/sales/**").hasAuthority("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/customers").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/customers").hasAuthority("SELLER")
+                        .requestMatchers(HttpMethod.PUT, "/customers").hasAuthority("SELLER")
+                        .requestMatchers(HttpMethod.DELETE, "/customers").hasAuthority("ADMIN")
+
+                        .requestMatchers("/profiles").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/users").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/users/*/password").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/users/*/profile").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/users/**").hasAuthority("ADMIN")
+
+                        .anyRequest().denyAll()
                 )
         ;
         return http.build();

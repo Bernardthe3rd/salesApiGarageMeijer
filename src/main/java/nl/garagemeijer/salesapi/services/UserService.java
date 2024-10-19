@@ -12,6 +12,8 @@ import nl.garagemeijer.salesapi.models.Profile;
 import nl.garagemeijer.salesapi.models.User;
 import nl.garagemeijer.salesapi.repositories.ProfileRepository;
 import nl.garagemeijer.salesapi.repositories.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,17 +36,10 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-//    public void seePasswords() {
-//        String rawPassword1 = "password123";
-//        String rawPassword2 = "password456";
-//        String encoded1 = passwordEncoder.encode(rawPassword1);
-//        String encoded2 = passwordEncoder.encode(rawPassword2);
-//
-//        System.out.println("hashed pw 1: " + encoded1);
-//        System.out.println("hashed pw 2: " + encoded2);
-//    }
-
     public List<UserOutputDto> getUsers() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("user " + auth.getName());
+        System.out.println("role " + auth.getAuthorities());
         return userMapper.usersToUserOutputDtos(userRepository.findAll());
     }
 

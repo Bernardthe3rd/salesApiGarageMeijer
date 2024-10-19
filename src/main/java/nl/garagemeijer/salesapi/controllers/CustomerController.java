@@ -3,8 +3,6 @@ package nl.garagemeijer.salesapi.controllers;
 import jakarta.validation.Valid;
 import nl.garagemeijer.salesapi.dtos.customers.CustomerInputDto;
 import nl.garagemeijer.salesapi.dtos.customers.CustomerOutputDto;
-import nl.garagemeijer.salesapi.models.Customer;
-import nl.garagemeijer.salesapi.repositories.CustomerRepository;
 import nl.garagemeijer.salesapi.services.CustomerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,15 +12,13 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/customers")
+@RequestMapping("/customers")
 public class CustomerController {
 
     private final CustomerService customerService;
-    private final CustomerRepository customerRepository;
 
-    public CustomerController(CustomerService customerService, CustomerRepository customerRepository) {
+    public CustomerController(CustomerService customerService) {
         this.customerService = customerService;
-        this.customerRepository = customerRepository;
     }
 
     @GetMapping

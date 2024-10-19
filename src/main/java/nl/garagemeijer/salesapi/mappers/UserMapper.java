@@ -63,7 +63,7 @@ public class UserMapper {
     public User userInputDtoToUser(UserInputDto userInputDto) {
         var user = new User();
         user.setUsername(userInputDto.getUsername());
-        user.setPassword(userInputDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userInputDto.getPassword()));
         return user;
     }
 

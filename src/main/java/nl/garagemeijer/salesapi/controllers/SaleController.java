@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import nl.garagemeijer.salesapi.dtos.ids.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
-import nl.garagemeijer.salesapi.repositories.SaleRepository;
 import nl.garagemeijer.salesapi.services.SaleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,15 +13,13 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/sales")
+@RequestMapping("/sales")
 public class SaleController {
 
     private final SaleService saleService;
-    private final SaleRepository saleRepository;
 
-    public SaleController(SaleService saleService, SaleRepository saleRepository) {
+    public SaleController(SaleService saleService) {
         this.saleService = saleService;
-        this.saleRepository = saleRepository;
     }
 
     @GetMapping

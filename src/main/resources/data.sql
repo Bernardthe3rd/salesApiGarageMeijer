@@ -44,20 +44,20 @@ VALUES (1, 'John', 'Doe', '1985-06-15', 'Maple Street 10', '1234AB', 'Amsterdam'
         'anna.johnson@example.com', 'phone', NULL, '2024-01-15');
 
 -- Users
-INSERT INTO public.users (id, username, password, last_login, is_active, creation_date)
-VALUES (1, 'markjohnson', '$2a$10$CLwWDPy2bR52uTKx7ZIvqOGmA6TMby64U10zKn0Zk4IxibTRBn4eG', '2024-01-01', TRUE,
+INSERT INTO public.users (username, password, last_login, is_active, creation_date)
+VALUES ('markjohnson', '$2a$10$CLwWDPy2bR52uTKx7ZIvqOGmA6TMby64U10zKn0Zk4IxibTRBn4eG', '2024-01-01', TRUE,
         '2024-01-01'),
-       (2, 'emilysmith', '$2a$10$kjXWp5bhlPGLaNnrMOe.b.lBzucZMsvXIlxWeFyzgDeW.imGe7Y9m', '2024-01-15', TRUE,
+       ('emilysmith', '$2a$10$kjXWp5bhlPGLaNnrMOe.b.lBzucZMsvXIlxWeFyzgDeW.imGe7Y9m', '2024-01-15', TRUE,
         '2024-01-15');
 -- password voor user1 = password123
 -- password voor user2 = password456
 
 -- Profiles
-INSERT INTO public.profiles (id, creation_date, role, first_name, last_name, date_of_birth, street, postal_code, city,
+INSERT INTO public.profiles (creation_date, role, first_name, last_name, date_of_birth, street, postal_code, city,
                              country, email, phone_number, user_id)
-VALUES (1, '2024-01-01', 'ADMIN', 'Mark', 'Johnson', '1982-05-12', 'Birch Lane 5', '1234AB', 'The Hague', 'Netherlands',
+VALUES ('2024-01-01', 'ADMIN', 'Mark', 'Johnson', '1982-05-12', 'Birch Lane 5', '1234AB', 'The Hague', 'Netherlands',
         'mark.johnson@example.com', '+31612345678', 1),
-       (2, '2024-01-15', 'SELLER', 'Emily', 'Smith', '1995-11-20', 'Pine Street 12', '5678CD', 'Utrecht', 'Netherlands',
+       ('2024-01-15', 'SELLER', 'Emily', 'Smith', '1995-11-20', 'Pine Street 12', '5678CD', 'Utrecht', 'Netherlands',
         'emily.smith@example.com', '+31687654321', 2);
 
 -- Purchases

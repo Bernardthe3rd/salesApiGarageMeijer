@@ -64,7 +64,11 @@ public class JwtService {
         List<String> role = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
-        claims.put("role", role);
+        if (!role.isEmpty()) {
+            String oneRole = role.get(0);
+            String withoutRole = oneRole.replace("ROLE_", "");
+            claims.put("role", withoutRole);
+        }
         return createToken(claims, userDetails.getUsername());
     }
 

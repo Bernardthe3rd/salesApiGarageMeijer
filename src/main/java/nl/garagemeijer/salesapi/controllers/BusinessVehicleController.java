@@ -3,7 +3,6 @@ package nl.garagemeijer.salesapi.controllers;
 import jakarta.validation.Valid;
 import nl.garagemeijer.salesapi.dtos.businessVehicles.BusinessVehicleInputDto;
 import nl.garagemeijer.salesapi.dtos.businessVehicles.BusinessVehicleOutputDto;
-import nl.garagemeijer.salesapi.repositories.BusinessVehicleRepository;
 import nl.garagemeijer.salesapi.services.BusinessVehicleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,15 +12,13 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/businessvehicles")
+@RequestMapping("/vehicles/businessvehicles")
 public class BusinessVehicleController {
 
     private final BusinessVehicleService businessVehicleService;
-    private final BusinessVehicleRepository businessVehicleRepository;
 
-    public BusinessVehicleController(BusinessVehicleService businessVehicleService, BusinessVehicleRepository businessVehicleRepository) {
+    public BusinessVehicleController(BusinessVehicleService businessVehicleService) {
         this.businessVehicleService = businessVehicleService;
-        this.businessVehicleRepository = businessVehicleRepository;
     }
 
     @GetMapping
