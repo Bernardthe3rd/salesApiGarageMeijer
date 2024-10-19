@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import nl.garagemeijer.salesapi.dtos.ids.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
+import nl.garagemeijer.salesapi.dtos.signature.SignatureOutputDto;
 import nl.garagemeijer.salesapi.models.Signature;
 import nl.garagemeijer.salesapi.services.SaleService;
 import nl.garagemeijer.salesapi.services.SignatureService;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.print.attribute.standard.Media;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
@@ -47,7 +47,7 @@ public class SaleController {
 
     @GetMapping("/{id}/signature")
     public ResponseEntity<byte[]> getSaleSignature(@PathVariable Long id) {
-        Signature signature = saleService.getSignatureFromSale(id);
+        SignatureOutputDto signature = saleService.getSignatureFromSale(id);
         MediaType mediaType;
 
         try {
