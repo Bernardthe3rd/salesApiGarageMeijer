@@ -28,9 +28,9 @@ public class ProfileService {
     }
 
     public ProfileOutputDto getProfile(Long id) {
-        Optional<Profile> accountOptional = profileRepository.findById(id);
-        if (accountOptional.isPresent()) {
-            return profileMapper.profileToProfileOutputDto(accountOptional.get());
+        Optional<Profile> optionalProfile = profileRepository.findById(id);
+        if (optionalProfile.isPresent()) {
+            return profileMapper.profileToProfileOutputDto(optionalProfile.get());
         } else {
             throw new RecordNotFoundException("Profile with id " + id + " not found");
         }

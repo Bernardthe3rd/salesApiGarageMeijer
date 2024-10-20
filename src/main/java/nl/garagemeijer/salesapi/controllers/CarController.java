@@ -34,8 +34,8 @@ public class CarController {
     }
 
     @PostMapping
-    public ResponseEntity<CarOutputDto> createCar(@Valid @RequestBody CarInputDto car) {
-        CarOutputDto createdCar = carService.saveCar(car);
+    public ResponseEntity<CarOutputDto> createCar(@Valid @RequestBody CarInputDto carInput) {
+        CarOutputDto createdCar = carService.saveCar(carInput);
         URI locationDynamic = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -45,8 +45,8 @@ public class CarController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CarOutputDto> updateCar(@PathVariable Long id, @Valid @RequestBody CarInputDto car) {
-        CarOutputDto updatedCar = carService.updateCar(id, car);
+    public ResponseEntity<CarOutputDto> updateCar(@PathVariable Long id, @Valid @RequestBody CarInputDto carInput) {
+        CarOutputDto updatedCar = carService.updateCar(id, carInput);
         return ResponseEntity.ok(updatedCar);
     }
 

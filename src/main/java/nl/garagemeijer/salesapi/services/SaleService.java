@@ -3,7 +3,6 @@ package nl.garagemeijer.salesapi.services;
 import nl.garagemeijer.salesapi.dtos.ids.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleInputDto;
 import nl.garagemeijer.salesapi.dtos.sales.SaleOutputDto;
-import nl.garagemeijer.salesapi.dtos.signature.SignatureInputDto;
 import nl.garagemeijer.salesapi.dtos.signature.SignatureOutputDto;
 import nl.garagemeijer.salesapi.enums.BusinessOrPrivate;
 import nl.garagemeijer.salesapi.enums.Role;
@@ -73,9 +72,9 @@ public class SaleService {
     }
 
     public SaleOutputDto getSale(Long id) {
-        Optional<Sale> saleOptional = saleRepository.findById(id);
-        if (saleOptional.isPresent()) {
-            return saleMapper.saleTosaleOutputDto(saleOptional.get());
+        Optional<Sale> optionalSale = saleRepository.findById(id);
+        if (optionalSale.isPresent()) {
+            return saleMapper.saleTosaleOutputDto(optionalSale.get());
         } else {
             throw new RecordNotFoundException("Sale with id: " + id + " not found");
         }

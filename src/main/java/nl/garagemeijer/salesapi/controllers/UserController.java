@@ -36,8 +36,8 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserOutputDto> createUser(@Valid @RequestBody UserInputDto user) {
-        UserOutputDto createdUser = userService.saveUser(user);
+    public ResponseEntity<UserOutputDto> createUser(@Valid @RequestBody UserInputDto userInput) {
+        UserOutputDto createdUser = userService.saveUser(userInput);
         URI locationDynamic = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -47,8 +47,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}/password")
-    public ResponseEntity<UserOutputDto> updatePassword(@PathVariable Long id, @Valid @RequestBody UserChangePasswordInputDto passwordInputDto) {
-        UserOutputDto updatedUser = userService.updatePassword(id, passwordInputDto);
+    public ResponseEntity<UserOutputDto> updatePassword(@PathVariable Long id, @Valid @RequestBody UserChangePasswordInputDto passwordInput) {
+        UserOutputDto updatedUser = userService.updatePassword(id, passwordInput);
         return ResponseEntity.ok(updatedUser);
     }
 

@@ -22,36 +22,36 @@ public class ProfileController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProfileOutputDto>> getAllAccounts() {
+    public ResponseEntity<List<ProfileOutputDto>> getAllProfiles() {
         List<ProfileOutputDto> profiles = profileService.getProfiles();
         return ResponseEntity.ok(profiles);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProfileOutputDto> getAccountById(@PathVariable Long id) {
+    public ResponseEntity<ProfileOutputDto> getProfileById(@PathVariable Long id) {
         ProfileOutputDto selectedProfile = profileService.getProfile(id);
         return ResponseEntity.ok(selectedProfile);
     }
 
     @PostMapping
-    public ResponseEntity<ProfileOutputDto> createAccount(@Valid @RequestBody ProfileInputDto account) {
-        ProfileOutputDto createdAccount = profileService.saveProfile(account);
+    public ResponseEntity<ProfileOutputDto> createProfile(@Valid @RequestBody ProfileInputDto profileInput) {
+        ProfileOutputDto createdProfile = profileService.saveProfile(profileInput);
         URI locationDynamic = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(createdAccount.getId())
+                .buildAndExpand(createdProfile.getId())
                 .toUri();
-        return ResponseEntity.created(locationDynamic).body(createdAccount);
+        return ResponseEntity.created(locationDynamic).body(createdProfile);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProfileOutputDto> updateAccount(@PathVariable Long id, @Valid @RequestBody ProfileInputDto account) {
-        ProfileOutputDto updatedProfile = profileService.updateProfile(id, account);
+    public ResponseEntity<ProfileOutputDto> updateProfile(@PathVariable Long id, @Valid @RequestBody ProfileInputDto profileInput) {
+        ProfileOutputDto updatedProfile = profileService.updateProfile(id, profileInput);
         return ResponseEntity.ok(updatedProfile);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteProfile(@PathVariable Long id) {
         profileService.deleteProfile(id);
         return ResponseEntity.noContent().build();
     }

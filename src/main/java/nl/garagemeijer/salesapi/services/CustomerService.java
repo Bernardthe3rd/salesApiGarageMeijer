@@ -2,8 +2,6 @@ package nl.garagemeijer.salesapi.services;
 
 import nl.garagemeijer.salesapi.dtos.customers.CustomerInputDto;
 import nl.garagemeijer.salesapi.dtos.customers.CustomerOutputDto;
-import nl.garagemeijer.salesapi.enums.Role;
-import nl.garagemeijer.salesapi.exceptions.BadRequestException;
 import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
 import nl.garagemeijer.salesapi.mappers.CustomerMapper;
 import nl.garagemeijer.salesapi.models.Customer;
@@ -34,9 +32,9 @@ public class CustomerService {
     }
 
     public CustomerOutputDto getCustomer(Long id) {
-        Optional<Customer> customerOptional = customerRepository.findById(id);
-        if (customerOptional.isPresent()) {
-            return customerMapper.customerTocustomerOutputDto(customerOptional.get());
+        Optional<Customer> optionalCustomer = customerRepository.findById(id);
+        if (optionalCustomer.isPresent()) {
+            return customerMapper.customerTocustomerOutputDto(optionalCustomer.get());
         } else {
             throw new RecordNotFoundException("Customer with id " + id + " not found");
         }

@@ -27,9 +27,9 @@ public class MotorService {
     }
 
     public MotorOutputDto getMotor(Long id) {
-        Optional<Motor> motorOptional = motorRepository.findById(id);
-        if (motorOptional.isPresent()) {
-            return motorMapper.motorTomotorOutputDto(motorOptional.get());
+        Optional<Motor> optionalMotor = motorRepository.findById(id);
+        if (optionalMotor.isPresent()) {
+            return motorMapper.motorTomotorOutputDto(optionalMotor.get());
         } else {
             throw new RecordNotFoundException("Motor with id " + id + " not found");
         }

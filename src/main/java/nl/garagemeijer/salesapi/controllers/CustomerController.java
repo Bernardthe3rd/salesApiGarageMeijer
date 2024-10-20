@@ -34,8 +34,8 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<CustomerOutputDto> createCustomer(@Valid @RequestBody CustomerInputDto customer) {
-        CustomerOutputDto createdCustomer = customerService.saveCustomer(customer);
+    public ResponseEntity<CustomerOutputDto> createCustomer(@Valid @RequestBody CustomerInputDto customerInput) {
+        CustomerOutputDto createdCustomer = customerService.saveCustomer(customerInput);
         URI locationDynamic = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -45,8 +45,8 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CustomerOutputDto> updateCustomer(@PathVariable Long id, @Valid @RequestBody CustomerInputDto customer) {
-        CustomerOutputDto updatedCustomer = customerService.updateCustomer(id, customer);
+    public ResponseEntity<CustomerOutputDto> updateCustomer(@PathVariable Long id, @Valid @RequestBody CustomerInputDto customerInput) {
+        CustomerOutputDto updatedCustomer = customerService.updateCustomer(id, customerInput);
         return ResponseEntity.ok(updatedCustomer);
     }
 

@@ -34,8 +34,8 @@ public class MotorController {
     }
 
     @PostMapping
-    public ResponseEntity<MotorOutputDto> createMotor(@Valid @RequestBody MotorInputDto Motor) {
-        MotorOutputDto createdMotor = motorService.saveMotor(Motor);
+    public ResponseEntity<MotorOutputDto> createMotor(@Valid @RequestBody MotorInputDto motorInput) {
+        MotorOutputDto createdMotor = motorService.saveMotor(motorInput);
         URI locationDynamic = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -45,8 +45,8 @@ public class MotorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MotorOutputDto> updateMotor(@PathVariable Long id, @Valid @RequestBody MotorInputDto Motor) {
-        MotorOutputDto updatedMotor = motorService.updateMotor(id, Motor);
+    public ResponseEntity<MotorOutputDto> updateMotor(@PathVariable Long id, @Valid @RequestBody MotorInputDto motorInput) {
+        MotorOutputDto updatedMotor = motorService.updateMotor(id, motorInput);
         return ResponseEntity.ok(updatedMotor);
     }
 

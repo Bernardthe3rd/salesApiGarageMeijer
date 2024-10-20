@@ -20,9 +20,11 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDate orderDate;
     @Column(nullable = false)
     private String supplier;
+    private Long adminId;
+    private int orderNumber;
+    private LocalDate orderDate;
     private BigDecimal purchasePriceEx;
     private BigDecimal taxPrice;
     private BigDecimal bpmPrice;
@@ -34,11 +36,9 @@ public class Purchase {
     private int quantity;
     @Enumerated(EnumType.STRING)
     private Status status;
-    private int orderNumber;
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private BusinessOrPrivate businessOrPrivate;
-    private Long adminId;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "vehicle_id")

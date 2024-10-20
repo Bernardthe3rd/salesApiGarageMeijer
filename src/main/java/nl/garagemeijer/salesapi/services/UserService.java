@@ -44,9 +44,9 @@ public class UserService {
     }
 
     public UserOutputDto getUser(Long id) {
-        Optional<User> user = userRepository.findById(id);
-        if (user.isPresent()) {
-            return userMapper.userToUserOutputDto(user.get());
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            return userMapper.userToUserOutputDto(optionalUser.get());
         } else {
             throw new RecordNotFoundException("User with id: " + id + " not found");
         }

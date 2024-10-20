@@ -34,8 +34,8 @@ public class BusinessVehicleController {
     }
 
     @PostMapping
-    public ResponseEntity<BusinessVehicleOutputDto> createBusinessVehicle(@Valid @RequestBody BusinessVehicleInputDto businessVehicle) {
-        BusinessVehicleOutputDto createdBusinessVehicle = businessVehicleService.saveBusinessVehicle(businessVehicle);
+    public ResponseEntity<BusinessVehicleOutputDto> createBusinessVehicle(@Valid @RequestBody BusinessVehicleInputDto businessVehicleInput) {
+        BusinessVehicleOutputDto createdBusinessVehicle = businessVehicleService.saveBusinessVehicle(businessVehicleInput);
         URI locationDynamic = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -46,8 +46,8 @@ public class BusinessVehicleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BusinessVehicleOutputDto> updateBusinessVehicle(@PathVariable Long id, @Valid @RequestBody BusinessVehicleInputDto businessVehicle) {
-        BusinessVehicleOutputDto updatedBusinessVehicle = businessVehicleService.updateBusinessVehicle(id, businessVehicle);
+    public ResponseEntity<BusinessVehicleOutputDto> updateBusinessVehicle(@PathVariable Long id, @Valid @RequestBody BusinessVehicleInputDto businessVehicleInput) {
+        BusinessVehicleOutputDto updatedBusinessVehicle = businessVehicleService.updateBusinessVehicle(id, businessVehicleInput);
         return ResponseEntity.ok(updatedBusinessVehicle);
     }
 

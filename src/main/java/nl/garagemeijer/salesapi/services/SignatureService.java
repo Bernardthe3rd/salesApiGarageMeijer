@@ -29,9 +29,9 @@ public class SignatureService {
     }
 
     public SignatureOutputDto getSignatureById(Long id) {
-        Optional<Signature> signature = signatureRepository.findById(id);
-        if (signature.isPresent()) {
-            return signatureMapper.signatureToOutputDto(signature.get());
+        Optional<Signature> optionalSignature = signatureRepository.findById(id);
+        if (optionalSignature.isPresent()) {
+            return signatureMapper.signatureToOutputDto(optionalSignature.get());
         } else {
             throw new RecordNotFoundException("Signature with id " + id + " not found");
         }

@@ -76,8 +76,8 @@ public class SaleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SaleOutputDto> updateSale(@PathVariable Long id, @Valid @RequestBody SaleInputDto sale) {
-        SaleOutputDto updatedSale = saleService.updateSale(id, sale);
+    public ResponseEntity<SaleOutputDto> updateSale(@PathVariable Long id, @Valid @RequestBody SaleInputDto saleInput) {
+        SaleOutputDto updatedSale = saleService.updateSale(id, saleInput);
         return ResponseEntity.ok(updatedSale);
     }
 

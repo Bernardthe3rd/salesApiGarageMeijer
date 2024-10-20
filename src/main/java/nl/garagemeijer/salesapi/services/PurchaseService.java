@@ -49,9 +49,9 @@ public class PurchaseService {
     }
 
     public PurchaseOutputDto getPurchase(Long id) {
-        Optional<Purchase> purchaseOptional = purchaseRepository.findById(id);
-        if (purchaseOptional.isPresent()) {
-            return purchaseMapper.purchaseToPurchaseOutputDto(purchaseOptional.get());
+        Optional<Purchase> optionalPurchase = purchaseRepository.findById(id);
+        if (optionalPurchase.isPresent()) {
+            return purchaseMapper.purchaseToPurchaseOutputDto(optionalPurchase.get());
         } else {
             throw new RecordNotFoundException("Purchase with id: " + id + " not found");
         }
