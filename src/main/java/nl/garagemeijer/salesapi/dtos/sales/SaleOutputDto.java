@@ -3,7 +3,6 @@ package nl.garagemeijer.salesapi.dtos.sales;
 import lombok.Getter;
 import lombok.Setter;
 import nl.garagemeijer.salesapi.dtos.vehicles.VehicleOutputDto;
-import nl.garagemeijer.salesapi.dtos.customers.CustomerOutputDto;
 import nl.garagemeijer.salesapi.enums.Addition;
 import nl.garagemeijer.salesapi.enums.BusinessOrPrivate;
 import nl.garagemeijer.salesapi.enums.Status;
@@ -31,9 +30,9 @@ public class SaleOutputDto {
     private BusinessOrPrivate businessOrPrivate;
     private String comment;
     private Addition addition;
-    private VehicleOutputDto vehicle;
-    private CustomerOutputDto customer;
+    private Long customerId;
     private Long sellerId;
+    private Long signatureId;
+    private VehicleOutputDto vehicleId;
 
-//    private SignatureUpload signatureUpload;
 }

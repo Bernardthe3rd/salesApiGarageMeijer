@@ -2,11 +2,11 @@ package nl.garagemeijer.salesapi.security;
 
 import nl.garagemeijer.salesapi.dtos.authentication.AuthenticationInputDto;
 import nl.garagemeijer.salesapi.dtos.authentication.AuthenticationOutputDto;
-import nl.garagemeijer.salesapi.exceptions.UnauthorizedException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -33,13 +33,14 @@ public class AuthController {
 
         try {
             Authentication auth = authenticationManager.authenticate(uploadedDetails);
+            System.out.println("role " + auth.getAuthorities());
             var userDetails = userDetailsService.loadUserByUsername(auth.getName());
             String token = jwtService.generateToken(userDetails);
             AuthenticationOutputDto response = new AuthenticationOutputDto(token, "login succesful");
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                     .body(response);
-        } catch (UnauthorizedException ex) {
+        } catch (BadCredentialsException ex) {
             return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
         }
     }

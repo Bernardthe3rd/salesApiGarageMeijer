@@ -25,7 +25,7 @@ public class PurchaseOutputDto {
     private Status status;
     private int orderNumber;
     private BusinessOrPrivate businessOrPrivate;
-    private VehicleOutputDto vehicle;
     private Long adminId;
+    private VehicleOutputDto vehicleOutput;
 
 }

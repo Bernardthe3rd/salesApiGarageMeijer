@@ -1,6 +1,5 @@
 package nl.garagemeijer.salesapi.services;
 
-import jakarta.validation.Valid;
 import nl.garagemeijer.salesapi.dtos.cars.CarInputDto;
 import nl.garagemeijer.salesapi.dtos.cars.CarOutputDto;
 import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
@@ -28,15 +27,15 @@ public class CarService {
     }
 
     public CarOutputDto getCar(Long id) {
-        Optional<Car> carOptional = carRepository.findById(id);
-        if (carOptional.isPresent()) {
-            return carMapper.carToCarOutputDto(carOptional.get());
+        Optional<Car> optionalCar = carRepository.findById(id);
+        if (optionalCar.isPresent()) {
+            return carMapper.carToCarOutputDto(optionalCar.get());
         } else {
             throw new RecordNotFoundException("Car with id: " + id + " not found");
         }
     }
 
-    public CarOutputDto saveCar(@Valid CarInputDto car) {
+    public CarOutputDto saveCar(CarInputDto car) {
         Car carToSave = carMapper.carInputDtoToCar(car);
         carToSave.setAmountInStock(0);
         return carMapper.carToCarOutputDto(carRepository.save(carToSave));
@@ -49,6 +48,9 @@ public class CarService {
     }
 
     public void deleteCar(Long id) {
+        if (carRepository.findById(id).isEmpty()) {
+            throw new RecordNotFoundException("Car with id: " + id + " not found");
+        }
         carRepository.deleteById(id);
     }
 }

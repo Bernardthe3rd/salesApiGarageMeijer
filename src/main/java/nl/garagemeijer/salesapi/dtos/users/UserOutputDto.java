@@ -13,7 +13,6 @@ public class UserOutputDto {
 
     private Long id;
     private String username;
-    private String password;
     private LocalDate lastLogin;
     private Boolean isActive;
     private LocalDate creationDate;

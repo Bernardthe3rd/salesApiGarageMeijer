@@ -17,6 +17,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private LocalDate creationDate;
     @Column(unique = true, length = 64)
     private String username;
     @Column(nullable = false)
@@ -25,7 +26,6 @@ public class User {
     private LocalDate lastLogin;
     @Column(nullable = false)
     private Boolean isActive;
-    private LocalDate creationDate;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Profile profile;

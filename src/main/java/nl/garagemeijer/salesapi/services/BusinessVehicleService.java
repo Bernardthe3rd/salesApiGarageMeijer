@@ -27,9 +27,9 @@ public class BusinessVehicleService {
     }
 
     public BusinessVehicleOutputDto getBusinessVehicle(Long id) {
-        Optional<BusinessVehicle> businessVehicleOptional = businessVehicleRepository.findById(id);
-        if (businessVehicleOptional.isPresent()) {
-            return businessVehicleMapper.businessVehicleToBusinessVehicleOutputDto(businessVehicleOptional.get());
+        Optional<BusinessVehicle> optionalBusinessVehicle = businessVehicleRepository.findById(id);
+        if (optionalBusinessVehicle.isPresent()) {
+            return businessVehicleMapper.businessVehicleToBusinessVehicleOutputDto(optionalBusinessVehicle.get());
         } else {
             throw new RecordNotFoundException("Business vehicle with id: " + id + " not found");
         }
@@ -48,6 +48,9 @@ public class BusinessVehicleService {
     }
 
     public void deleteBusinessVehicle(Long id) {
+        if (businessVehicleRepository.findById(id).isEmpty()) {
+            throw new RecordNotFoundException("Business vehicle with id: " + id + " not found");
+        }
         businessVehicleRepository.deleteById(id);
     }
 }

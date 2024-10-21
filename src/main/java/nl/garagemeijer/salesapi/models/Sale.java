@@ -22,19 +22,20 @@ public class Sale {
     private Long id;
 
     private LocalDate saleDate;
-    @Column(nullable = false)
-    private int quantity;
+    private int orderNumber;
+    private Long sellerId;
+    private String comment;
     private BigDecimal salePriceEx;
     private BigDecimal bpmPrice;
     private BigDecimal taxPrice;
     @Column(nullable = false)
     private BigDecimal salePriceIncl;
     @Column(nullable = false)
+    private int quantity;
+    @Column(nullable = false)
     private String typeOrder;
     @Enumerated(EnumType.STRING)
     private Status status;
-    private int orderNumber;
-    private String comment;
     @Column(nullable = false)
     private Double discount;
     @Column(nullable = false)
@@ -46,7 +47,6 @@ public class Sale {
     private BusinessOrPrivate businessOrPrivate;
     @Enumerated(EnumType.STRING)
     private Addition addition;
-    private Long sellerId;
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "vehicle_id")
@@ -56,6 +56,7 @@ public class Sale {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-//    private SignatureUpload signatureUpload;
+    @OneToOne(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Signature signature;
 
 }

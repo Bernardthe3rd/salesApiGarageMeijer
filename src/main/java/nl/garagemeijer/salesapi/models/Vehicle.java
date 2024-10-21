@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -42,8 +43,9 @@ public abstract class Vehicle {
     private LocalDate firstRegistrationDate;
     private int amountInStock;
 
-//    public String getVehicleType() {
-//        return this.getClass().
-//    }
+    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Purchase> purchases;
 
+    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Sale> sales;
 }

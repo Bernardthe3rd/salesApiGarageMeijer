@@ -35,8 +35,8 @@ public class PurchaseController {
     }
 
     @PostMapping
-    public ResponseEntity<PurchaseOutputDto> createPurchase(@Valid @RequestBody PurchaseInputDto purchase) {
-        PurchaseOutputDto createdPurchase = purchaseService.savePurchase(purchase);
+    public ResponseEntity<PurchaseOutputDto> createPurchase(@Valid @RequestBody PurchaseInputDto purchaseInput) {
+        PurchaseOutputDto createdPurchase = purchaseService.savePurchase(purchaseInput);
         URI locationDynamic = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -46,8 +46,8 @@ public class PurchaseController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<PurchaseOutputDto> updatePurchase(@PathVariable Long id, @Valid @RequestBody PurchaseInputDto purchase) {
-        PurchaseOutputDto updatedPurchase = purchaseService.updatePurchase(id, purchase);
+    public ResponseEntity<PurchaseOutputDto> updatePurchase(@PathVariable Long id, @Valid @RequestBody PurchaseInputDto purchaseInput) {
+        PurchaseOutputDto updatedPurchase = purchaseService.updatePurchase(id, purchaseInput);
         return ResponseEntity.ok(updatedPurchase);
     }
 

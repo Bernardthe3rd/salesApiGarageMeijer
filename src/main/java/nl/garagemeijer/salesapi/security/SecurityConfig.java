@@ -35,6 +35,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
+
                         .requestMatchers("/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/vehicles/**").authenticated()
                         .requestMatchers(HttpMethod.POST, "/vehicles/**").hasAuthority("ADMIN")
@@ -42,8 +43,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/vehicles/**").hasAuthority("ADMIN")
 
                         .requestMatchers("purchases/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/sales/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/sales/**").hasAuthority("SELLER")
+
+                        .requestMatchers(HttpMethod.GET, "/sales").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/sales/*/signature").hasAuthority("SELLER")
                         .requestMatchers(HttpMethod.POST, "/sales/**").hasAuthority("SELLER")
                         .requestMatchers(HttpMethod.PUT, "/sales/**").hasAuthority("SELLER")
                         .requestMatchers(HttpMethod.DELETE, "/sales/**").hasAuthority("ADMIN")
@@ -51,11 +53,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/customers").authenticated()
                         .requestMatchers(HttpMethod.POST, "/customers").hasAuthority("SELLER")
                         .requestMatchers(HttpMethod.PUT, "/customers").hasAuthority("SELLER")
-                        .requestMatchers(HttpMethod.DELETE, "/customers").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/customers/**").hasAuthority("ADMIN")
 
-                        .requestMatchers("/profiles").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/users").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
+                        .requestMatchers("/profiles/**").hasAuthority("ADMIN")
+
+                        .requestMatchers(HttpMethod.GET, "/users/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/users").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/users/*/password").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/users/*/profile").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/users/**").hasAuthority("ADMIN")

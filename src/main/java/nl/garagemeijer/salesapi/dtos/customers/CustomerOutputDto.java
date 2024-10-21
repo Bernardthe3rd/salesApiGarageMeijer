@@ -25,8 +25,6 @@ public class CustomerOutputDto {
     private String prefferedContactMethod;
     private String nameLastSalesPerson;
     private List<SaleOutputDto> purchaseHistory;
-//    private int accountId;
-//    private sale purchasehistory;
 
 }
 
