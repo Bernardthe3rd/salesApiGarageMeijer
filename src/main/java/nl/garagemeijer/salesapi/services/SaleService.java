@@ -57,7 +57,7 @@ public class SaleService {
             purchaseFromSale.setQuantity(sale.getQuantity());
             purchaseFromSale.setOrderDate(LocalDate.now());
             purchaseFromSale.setStatus(Status.OPEN);
-            purchaseFromSale.setOrderNumber(getLastOrderNumber.forPurchase());
+            purchaseFromSale.setOrderNumber(getLastOrderNumber.getLastOrderNumber(purchaseFromSale));
             purchaseFromSale.setExpectedDeliveryDate(LocalDate.of(2044, 1, 1));
             purchaseFromSale.setPurchasePriceIncl(sale.getSalePriceEx());
             purchaseFromSale.setBusinessOrPrivate(sale.getBusinessOrPrivate());
@@ -85,9 +85,9 @@ public class SaleService {
 
         saleToSave.setSaleDate(LocalDate.now());
         saleToSave.setStatus(Status.NEW);
-        saleToSave.setOrderNumber(getLastOrderNumber.forSale());
+        saleToSave.setOrderNumber(getLastOrderNumber.getLastOrderNumber(saleToSave));
 
-        List<BigDecimal> prices = priceCalculator.calculatePricesSales(saleToSave);
+        List<BigDecimal> prices = priceCalculator.calculatePrices(saleToSave);
         saleToSave.setTaxPrice(prices.get(0));
         saleToSave.setBpmPrice(prices.get(1));
         saleToSave.setSalePriceEx(prices.get(2));
@@ -99,7 +99,7 @@ public class SaleService {
         Sale getSale = saleRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Sale with id: " + id + " not found"));
         Sale saleToUpdate = saleMapper.updateSaleFromSaleInputDto(sale, getSale);
 
-        List<BigDecimal> prices = priceCalculator.calculatePricesSales(saleToUpdate);
+        List<BigDecimal> prices = priceCalculator.calculatePrices(saleToUpdate);
         saleToUpdate.setTaxPrice(prices.get(0));
         saleToUpdate.setBpmPrice(prices.get(1));
         saleToUpdate.setSalePriceEx(prices.get(2));
@@ -116,6 +116,9 @@ public class SaleService {
     }
 
     public void deleteSale(Long id) {
+        if (saleRepository.findById(id).isEmpty()) {
+            throw new RecordNotFoundException("Sale with id: " + id + " not found");
+        }
         saleRepository.deleteById(id);
     }
 

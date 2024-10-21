@@ -1,6 +1,7 @@
 package nl.garagemeijer.salesapi.helpers;
 
 import nl.garagemeijer.salesapi.enums.BusinessOrPrivate;
+import nl.garagemeijer.salesapi.exceptions.BadRequestException;
 import nl.garagemeijer.salesapi.models.Purchase;
 import nl.garagemeijer.salesapi.models.Sale;
 import org.springframework.stereotype.Component;
@@ -75,5 +76,17 @@ public class PriceCalculator {
         }
 
         return prices;
+    }
+
+    public List<BigDecimal> calculatePrices(Object document) {
+        switch (document) {
+            case Sale sale -> {
+                return calculatePricesSales(sale);
+            }
+            case Purchase purchase -> {
+                return calculatePricesPurchases(purchase);
+            }
+            default -> throw new BadRequestException("Unsupported document type: " + document);
+        }
     }
 }

@@ -5,8 +5,10 @@ import nl.garagemeijer.salesapi.dtos.ids.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserChangePasswordInputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserInputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserOutputDto;
+import nl.garagemeijer.salesapi.enums.Role;
 import nl.garagemeijer.salesapi.exceptions.BadRequestException;
 import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
+import nl.garagemeijer.salesapi.exceptions.UnauthorizedException;
 import nl.garagemeijer.salesapi.mappers.UserMapper;
 import nl.garagemeijer.salesapi.models.Profile;
 import nl.garagemeijer.salesapi.models.User;
@@ -53,12 +55,14 @@ public class UserService {
     }
 
     public UserOutputDto saveUser(UserInputDto user) {
+        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+            throw new BadRequestException("Username already exists: " + user.getUsername());
+        }
+
         User userToSave = userMapper.userInputDtoToUser(user);
         userToSave.setCreationDate(LocalDate.now());
         userToSave.setIsActive(true);
         userToSave.setLastLogin(LocalDate.now());
-        Profile profile = new Profile();
-        userToSave.setProfile(profile);
 
         return userMapper.userToUserOutputDto(userRepository.save(userToSave));
     }
@@ -77,6 +81,12 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isEmpty()) {
+            throw new RecordNotFoundException("User with id: " + id + " not found");
+        } else if (optionalUser.get().getId().equals(id)) {
+            throw new UnauthorizedException("You can not delete your own user account");
+        }
         userRepository.deleteById(id);
     }
 

@@ -33,7 +33,7 @@ public class PurchaseMapper {
         dto.setOrderNumber(purchase.getOrderNumber());
         dto.setBusinessOrPrivate(purchase.getBusinessOrPrivate());
         if (purchase.getVehicle() != null) {
-            dto.setVehicleId(purchase.getVehicle().getId());
+            dto.setVehicleOutput(vehicleMapper.vehicleToVehicleOutputDto(purchase.getVehicle()));
         }
         if (purchase.getAdminId() != null) {
             dto.setAdminId(purchase.getAdminId());

@@ -56,13 +56,4 @@ public class VehicleMapper {
         return dto;
     }
 
-//    public static List<VehicleOutputDto> vehiclesToVehiclesOutputDtos(List<Vehicle> vehicles) {
-//        List<VehicleOutputDto> vehicleOutputDtos = new ArrayList<>();
-//        for (Vehicle vehicle : vehicles) {
-//            VehicleOutputDto vehicleOutputDto = vehicleToVehicleOutputDto(vehicle);
-//            vehicleOutputDtos.add(vehicleOutputDto);
-//        }
-//        return vehicleOutputDtos;
-//    }
-
 }

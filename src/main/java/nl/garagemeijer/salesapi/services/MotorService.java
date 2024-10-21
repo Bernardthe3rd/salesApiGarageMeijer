@@ -48,6 +48,9 @@ public class MotorService {
     }
 
     public void deleteMotor(Long id) {
+        if (motorRepository.findById(id).isEmpty()) {
+            throw new RecordNotFoundException("Motor with id " + id + " not found");
+        }
         motorRepository.deleteById(id);
     }
 }

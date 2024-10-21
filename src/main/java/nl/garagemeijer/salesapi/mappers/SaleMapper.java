@@ -11,6 +11,12 @@ import java.util.List;
 @Component
 public class SaleMapper {
 
+    private final VehicleMapper vehicleMapper;
+
+    public SaleMapper(VehicleMapper vehicleMapper) {
+        this.vehicleMapper = vehicleMapper;
+    }
+
     public SaleOutputDto saleTosaleOutputDto(Sale sale) {
         var dto = new SaleOutputDto();
 
@@ -30,7 +36,7 @@ public class SaleMapper {
         dto.setBusinessOrPrivate(sale.getBusinessOrPrivate());
         dto.setAddition(sale.getAddition());
         if (sale.getVehicle() != null) {
-            dto.setVehicleId(sale.getVehicle().getId());
+            dto.setVehicleId(vehicleMapper.vehicleToVehicleOutputDto(sale.getVehicle()));
         }
         if (sale.getCustomer() != null) {
             dto.setCustomerId(sale.getCustomer().getId());

@@ -62,9 +62,9 @@ public class PurchaseService {
 
         purchaseToSave.setOrderDate(LocalDate.now());
         purchaseToSave.setStatus(Status.NEW);
-        purchaseToSave.setOrderNumber(getLastOrderNumber.forPurchase());
+        purchaseToSave.setOrderNumber(getLastOrderNumber.getLastOrderNumber(purchaseToSave));
 
-        List<BigDecimal> prices = priceCalculator.calculatePricesPurchases(purchaseToSave);
+        List<BigDecimal> prices = priceCalculator.calculatePrices(purchaseToSave);
         purchaseToSave.setTaxPrice(prices.get(0));
         purchaseToSave.setBpmPrice(prices.get(1));
         purchaseToSave.setPurchasePriceEx(prices.get(2));
@@ -76,7 +76,7 @@ public class PurchaseService {
         Purchase getPurchase = purchaseRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Purchase with id: " + id + " not found"));
         Purchase purchaseToUpdate = purchaseMapper.updatePurchaseFromPurchaseInputDto(purchase, getPurchase);
 
-        List<BigDecimal> prices = priceCalculator.calculatePricesPurchases(purchaseToUpdate);
+        List<BigDecimal> prices = priceCalculator.calculatePrices(purchaseToUpdate);
         purchaseToUpdate.setTaxPrice(prices.get(0));
         purchaseToUpdate.setBpmPrice(prices.get(1));
         purchaseToUpdate.setPurchasePriceEx(prices.get(2));
@@ -92,6 +92,9 @@ public class PurchaseService {
 
 
     public void deletePurchase(Long id) {
+        if (purchaseRepository.findById(id).isEmpty()) {
+            throw new RecordNotFoundException("Purchase with id: " + id + " not found");
+        }
         purchaseRepository.deleteById(id);
     }
 

@@ -48,6 +48,9 @@ public class CarService {
     }
 
     public void deleteCar(Long id) {
+        if (carRepository.findById(id).isEmpty()) {
+            throw new RecordNotFoundException("Car with id: " + id + " not found");
+        }
         carRepository.deleteById(id);
     }
 }
