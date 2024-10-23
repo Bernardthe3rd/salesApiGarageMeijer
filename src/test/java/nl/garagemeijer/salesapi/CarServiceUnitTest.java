@@ -37,6 +37,7 @@ public class CarServiceUnitTest {
     @Test
     @DisplayName("Get all cars")
     public void getAllCars() {
+//        Arrange
         Car car1 = new Car();
         car1.setId(1L);
         car1.setNumberOfDoors(5);
@@ -54,11 +55,14 @@ public class CarServiceUnitTest {
         List<Car> cars = Arrays.asList(car1, car2);
         List<CarOutputDto> dtos = Arrays.asList(dto1, dto2);
 
+//        Mock repos
         when(carRepository.findAll()).thenReturn(cars);
         when(carMapper.carsToCarsOutputDtos(cars)).thenReturn(dtos);
 
+//        Act
         List<CarOutputDto> result = carService.getCars();
 
+//        Assert
         assertEquals(2, result.size());
         assertEquals(dto1, result.get(0));
         assertEquals(dto2, result.get(1));
