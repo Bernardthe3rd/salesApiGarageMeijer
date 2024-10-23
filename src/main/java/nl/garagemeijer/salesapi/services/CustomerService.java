@@ -11,6 +11,7 @@ import nl.garagemeijer.salesapi.repositories.CustomerRepository;
 import nl.garagemeijer.salesapi.repositories.ProfileRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +43,7 @@ public class CustomerService {
 
     public CustomerOutputDto saveCustomer(CustomerInputDto customer) {
         Customer customerToSave = customerMapper.customerInputDtoTocustomer(customer);
+        customerToSave.setCreationDate(LocalDate.now());
 
         return customerMapper.customerTocustomerOutputDto(customerRepository.save(customerToSave));
     }

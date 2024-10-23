@@ -9,7 +9,7 @@ import nl.garagemeijer.salesapi.enums.Role;
 import nl.garagemeijer.salesapi.enums.Status;
 import nl.garagemeijer.salesapi.exceptions.BadRequestException;
 import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
-import nl.garagemeijer.salesapi.helpers.GetLastOrderNumber;
+import nl.garagemeijer.salesapi.exceptions.SignatureException;
 import nl.garagemeijer.salesapi.helpers.PriceCalculator;
 import nl.garagemeijer.salesapi.mappers.SaleMapper;
 import nl.garagemeijer.salesapi.mappers.SignatureMapper;
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,14 +29,13 @@ public class SaleService {
     private final SaleRepository saleRepository;
     private final SaleMapper saleMapper;
     private final PriceCalculator priceCalculator;
-    private final GetLastOrderNumber getLastOrderNumber;
     private final VehicleRepository vehicleRepository;
     private final CustomerRepository customerRepository;
     private final ProfileRepository profileRepository;
     private final PurchaseRepository purchaseRepository;
     private final SignatureMapper signatureMapper;
 
-    public SaleService(SaleRepository saleRepository, SaleMapper saleMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository, CustomerRepository customerRepository, ProfileRepository profileRepository, PurchaseRepository purchaseRepository, GetLastOrderNumber getLastOrderNumber, SignatureMapper signatureMapper) {
+    public SaleService(SaleRepository saleRepository, SaleMapper saleMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository, CustomerRepository customerRepository, ProfileRepository profileRepository, PurchaseRepository purchaseRepository, SignatureMapper signatureMapper) {
         this.saleRepository = saleRepository;
         this.saleMapper = saleMapper;
         this.priceCalculator = priceCalculator;
@@ -43,7 +43,6 @@ public class SaleService {
         this.customerRepository = customerRepository;
         this.profileRepository = profileRepository;
         this.purchaseRepository = purchaseRepository;
-        this.getLastOrderNumber = getLastOrderNumber;
         this.signatureMapper = signatureMapper;
     }
 
@@ -57,7 +56,7 @@ public class SaleService {
             purchaseFromSale.setQuantity(sale.getQuantity());
             purchaseFromSale.setOrderDate(LocalDate.now());
             purchaseFromSale.setStatus(Status.OPEN);
-            purchaseFromSale.setOrderNumber(getLastOrderNumber.getLastOrderNumber(purchaseFromSale));
+            purchaseFromSale.setOrderNumber((purchaseRepository.findLastOrderNumber() != null) ? purchaseRepository.findLastOrderNumber() : 0);
             purchaseFromSale.setExpectedDeliveryDate(LocalDate.of(2044, 1, 1));
             purchaseFromSale.setPurchasePriceIncl(sale.getSalePriceEx());
             purchaseFromSale.setBusinessOrPrivate(sale.getBusinessOrPrivate());
@@ -85,7 +84,7 @@ public class SaleService {
 
         saleToSave.setSaleDate(LocalDate.now());
         saleToSave.setStatus(Status.NEW);
-        saleToSave.setOrderNumber(getLastOrderNumber.getLastOrderNumber(saleToSave));
+        saleToSave.setOrderNumber((saleRepository.findLastOrderNumber() != null) ? saleRepository.findLastOrderNumber() : 0);
 
         List<BigDecimal> prices = priceCalculator.calculatePrices(saleToSave);
         saleToSave.setTaxPrice(prices.get(0));
@@ -189,6 +188,8 @@ public class SaleService {
         Signature signature = signatureMapper.signatureOutputDtoToSignature(signatureDto);
         if (optionalSale.isEmpty()) {
             throw new RecordNotFoundException("Sale with id: " + id + " not found");
+        } else if (signature.getContentType() == null) {
+            throw new SignatureException("It seems you haven't added a file, please add one");
         }
         Sale sale = optionalSale.get();
         signature.setSale(sale);

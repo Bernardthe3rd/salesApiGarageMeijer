@@ -36,11 +36,11 @@ VALUES (5, 'Cruiser', 1625, 'Ape Hanger'),
        (6, 'Naked', 1400, 'Clip-ons');
 
 -- Customers
-INSERT INTO public.customers (id, first_name, last_name, date_of_birth, street, postal_code, city, country,
+INSERT INTO public.customers (first_name, last_name, date_of_birth, street, postal_code, city, country,
                               phone_number, email, preffered_contact_method, name_last_sales_person, creation_date)
-VALUES (1, 'John', 'Doe', '1985-06-15', 'Maple Street 10', '1234AB', 'Amsterdam', 'Netherlands', '+31612345678',
+VALUES ('John', 'Doe', '1985-06-15', 'Maple Street 10', '1234AB', 'Amsterdam', 'Netherlands', '+31612345678',
         'john.doe@example.com', 'email', 'Jane Smith', '2024-01-01'),
-       (2, 'Anna', 'Johnson', '1990-09-25', 'Oak Avenue 22', '5678CD', 'Rotterdam', 'Netherlands', '+31687654321',
+       ('Anna', 'Johnson', '1990-09-25', 'Oak Avenue 22', '5678CD', 'Rotterdam', 'Netherlands', '+31687654321',
         'anna.johnson@example.com', 'phone', NULL, '2024-01-15');
 
 -- Users

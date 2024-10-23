@@ -38,6 +38,11 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    private String getCurrentAuthenticatedUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
+    }
+
     public List<UserOutputDto> getUsers() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         System.out.println("user " + auth.getName());
@@ -68,7 +73,11 @@ public class UserService {
     }
 
     public UserOutputDto updatePassword(Long id, UserChangePasswordInputDto userPassword) {
+        String currentUsername = getCurrentAuthenticatedUsername();
         User getUser = userRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("User with id: " + id + " not found"));
+        if (!currentUsername.equals(getUser.getUsername())) {
+            throw new UnauthorizedException("You can only change your own password");
+        }
         if (!passwordEncoder.matches(userPassword.getOldPassword(), getUser.getPassword())) {
             throw new BadRequestException("Old password is incorrect");
         }
@@ -82,9 +91,10 @@ public class UserService {
 
     public void deleteUser(Long id) {
         Optional<User> optionalUser = userRepository.findById(id);
+        String currentUsername = getCurrentAuthenticatedUsername();
         if (optionalUser.isEmpty()) {
             throw new RecordNotFoundException("User with id: " + id + " not found");
-        } else if (optionalUser.get().getId().equals(id)) {
+        } else if (currentUsername.equals(optionalUser.get().getUsername())) {
             throw new UnauthorizedException("You can not delete your own user account");
         }
         userRepository.deleteById(id);

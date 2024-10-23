@@ -41,7 +41,7 @@ public class AuthController {
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                     .body(response);
         } catch (BadCredentialsException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+            throw new BadCredentialsException("Bad credentials", ex);
         }
     }
 }
