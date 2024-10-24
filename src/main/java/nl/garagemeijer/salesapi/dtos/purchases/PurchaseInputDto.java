@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import nl.garagemeijer.salesapi.enums.BusinessOrPrivate;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ public class PurchaseInputDto {
     @NotNull(message = "please fill in the total purchase price including tax and bpm")
     private BigDecimal purchasePriceIncl;
     @NotNull(message = "please fill in on which date the car is expected to come in")
+    @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate expectedDeliveryDate;
     @NotNull(message = "please fill in how many cars we are buying of this kind")
     private int quantity;

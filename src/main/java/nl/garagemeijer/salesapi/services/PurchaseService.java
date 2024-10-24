@@ -8,7 +8,6 @@ import nl.garagemeijer.salesapi.enums.Role;
 import nl.garagemeijer.salesapi.enums.Status;
 import nl.garagemeijer.salesapi.exceptions.BadRequestException;
 import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
-import nl.garagemeijer.salesapi.helpers.GetLastOrderNumber;
 import nl.garagemeijer.salesapi.helpers.PriceCalculator;
 import nl.garagemeijer.salesapi.mappers.PurchaseMapper;
 import nl.garagemeijer.salesapi.models.Profile;
@@ -30,17 +29,15 @@ public class PurchaseService {
     private final PurchaseRepository purchaseRepository;
     private final PurchaseMapper purchaseMapper;
     private final PriceCalculator priceCalculator;
-    private final GetLastOrderNumber getLastOrderNumber;
     private final VehicleRepository vehicleRepository;
     private final ProfileRepository profileRepository;
 
-    public PurchaseService(PurchaseRepository purchaseRepository, PurchaseMapper purchaseMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository, ProfileRepository profileRepository, GetLastOrderNumber getLastOrderNumber) {
+    public PurchaseService(PurchaseRepository purchaseRepository, PurchaseMapper purchaseMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository, ProfileRepository profileRepository) {
         this.purchaseRepository = purchaseRepository;
         this.purchaseMapper = purchaseMapper;
         this.priceCalculator = priceCalculator;
         this.vehicleRepository = vehicleRepository;
         this.profileRepository = profileRepository;
-        this.getLastOrderNumber = getLastOrderNumber;
     }
 
 
@@ -62,7 +59,7 @@ public class PurchaseService {
 
         purchaseToSave.setOrderDate(LocalDate.now());
         purchaseToSave.setStatus(Status.NEW);
-        purchaseToSave.setOrderNumber(getLastOrderNumber.getLastOrderNumber(purchaseToSave));
+        purchaseToSave.setOrderNumber((purchaseRepository.findLastOrderNumber() != null) ? purchaseRepository.findLastOrderNumber() : 0);
 
         List<BigDecimal> prices = priceCalculator.calculatePrices(purchaseToSave);
         purchaseToSave.setTaxPrice(prices.get(0));

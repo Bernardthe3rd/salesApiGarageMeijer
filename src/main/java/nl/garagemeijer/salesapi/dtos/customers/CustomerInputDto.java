@@ -4,6 +4,9 @@ package nl.garagemeijer.salesapi.dtos.customers;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -26,7 +29,8 @@ public class CustomerInputDto {
     @NotNull(message = "please fill in the email address of the customer")
     private String email;
     @NotNull(message = "please fill in the date of birth")
-    private String dateOfBirth;
+    @DateTimeFormat(pattern = "yyyy-mm-dd")
+    private LocalDate dateOfBirth;
     @NotNull(message = "please fill in which method the customer would like to stay up-to-date")
     private String prefferedContactMethod;
 

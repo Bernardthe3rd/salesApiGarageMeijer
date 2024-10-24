@@ -15,7 +15,7 @@ public class CustomerOutputDto {
     private LocalDate creationDate;
     private String firstName;
     private String lastName;
-    private String dateOfBirth;
+    private LocalDate dateOfBirth;
     private String street;
     private String postalCode;
     private String city;

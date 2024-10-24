@@ -3,6 +3,7 @@ package nl.garagemeijer.salesapi.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -56,5 +57,12 @@ public class ExceptionController {
     public ResponseEntity<String> handleSignatureException(SignatureException ex) {
         String message = "Signature exception: " + ex.getMessage();
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<Map<String, String>> handleBadCredentialsException(BadCredentialsException ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put(ex.getMessage(), " Invalid username or password");
+        return new ResponseEntity<>(errors, HttpStatus.UNAUTHORIZED);
     }
 }

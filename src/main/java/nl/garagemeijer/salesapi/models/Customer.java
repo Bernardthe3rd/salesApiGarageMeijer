@@ -23,7 +23,7 @@ public class Customer {
     @Column(nullable = false)
     private String lastName;
     @Column(nullable = false)
-    private String dateOfBirth;
+    private LocalDate dateOfBirth;
     @Column(nullable = false)
     private String street;
     @Column(nullable = false)

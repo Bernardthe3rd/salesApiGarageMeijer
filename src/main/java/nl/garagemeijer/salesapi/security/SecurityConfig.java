@@ -44,15 +44,15 @@ public class SecurityConfig {
 
                         .requestMatchers("purchases/**").hasAuthority("ADMIN")
 
-                        .requestMatchers(HttpMethod.GET, "/sales").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/sales/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/sales/*/signature").hasAuthority("SELLER")
                         .requestMatchers(HttpMethod.POST, "/sales/**").hasAuthority("SELLER")
                         .requestMatchers(HttpMethod.PUT, "/sales/**").hasAuthority("SELLER")
                         .requestMatchers(HttpMethod.DELETE, "/sales/**").hasAuthority("ADMIN")
 
-                        .requestMatchers(HttpMethod.GET, "/customers").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/customers/**").authenticated()
                         .requestMatchers(HttpMethod.POST, "/customers").hasAuthority("SELLER")
-                        .requestMatchers(HttpMethod.PUT, "/customers").hasAuthority("SELLER")
+                        .requestMatchers(HttpMethod.PUT, "/customers/**").hasAuthority("SELLER")
                         .requestMatchers(HttpMethod.DELETE, "/customers/**").hasAuthority("ADMIN")
 
                         .requestMatchers("/profiles/**").hasAuthority("ADMIN")
