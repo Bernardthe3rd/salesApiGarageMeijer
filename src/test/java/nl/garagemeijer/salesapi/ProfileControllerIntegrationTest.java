@@ -1,7 +1,5 @@
 package nl.garagemeijer.salesapi;
 
-import nl.garagemeijer.salesapi.dtos.profiles.ProfileInputDto;
-import nl.garagemeijer.salesapi.enums.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -44,7 +42,7 @@ public class ProfileControllerIntegrationTest {
     void shouldCreateProfile() throws Exception {
         String requestJson = """
                 {
-                    "role": "SELLER",
+                    "role" : "SELLER",
                     "firstName" : "Puppy",
                     "lastName" : "Lover",
                     "dateOfBirth" : "1987-08-21",
@@ -63,14 +61,13 @@ public class ProfileControllerIntegrationTest {
                         .content(requestJson))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isCreated());
-
     }
 
     @Test
     void shouldUpdateProfile() throws Exception {
         String requestJson = """
                 {
-                    "role": "ADMIN",
+                    "role" : "ADMIN",
                     "firstName" : "Puppy",
                     "lastName" : "Lover",
                     "dateOfBirth" : "1987-08-21",
@@ -94,7 +91,7 @@ public class ProfileControllerIntegrationTest {
     @Test
     void shouldDeleteProfile() throws Exception {
         this.mockMvc
-                .perform(MockMvcRequestBuilders.delete("/profiles/1"))
+                .perform(MockMvcRequestBuilders.delete("/profiles/2"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(status().isNoContent());
     }

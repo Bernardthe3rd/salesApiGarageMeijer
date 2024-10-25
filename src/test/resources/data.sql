@@ -53,11 +53,13 @@ VALUES (1, 'markjohnson', '$2a$10$CLwWDPy2bR52uTKx7ZIvqOGmA6TMby64U10zKn0Zk4Ixib
 -- password voor user2 = password456
 
 -- Profiles
-INSERT INTO public.profiles (id, creation_date, role, first_name, last_name, date_of_birth, street, postal_code, city,
+INSERT INTO public.profiles (creation_date, role, first_name, last_name, date_of_birth, street, postal_code, city,
                              country, email, phone_number, user_id)
-VALUES (1, '2024-01-01', 'ADMIN', 'Mark', 'Johnson', '1982-05-12', 'Birch Lane 5', '1234AB', 'The Hague', 'Netherlands',
+VALUES ('2024-01-01', 'ADMIN', 'Mark', 'Johnson', '1982-05-12', 'Birch Lane 5', '1234AB', 'The Hague',
+        'Netherlands',
         'mark.johnson@example.com', '+31612345678', 1),
-       (2, '2024-01-15', 'SELLER', 'Emily', 'Smith', '1995-11-20', 'Pine Street 12', '5678CD', 'Utrecht', 'Netherlands',
+       ('2024-01-15', 'SELLER', 'Emily', 'Smith', '1995-11-20', 'Pine Street 12', '5678CD', 'Utrecht',
+        'Netherlands',
         'emily.smith@example.com', '+31687654321', 2);
 
 -- Purchases
