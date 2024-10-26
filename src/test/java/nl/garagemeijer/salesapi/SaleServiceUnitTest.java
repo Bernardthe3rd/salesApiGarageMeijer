@@ -12,6 +12,7 @@ import nl.garagemeijer.salesapi.exceptions.BadRequestException;
 import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
 import nl.garagemeijer.salesapi.exceptions.SignatureException;
 import nl.garagemeijer.salesapi.exceptions.UnauthorizedException;
+import nl.garagemeijer.salesapi.helpers.CheckAndChangeStatus;
 import nl.garagemeijer.salesapi.helpers.PriceCalculator;
 import nl.garagemeijer.salesapi.mappers.SaleMapper;
 import nl.garagemeijer.salesapi.mappers.SignatureMapper;
@@ -44,6 +45,8 @@ public class SaleServiceUnitTest {
     private SaleMapper saleMapper;
     @Mock
     private PriceCalculator priceCalculator;
+    @Mock
+    private CheckAndChangeStatus checkAndChangeStatus;
     @Mock
     VehicleRepository vehicleRepository;
     @Mock
@@ -229,6 +232,7 @@ public class SaleServiceUnitTest {
         existingSale.setComment("Amazing");
         existingSale.setAddition(Addition.DPS);
         existingSale.setWarranty("3 years");
+        existingSale.setStatus(Status.NEW);
 
         Sale updatedSale = new Sale();
         updatedSale.setId(saleId);
@@ -241,6 +245,7 @@ public class SaleServiceUnitTest {
         updatedSale.setComment(saleInput.getComment());
         updatedSale.setAddition(saleInput.getAddition());
         updatedSale.setWarranty(saleInput.getWarranty());
+        updatedSale.setStatus(existingSale.getStatus());
 
         List<BigDecimal> prices = new ArrayList<>();
         prices.add(new BigDecimal("3305.78"));
@@ -267,6 +272,7 @@ public class SaleServiceUnitTest {
 
         when(saleRepository.findById(saleId)).thenReturn(Optional.of(existingSale));
         when(saleMapper.updateSaleFromSaleInputDto(saleInput, existingSale)).thenReturn(updatedSale);
+        when(checkAndChangeStatus.returnNewSaleStatus(updatedSale)).thenReturn(updatedSale.getStatus());
         when(priceCalculator.calculatePrices(updatedSale)).thenReturn(prices);
         when(saleRepository.save(updatedSale)).thenReturn(updatedSale);
         when(saleMapper.saleTosaleOutputDto(updatedSale)).thenReturn(output);
@@ -290,6 +296,38 @@ public class SaleServiceUnitTest {
 
         assertEquals("Sale with id: " + saleId + " not found", exception.getMessage());
     }
+
+//    @Test
+//    @DisplayName("Update existing sale - check status")
+//    void updateSaleCheckStatus() {
+//        // Arrange
+//        Sale sale = new Sale();
+//        sale.setId(1L);
+//        sale.setStatus(Status.NEW);
+//
+//        SaleInputDto saleInput = new SaleInputDto();
+//        saleInput.setSalePriceIncl(new BigDecimal("20.000"));
+//        saleInput.setBusinessOrPrivate(BusinessOrPrivate.PRIVATE);
+//        saleInput.setQuantity(1);
+//        saleInput.setDiscount(500.00);
+//        saleInput.setPaymentMethod("Bank");
+//        saleInput.setTypeOrder("Order");
+//        saleInput.setComment("Amazing");
+//        saleInput.setAddition(Addition.DPS);
+//        saleInput.setWarranty("2 years");
+//
+//        when(saleRepository.findById(sale.getId())).thenReturn(Optional.of(sale));
+//        when(saleMapper.updateSaleFromSaleInputDto(saleInput, sale)).thenReturn(sale);
+//        when(priceCalculator.calculatePrices(sale)).thenReturn(List.of(BigDecimal.ONE, BigDecimal.TEN, BigDecimal.valueOf(100)));
+//
+//        // Act
+//        SaleOutputDto result = saleService.updateSale(sale.getId(), saleInput);
+//
+//        // Assert
+//        assertNotNull(result);
+//        assertEquals(Status.PENDING, sale.getStatus());
+//        verify(saleRepository).save(sale);
+//    }
 
     @Test
     @DisplayName("Delete sale - found")

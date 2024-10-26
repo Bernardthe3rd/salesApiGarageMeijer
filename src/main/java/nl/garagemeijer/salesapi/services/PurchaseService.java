@@ -8,6 +8,7 @@ import nl.garagemeijer.salesapi.enums.Role;
 import nl.garagemeijer.salesapi.enums.Status;
 import nl.garagemeijer.salesapi.exceptions.BadRequestException;
 import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
+import nl.garagemeijer.salesapi.helpers.CheckAndChangeStatus;
 import nl.garagemeijer.salesapi.helpers.PriceCalculator;
 import nl.garagemeijer.salesapi.mappers.PurchaseMapper;
 import nl.garagemeijer.salesapi.models.Profile;
@@ -29,13 +30,15 @@ public class PurchaseService {
     private final PurchaseRepository purchaseRepository;
     private final PurchaseMapper purchaseMapper;
     private final PriceCalculator priceCalculator;
+    private final CheckAndChangeStatus checkAndChangeStatus;
     private final VehicleRepository vehicleRepository;
     private final ProfileRepository profileRepository;
 
-    public PurchaseService(PurchaseRepository purchaseRepository, PurchaseMapper purchaseMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository, ProfileRepository profileRepository) {
+    public PurchaseService(PurchaseRepository purchaseRepository, PurchaseMapper purchaseMapper, PriceCalculator priceCalculator, CheckAndChangeStatus checkAndChangeStatus, VehicleRepository vehicleRepository, ProfileRepository profileRepository) {
         this.purchaseRepository = purchaseRepository;
         this.purchaseMapper = purchaseMapper;
         this.priceCalculator = priceCalculator;
+        this.checkAndChangeStatus = checkAndChangeStatus;
         this.vehicleRepository = vehicleRepository;
         this.profileRepository = profileRepository;
     }
@@ -78,11 +81,7 @@ public class PurchaseService {
         purchaseToUpdate.setBpmPrice(prices.get(1));
         purchaseToUpdate.setPurchasePriceEx(prices.get(2));
 
-        if (purchaseToUpdate.getExpectedDeliveryDate().isBefore(LocalDate.now())) {
-            purchaseToUpdate.setStatus(Status.CLOSED);
-        } else {
-            purchaseToUpdate.setStatus(Status.PENDING);
-        }
+        purchaseToUpdate.setStatus(checkAndChangeStatus.returnNewPurchaseStatus(purchaseToUpdate));
 
         return purchaseMapper.purchaseToPurchaseOutputDto(purchaseRepository.save(purchaseToUpdate));
     }

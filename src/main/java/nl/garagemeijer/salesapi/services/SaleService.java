@@ -11,6 +11,7 @@ import nl.garagemeijer.salesapi.exceptions.BadRequestException;
 import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
 import nl.garagemeijer.salesapi.exceptions.SignatureException;
 import nl.garagemeijer.salesapi.exceptions.UnauthorizedException;
+import nl.garagemeijer.salesapi.helpers.CheckAndChangeStatus;
 import nl.garagemeijer.salesapi.helpers.PriceCalculator;
 import nl.garagemeijer.salesapi.mappers.SaleMapper;
 import nl.garagemeijer.salesapi.mappers.SignatureMapper;
@@ -29,16 +30,18 @@ public class SaleService {
     private final SaleRepository saleRepository;
     private final SaleMapper saleMapper;
     private final PriceCalculator priceCalculator;
+    private final CheckAndChangeStatus checkAndChangeStatus;
     private final VehicleRepository vehicleRepository;
     private final CustomerRepository customerRepository;
     private final ProfileRepository profileRepository;
     private final PurchaseRepository purchaseRepository;
     private final SignatureMapper signatureMapper;
 
-    public SaleService(SaleRepository saleRepository, SaleMapper saleMapper, PriceCalculator priceCalculator, VehicleRepository vehicleRepository, CustomerRepository customerRepository, ProfileRepository profileRepository, PurchaseRepository purchaseRepository, SignatureMapper signatureMapper) {
+    public SaleService(SaleRepository saleRepository, SaleMapper saleMapper, PriceCalculator priceCalculator, CheckAndChangeStatus checkAndChangeStatus, VehicleRepository vehicleRepository, CustomerRepository customerRepository, ProfileRepository profileRepository, PurchaseRepository purchaseRepository, SignatureMapper signatureMapper) {
         this.saleRepository = saleRepository;
         this.saleMapper = saleMapper;
         this.priceCalculator = priceCalculator;
+        this.checkAndChangeStatus = checkAndChangeStatus;
         this.vehicleRepository = vehicleRepository;
         this.customerRepository = customerRepository;
         this.profileRepository = profileRepository;
@@ -98,18 +101,12 @@ public class SaleService {
         Sale getSale = saleRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Sale with id: " + id + " not found"));
         Sale saleToUpdate = saleMapper.updateSaleFromSaleInputDto(sale, getSale);
 
+        saleToUpdate.setStatus(checkAndChangeStatus.returnNewSaleStatus(saleToUpdate));
+
         List<BigDecimal> prices = priceCalculator.calculatePrices(saleToUpdate);
         saleToUpdate.setTaxPrice(prices.get(0));
         saleToUpdate.setBpmPrice(prices.get(1));
         saleToUpdate.setSalePriceEx(prices.get(2));
-
-        if (saleToUpdate.getStatus() == Status.NEW) {
-            saleToUpdate.setStatus(Status.PENDING);
-        } else if (saleToUpdate.getTypeOrder().contains("order") && saleToUpdate.getCustomer() != null) {
-            saleToUpdate.setStatus(Status.CLOSED);
-        } else {
-            saleToUpdate.setStatus(Status.OPEN);
-        }
 
         return saleMapper.saleTosaleOutputDto(saleRepository.save(saleToUpdate));
     }
