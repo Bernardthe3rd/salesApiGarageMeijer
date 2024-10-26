@@ -297,38 +297,6 @@ public class SaleServiceUnitTest {
         assertEquals("Sale with id: " + saleId + " not found", exception.getMessage());
     }
 
-//    @Test
-//    @DisplayName("Update existing sale - check status")
-//    void updateSaleCheckStatus() {
-//        // Arrange
-//        Sale sale = new Sale();
-//        sale.setId(1L);
-//        sale.setStatus(Status.NEW);
-//
-//        SaleInputDto saleInput = new SaleInputDto();
-//        saleInput.setSalePriceIncl(new BigDecimal("20.000"));
-//        saleInput.setBusinessOrPrivate(BusinessOrPrivate.PRIVATE);
-//        saleInput.setQuantity(1);
-//        saleInput.setDiscount(500.00);
-//        saleInput.setPaymentMethod("Bank");
-//        saleInput.setTypeOrder("Order");
-//        saleInput.setComment("Amazing");
-//        saleInput.setAddition(Addition.DPS);
-//        saleInput.setWarranty("2 years");
-//
-//        when(saleRepository.findById(sale.getId())).thenReturn(Optional.of(sale));
-//        when(saleMapper.updateSaleFromSaleInputDto(saleInput, sale)).thenReturn(sale);
-//        when(priceCalculator.calculatePrices(sale)).thenReturn(List.of(BigDecimal.ONE, BigDecimal.TEN, BigDecimal.valueOf(100)));
-//
-//        // Act
-//        SaleOutputDto result = saleService.updateSale(sale.getId(), saleInput);
-//
-//        // Assert
-//        assertNotNull(result);
-//        assertEquals(Status.PENDING, sale.getStatus());
-//        verify(saleRepository).save(sale);
-//    }
-
     @Test
     @DisplayName("Delete sale - found")
     void deleteSaleFound() {
