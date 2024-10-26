@@ -27,7 +27,7 @@ public abstract class Vehicle {
     private String model;
     @Column(nullable = false)
     private String type;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "vehicle_year")
     private int year;
     @Column(nullable = false)
     private String licensePlate;
