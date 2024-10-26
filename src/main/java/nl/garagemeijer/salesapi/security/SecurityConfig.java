@@ -1,5 +1,6 @@
 package nl.garagemeijer.salesapi.security;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -58,7 +59,7 @@ public class SecurityConfig {
                         .requestMatchers("/profiles/**").hasAuthority("ADMIN")
 
                         .requestMatchers(HttpMethod.GET, "/users/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/users").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/users/*/password").authenticated()
                         .requestMatchers(HttpMethod.PUT, "/users/*/profile").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/users/**").hasAuthority("ADMIN")

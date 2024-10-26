@@ -2,8 +2,8 @@ package nl.garagemeijer.salesapi.security;
 
 import nl.garagemeijer.salesapi.dtos.authentication.AuthenticationInputDto;
 import nl.garagemeijer.salesapi.dtos.authentication.AuthenticationOutputDto;
+import nl.garagemeijer.salesapi.exceptions.UnauthorizedException;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -33,9 +33,14 @@ public class AuthController {
 
         try {
             Authentication auth = authenticationManager.authenticate(uploadedDetails);
-            System.out.println("role " + auth.getAuthorities());
             var userDetails = userDetailsService.loadUserByUsername(auth.getName());
             String token = jwtService.generateToken(userDetails);
+            String role = String.valueOf(jwtService.extractRole(token));
+
+            if (role.contains("null")) {
+                throw new UnauthorizedException("Your account does not have a valid profile yet please ask to update it");
+            }
+
             AuthenticationOutputDto response = new AuthenticationOutputDto(token, "login succesful");
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
