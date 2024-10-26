@@ -72,10 +72,10 @@ VALUES ('2024-01-01', 'ABC Supplier', 1500.00, 315.00, 0.00, 1815.00, '2024-01-1
         'PRIVATE', 1, 1);
 
 -- Sales
-INSERT INTO public.sales (sale_date, quantity, sale_price_ex, bpm_price, tax_price, sale_price_incl, type_order,
+INSERT INTO public.sales (id, sale_date, quantity, sale_price_ex, bpm_price, tax_price, sale_price_incl, type_order,
                           status, order_number, comment, discount, warranty, payment_method, business_or_private,
                           addition, seller_id, customer_id, vehicle_id)
-VALUES ('2024-01-05', 1, 1200.00, 0.00, 252.00, 1452.00, 'Online', 'CLOSED', 1, 'First sale of the year', 0.0,
+VALUES (1, '2024-01-05', 1, 1200.00, 0.00, 252.00, 1452.00, 'Online', 'CLOSED', 1, 'First sale of the year', 0.0,
         '2 years', 'Credit Card', 'BUSINESS', 'TOWBAR', 2, 1, 4),
-       ('2024-01-10', 1, 2500.00, 1000.00, 525.00, 4025.00, 'In-Store', 'CLOSED', 2,
+       (2, '2024-01-10', 1, 2500.00, 1000.00, 525.00, 4025.00, 'In-Store', 'CLOSED', 2,
         'Customer requested a discount', 0.0, '3 years', 'Cash', 'PRIVATE', 'NAVIGATION', 2, 2, 1);

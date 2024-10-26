@@ -36,7 +36,7 @@ public class CarServiceUnitTest {
 
     @Test
     @DisplayName("Get all cars")
-    public void getAllCars() {
+    void getAllCars() {
 //        Arrange
         Car car1 = new Car();
         car1.setId(1L);
@@ -71,7 +71,7 @@ public class CarServiceUnitTest {
 
     @Test
     @DisplayName("Get a car by id - found")
-    public void getCarByIdFound() {
+    void getCarByIdFound() {
         Long carId = 1L;
         Car car = new Car();
         car.setId(carId);
@@ -92,7 +92,7 @@ public class CarServiceUnitTest {
 
     @Test
     @DisplayName("Get a car by id - not found")
-    public void getCarByIdNotFound() {
+    void getCarByIdNotFound() {
         Long carId = 1L;
         when(carRepository.findById(carId)).thenReturn(Optional.empty());
 
@@ -105,7 +105,7 @@ public class CarServiceUnitTest {
 
     @Test
     @DisplayName("Create a new car")
-    public void createNewCar() {
+    void createNewCar() {
         CarInputDto carInput = new CarInputDto();
         carInput.setVinNumber("LAGER123456789GERG");
         carInput.setBrand("Toyota");
@@ -149,7 +149,7 @@ public class CarServiceUnitTest {
 
     @Test
     @DisplayName("Update an existing car - found")
-    public void updateFoundCar() {
+    void updateFoundCar() {
         Long carId = 1L;
         CarInputDto carInput = new CarInputDto();
         carInput.setVinNumber("LAGER123456789GERG");
@@ -208,7 +208,7 @@ public class CarServiceUnitTest {
 
     @Test
     @DisplayName("Update an existing car - not found")
-    public void updateNotFoundCar() {
+    void updateNotFoundCar() {
         Long carId = 1L;
         CarInputDto carInput = new CarInputDto();
 
@@ -221,7 +221,7 @@ public class CarServiceUnitTest {
 
     @Test
     @DisplayName("Delete a car - found")
-    public void deleteFoundCar() {
+    void deleteFoundCar() {
         Long carId = 1L;
         Car car = new Car();
         car.setId(carId);
@@ -229,11 +229,15 @@ public class CarServiceUnitTest {
         when(carRepository.findById(carId)).thenReturn(Optional.of(car));
 
         carService.deleteCar(carId);
+
+        when(carRepository.findById(carId)).thenReturn(Optional.empty());
+
+        assertFalse(carRepository.findById(carId).isPresent());
     }
 
     @Test
     @DisplayName("Delete a car - not found")
-    public void deleteNotFoundCar() {
+    void deleteNotFoundCar() {
         Long carId = 1L;
 
         when(carRepository.findById(carId)).thenReturn(Optional.empty());

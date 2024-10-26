@@ -10,6 +10,7 @@ import nl.garagemeijer.salesapi.enums.Status;
 import nl.garagemeijer.salesapi.exceptions.BadRequestException;
 import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
 import nl.garagemeijer.salesapi.exceptions.SignatureException;
+import nl.garagemeijer.salesapi.exceptions.UnauthorizedException;
 import nl.garagemeijer.salesapi.helpers.PriceCalculator;
 import nl.garagemeijer.salesapi.mappers.SaleMapper;
 import nl.garagemeijer.salesapi.mappers.SignatureMapper;
@@ -167,13 +168,13 @@ public class SaleService {
         if (optionalSale.isPresent() && optionalSeller.isPresent()) {
             Sale sale = optionalSale.get();
             Profile seller = optionalSeller.get();
-            List<Integer> sellerListOfOrderNumbers = seller.getSaleOrderNumbers();
             if (seller.getRole().equals(Role.SELLER)) {
+                List<Integer> sellerListOfOrderNumbers = seller.getSaleOrderNumbers();
                 sellerListOfOrderNumbers.add(sale.getOrderNumber());
                 sale.setSellerId(seller.getId());
                 return saleMapper.saleTosaleOutputDto(saleRepository.save(sale));
             } else {
-                throw new RuntimeException("The ProfileId you entered has role Admin but only profiles with role SELLER can be assigned");
+                throw new UnauthorizedException("The ProfileId you entered has role Admin but only profiles with role SELLER can be assigned");
             }
         } else if (optionalSeller.isEmpty()) {
             throw new RecordNotFoundException("Seller with id: " + sellerId.getId() + " not found");

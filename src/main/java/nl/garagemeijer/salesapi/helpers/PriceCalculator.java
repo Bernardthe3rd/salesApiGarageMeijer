@@ -79,14 +79,12 @@ public class PriceCalculator {
     }
 
     public List<BigDecimal> calculatePrices(Object document) {
-        switch (document) {
-            case Sale sale -> {
-                return calculatePricesSales(sale);
-            }
-            case Purchase purchase -> {
-                return calculatePricesPurchases(purchase);
-            }
-            default -> throw new BadRequestException("Unsupported document type: " + document);
+        if (document instanceof Sale sale) {
+            return calculatePricesSales(sale);
+        } else if (document instanceof Purchase purchase) {
+            return calculatePricesPurchases(purchase);
+        } else {
+            throw new BadRequestException("Unsupported document type: " + document);
         }
     }
 }
