@@ -107,7 +107,7 @@ public class SaleServiceUnitTest {
         sale1.setPaymentMethod("Bank");
         sale1.setTypeOrder("Order");
         sale1.setComment("Amazing");
-        sale1.setAddition(Addition.TOWBAR);
+        sale1.setAddition(Addition.DPS);
         sale1.setWarranty("2 years");
 
         SaleOutputDto dto1 = new SaleOutputDto();
@@ -119,7 +119,7 @@ public class SaleServiceUnitTest {
         dto1.setPaymentMethod("Bank");
         dto1.setTypeOrder("Order");
         dto1.setComment("Amazing");
-        dto1.setAddition(Addition.TOWBAR);
+        dto1.setAddition(Addition.DPS);
         dto1.setWarranty("2 years");
 
         when(saleRepository.findById(1L)).thenReturn(Optional.of(sale1));

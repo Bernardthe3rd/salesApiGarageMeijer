@@ -1,5 +1,8 @@
 package nl.garagemeijer.salesapi.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum BusinessUsageType {
     GOVERNMENT("Government"),
     GARDENER("Gardener"),
@@ -19,7 +22,4 @@ public enum BusinessUsageType {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
 }

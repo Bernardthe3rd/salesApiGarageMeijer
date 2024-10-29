@@ -41,10 +41,12 @@ public class AuthController {
                 throw new UnauthorizedException("Your account does not have a valid profile yet please ask to update it");
             }
 
-            AuthenticationOutputDto response = new AuthenticationOutputDto(token, "login succesful");
+            AuthenticationOutputDto response = new AuthenticationOutputDto(token, "login successful");
+
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                     .body(response);
+
         } catch (BadCredentialsException ex) {
             throw new BadCredentialsException("Bad credentials", ex);
         }

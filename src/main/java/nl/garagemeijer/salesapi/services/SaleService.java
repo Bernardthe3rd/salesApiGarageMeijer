@@ -199,10 +199,10 @@ public class SaleService {
         if (optionalSale.isEmpty()) {
             throw new RecordNotFoundException("Sale with id: " + id + " not found");
         }
-        if (optionalSale.get().getSignature() == null) {
+        Sale sale = optionalSale.get();
+        if (sale.getSignature() == null) {
             throw new RecordNotFoundException("This sale has no signature yet");
         }
-        Sale sale = optionalSale.get();
         return signatureMapper.signatureToOutputDto(sale.getSignature());
     }
 }

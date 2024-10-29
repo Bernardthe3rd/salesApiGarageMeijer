@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.security.Key;
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
@@ -56,16 +55,20 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String jwt) {
-        return Jwts.parser().setSigningKey(getSigningKey()).parseClaimsJws(jwt).getBody();
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(jwt)
+                .getBody();
     }
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
         List<String> role = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+                .toList();
         if (!role.isEmpty()) {
-            String oneRole = role.get(0);
+            String oneRole = role.getFirst();
             String withoutRole = oneRole.replace("ROLE_", "");
             claims.put("role", withoutRole);
         }

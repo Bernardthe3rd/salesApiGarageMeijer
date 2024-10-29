@@ -33,7 +33,6 @@ public class CustomUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(user.getProfile().getRole().toString()));
-        System.out.println("auth" + authorities);
         return authorities;
     }
 

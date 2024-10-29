@@ -1,3 +1,6 @@
+-- Github link:
+-- https://github.com/Bernardthe3rd/salesApiGarageMeijer
+
 -- Cars
 INSERT INTO public.vehicles (vin_number, brand, model, type, vehicle_year, license_plate, mileage, color, fuel_type,
                              engine_capacity, first_registration_date, amount_in_stock, vehicle_type)
@@ -74,6 +77,6 @@ INSERT INTO public.sales (sale_date, quantity, sale_price_ex, bpm_price, tax_pri
                           status, order_number, comment, discount, warranty, payment_method, business_or_private,
                           addition, seller_id, customer_id, vehicle_id)
 VALUES ('2024-01-05', 1, 1200.00, 0.00, 252.00, 1452.00, 'Online', 'CLOSED', 1, 'First sale of the year', 0.0,
-        '2 years', 'Credit Card', 'BUSINESS', 'TOWBAR', 2, 1, 4),
+        '2 years', 'Credit Card', 'BUSINESS', 'DPS', 2, 1, 4),
        ('2024-01-10', 1, 2500.00, 1000.00, 525.00, 4025.00, 'In-Store', 'CLOSED', 2,
-        'Customer requested a discount', 0.0, '3 years', 'Cash', 'PRIVATE', 'NAVIGATION', 2, 2, 1);
+        'Customer requested a discount', 0.0, '3 years', 'Cash', 'PRIVATE', 'DPP', 2, 2, 1);

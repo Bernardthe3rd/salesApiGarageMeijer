@@ -1,5 +1,8 @@
 package nl.garagemeijer.salesapi.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Status {
     NEW("New"),
     OPEN("Open"),
@@ -13,7 +16,4 @@ public enum Status {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
 }

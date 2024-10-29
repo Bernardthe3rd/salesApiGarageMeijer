@@ -5,7 +5,6 @@ import nl.garagemeijer.salesapi.dtos.ids.IdInputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserChangePasswordInputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserInputDto;
 import nl.garagemeijer.salesapi.dtos.users.UserOutputDto;
-import nl.garagemeijer.salesapi.enums.Role;
 import nl.garagemeijer.salesapi.exceptions.BadRequestException;
 import nl.garagemeijer.salesapi.exceptions.RecordNotFoundException;
 import nl.garagemeijer.salesapi.exceptions.UnauthorizedException;
@@ -44,9 +43,6 @@ public class UserService {
     }
 
     public List<UserOutputDto> getUsers() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("user " + auth.getName());
-        System.out.println("role " + auth.getAuthorities());
         return userMapper.usersToUserOutputDtos(userRepository.findAll());
     }
 
