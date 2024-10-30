@@ -1,6 +1,4 @@
--- Github link:
--- https://github.com/Bernardthe3rd/salesApiGarageMeijer
-
+-- Data.sql for the live application.
 -- Cars
 INSERT INTO public.vehicles (vin_number, brand, model, type, vehicle_year, license_plate, mileage, color, fuel_type,
                              engine_capacity, first_registration_date, amount_in_stock, vehicle_type)

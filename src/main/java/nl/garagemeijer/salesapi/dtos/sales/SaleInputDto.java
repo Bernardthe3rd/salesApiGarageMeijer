@@ -14,7 +14,7 @@ public class SaleInputDto {
 
     @NotNull(message = "please fill in the sale price including bpm and btw")
     private BigDecimal salePriceIncl;
-    @NotNull(message = "please fill in the amount of vehicles is sold")
+    @NotNull(message = "please fill in the amount of vehicles that is sold")
     private int quantity;
     @NotNull(message = "please fill in a discount price")
     private Double discount;

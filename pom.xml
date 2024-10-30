@@ -10,7 +10,7 @@
     </parent>
     <groupId>nl.garagemeijer</groupId>
     <artifactId>salesApi</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>salesApi</name>
     <description>salesApi</description>
     <url/>
