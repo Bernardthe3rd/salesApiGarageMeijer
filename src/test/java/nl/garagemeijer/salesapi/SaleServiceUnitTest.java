@@ -158,6 +158,7 @@ public class SaleServiceUnitTest {
 
         Sale sale = new Sale();
         sale.setId(1L);
+        sale.setOrderNumber(0);
         sale.setSalePriceIncl(new BigDecimal("20.000"));
         sale.setBusinessOrPrivate(BusinessOrPrivate.PRIVATE);
         sale.setQuantity(1);
