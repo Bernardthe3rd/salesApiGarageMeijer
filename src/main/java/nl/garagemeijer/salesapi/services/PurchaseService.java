@@ -59,10 +59,11 @@ public class PurchaseService {
 
     public PurchaseOutputDto savePurchase(PurchaseInputDto purchase) {
         Purchase purchaseToSave = purchaseMapper.purchaseInputDtoToPurchase(purchase);
+        Integer lastOrderNumber = purchaseRepository.findLastOrderNumber();
 
         purchaseToSave.setOrderDate(LocalDate.now());
         purchaseToSave.setStatus(Status.NEW);
-        purchaseToSave.setOrderNumber((purchaseRepository.findLastOrderNumber() != null) ? purchaseRepository.findLastOrderNumber() : 0);
+        purchaseToSave.setOrderNumber((lastOrderNumber != null) ? ++lastOrderNumber : 0);
 
         List<BigDecimal> prices = priceCalculator.calculatePrices(purchaseToSave);
         purchaseToSave.setTaxPrice(prices.get(0));

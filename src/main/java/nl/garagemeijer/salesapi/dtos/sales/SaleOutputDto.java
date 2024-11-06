@@ -20,12 +20,12 @@ public class SaleOutputDto {
     private BigDecimal bpmPrice;
     private BigDecimal taxPrice;
     private BigDecimal salePriceIncl;
-    private int quantity;
+    private Integer quantity;
     private Double discount;
     private String typeOrder;
     private Status status;
     private String warranty;
-    private int orderNumber;
+    private Integer orderNumber;
     private String paymentMethod;
     private BusinessOrPrivate businessOrPrivate;
     private String comment;

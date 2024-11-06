@@ -21,9 +21,9 @@ public class PurchaseOutputDto {
     private BigDecimal bpmPrice;
     private BigDecimal purchasePriceIncl;
     private LocalDate expectedDeliveryDate;
-    private int quantity;
+    private Integer quantity;
     private Status status;
-    private int orderNumber;
+    private Integer orderNumber;
     private BusinessOrPrivate businessOrPrivate;
     private Long adminId;
     private VehicleOutputDto vehicleOutput;

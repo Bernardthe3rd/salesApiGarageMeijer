@@ -23,7 +23,7 @@ public class Purchase {
     @Column(nullable = false)
     private String supplier;
     private Long adminId;
-    private int orderNumber;
+    private Integer orderNumber;
     private LocalDate orderDate;
     private BigDecimal purchasePriceEx;
     private BigDecimal taxPrice;
@@ -33,7 +33,7 @@ public class Purchase {
     @Column(nullable = false)
     private LocalDate expectedDeliveryDate;
     @Column(nullable = false)
-    private int quantity;
+    private Integer quantity;
     @Enumerated(EnumType.STRING)
     private Status status;
     @Column(nullable = false)

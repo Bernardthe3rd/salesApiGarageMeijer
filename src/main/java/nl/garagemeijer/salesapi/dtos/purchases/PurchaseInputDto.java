@@ -21,7 +21,7 @@ public class PurchaseInputDto {
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     private LocalDate expectedDeliveryDate;
     @NotNull(message = "please fill in how many cars we are buying of this kind")
-    private int quantity;
+    private Integer quantity;
     @NotNull(message = "please fill in if the car is for business use or private")
     private BusinessOrPrivate businessOrPrivate;
 

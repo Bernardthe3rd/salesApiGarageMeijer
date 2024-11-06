@@ -28,11 +28,11 @@ public abstract class Vehicle {
     @Column(nullable = false)
     private String type;
     @Column(nullable = false, name = "vehicle_year")
-    private int year;
+    private Integer year;
     @Column(nullable = false)
     private String licensePlate;
     @Column(nullable = false)
-    private int mileage;
+    private Integer mileage;
     @Column(nullable = false)
     private String color;
     @Column(nullable = false)
@@ -41,7 +41,7 @@ public abstract class Vehicle {
     private Double engineCapacity;
     @Column(nullable = false)
     private LocalDate firstRegistrationDate;
-    private int amountInStock;
+    private Integer amountInStock;
 
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Purchase> purchases;

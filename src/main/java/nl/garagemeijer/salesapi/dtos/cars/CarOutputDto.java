@@ -8,9 +8,9 @@ import nl.garagemeijer.salesapi.dtos.vehicles.VehicleOutputDto;
 @Setter
 public class CarOutputDto extends VehicleOutputDto {
 
-    private int numberOfDoors;
+    private Integer numberOfDoors;
     private Double trunkCapacity;
     private String transmission;
-    private int seatingCapacity;
+    private Integer seatingCapacity;
 
 }

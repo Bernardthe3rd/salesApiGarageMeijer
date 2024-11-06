@@ -32,13 +32,10 @@ https://github.com/Bernardthe3rd/salesApiGarageMeijer
 ~~7. nog te bepalen~~
 ~~7. na elke geintegreerde test committen.~~
 
-8. elke grote finishing touch committen. Pas mergen als project 100% af is.
-
 ## Side quests
 
-34. Klassendiagram die je in eerste instantie gemaakt hebt in verantwoordingsdocument. > plus punt.
-35. todo.md verwijderen
 36. target map verwijderen
+37. mergen naar main
 
 ### Endpints
 

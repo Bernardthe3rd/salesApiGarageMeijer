@@ -22,7 +22,7 @@ public class Sale {
     private Long id;
 
     private LocalDate saleDate;
-    private int orderNumber;
+    private Integer orderNumber;
     private Long sellerId;
     private String comment;
     private BigDecimal salePriceEx;
@@ -31,7 +31,7 @@ public class Sale {
     @Column(nullable = false)
     private BigDecimal salePriceIncl;
     @Column(nullable = false)
-    private int quantity;
+    private Integer quantity;
     @Column(nullable = false)
     private String typeOrder;
     @Enumerated(EnumType.STRING)

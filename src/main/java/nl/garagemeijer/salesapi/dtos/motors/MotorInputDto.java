@@ -25,12 +25,12 @@ public class MotorInputDto {
     @NotNull(message = "please fill in the year in which the vehicle is build")
     @Min(value = 1886, message = "Year must be no earlier than 1886")
     @Max(value = 2024, message = "Year must be no later than 2024")
-    private int year;
+    private Integer year;
     @NotNull(message = "please fill in the license plate of the vehicle")
     @Pattern(regexp = "^M.*", message = "License plate must start with a M")
     private String licensePlate;
     @NotNull(message = "please fill in the mileage of the vehicle")
-    private int mileage;
+    private Integer mileage;
     @NotNull(message = "please fill in the color of the vehicle")
     private String color;
     @NotNull(message = "please fill in which type of fuel the vehicle needs")
@@ -43,7 +43,7 @@ public class MotorInputDto {
     @NotNull(message = "please fill in what type of motor it is")
     private String typeMotorcycle;
     @NotNull(message = "please fill in how long the wheelbase is in meters")
-    private int wheelbase;
+    private Integer wheelbase;
     @NotNull(message = "please fill in what type of handlebar the motor has")
     private String handlebarType;
 

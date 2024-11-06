@@ -55,11 +55,12 @@ public class SaleService {
             vehicle.setAmountInStock(vehicle.getAmountInStock() - sale.getQuantity());
         } else {
             Purchase purchaseFromSale = new Purchase();
+            Integer lastPurchaseOrderNumber = purchaseRepository.findLastOrderNumber();
             purchaseFromSale.setVehicle(vehicle);
             purchaseFromSale.setQuantity(sale.getQuantity());
             purchaseFromSale.setOrderDate(LocalDate.now());
             purchaseFromSale.setStatus(Status.OPEN);
-            purchaseFromSale.setOrderNumber((purchaseRepository.findLastOrderNumber() != null) ? purchaseRepository.findLastOrderNumber() : 0);
+            purchaseFromSale.setOrderNumber((lastPurchaseOrderNumber != null) ? ++lastPurchaseOrderNumber : 0);
             purchaseFromSale.setExpectedDeliveryDate(LocalDate.of(2044, 1, 1));
             purchaseFromSale.setPurchasePriceIncl(sale.getSalePriceEx());
             purchaseFromSale.setBusinessOrPrivate(sale.getBusinessOrPrivate());
@@ -84,10 +85,11 @@ public class SaleService {
 
     public SaleOutputDto saveSale(SaleInputDto sale) {
         Sale saleToSave = saleMapper.saleInputDtoToSale(sale);
+        Integer lastOrderNumber = saleRepository.findLastOrderNumber();
 
         saleToSave.setSaleDate(LocalDate.now());
         saleToSave.setStatus(Status.NEW);
-        saleToSave.setOrderNumber((saleRepository.findLastOrderNumber() != null) ? saleRepository.findLastOrderNumber() : 0);
+        saleToSave.setOrderNumber((lastOrderNumber != null) ? ++lastOrderNumber : 0);
 
         List<BigDecimal> prices = priceCalculator.calculatePrices(saleToSave);
         saleToSave.setTaxPrice(prices.get(0));
