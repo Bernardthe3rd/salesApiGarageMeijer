@@ -23,12 +23,12 @@ public class BusinessVehicleInputDto {
     @NotNull(message = "please fill in the year in which the vehicle is build")
     @Min(value = 1886, message = "Year must be no earlier than 1886")
     @Max(value = 2024, message = "Year must be no later than 2024")
-    private int year;
+    private Integer year;
     @NotNull(message = "please fill in the license plate of the vehicle")
     @Pattern(regexp = "^V.*", message = "License plate must start with V")
     private String licensePlate;
     @NotNull(message = "please fill in the mileage of the vehicle")
-    private int mileage;
+    private Integer mileage;
     @NotNull(message = "please fill in the color of the vehicle")
     private String color;
     @NotNull(message = "please fill in which type of fuel the vehicle needs")

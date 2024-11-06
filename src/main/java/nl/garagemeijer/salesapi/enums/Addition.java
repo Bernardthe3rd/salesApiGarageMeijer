@@ -1,12 +1,12 @@
 package nl.garagemeijer.salesapi.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Addition {
-    TOWBAR("Towbar"),
-    NAVIGATION("Navigation"),
     DPL("Delivery package light"),
     DPS("Delivery package standard"),
-    DPP("Delivery package plus"),
-    INSURANCE("Insurance");
+    DPP("Delivery package plus");
 
     private final String name;
 
@@ -14,7 +14,4 @@ public enum Addition {
         this.name = name;
     }
 
-    public String getName() {
-        return name;
-    }
 }

@@ -16,13 +16,13 @@ public class VehicleOutputDto {
     private String brand;
     private String model;
     private String type;
-    private int year;
+    private Integer year;
     private String licensePlate;
-    private int mileage;
+    private Integer mileage;
     private String color;
     private String fuelType;
     private Double engineCapacity;
     private LocalDate firstRegistrationDate;
-    private int amountInStock;
+    private Integer amountInStock;
 
 }

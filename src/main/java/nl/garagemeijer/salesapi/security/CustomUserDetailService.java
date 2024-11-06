@@ -1,5 +1,6 @@
 package nl.garagemeijer.salesapi.security;
 
+import nl.garagemeijer.salesapi.models.Profile;
 import nl.garagemeijer.salesapi.models.User;
 import nl.garagemeijer.salesapi.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +20,10 @@ public class CustomUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User getUser = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+
+        if (getUser.getProfile() == null) {
+            getUser.setProfile(new Profile());
+        }
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(getUser.getUsername())

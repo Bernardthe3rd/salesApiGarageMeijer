@@ -26,6 +26,7 @@ public class SaleMapper {
         dto.setBpmPrice(sale.getBpmPrice());
         dto.setTaxPrice(sale.getTaxPrice());
         dto.setSalePriceIncl(sale.getSalePriceIncl());
+        dto.setQuantity(sale.getQuantity());
         dto.setStatus(sale.getStatus());
         dto.setOrderNumber(sale.getOrderNumber());
         dto.setComment(sale.getComment());
@@ -53,11 +54,12 @@ public class SaleMapper {
 
     public Sale updateSaleFromSaleInputDto(SaleInputDto saleInputDto, Sale sale) {
         sale.setSalePriceIncl(saleInputDto.getSalePriceIncl());
+        sale.setQuantity(saleInputDto.getQuantity());
         sale.setDiscount(saleInputDto.getDiscount());
-        sale.setTypeOrder(saleInputDto.getTypeOrder());
         sale.setWarranty(saleInputDto.getWarranty());
         sale.setPaymentMethod(saleInputDto.getPaymentMethod());
         sale.setBusinessOrPrivate(saleInputDto.getBusinessOrPrivate());
+        sale.setTypeOrder(saleInputDto.getTypeOrder());
         sale.setComment(saleInputDto.getComment());
         sale.setAddition(saleInputDto.getAddition());
 

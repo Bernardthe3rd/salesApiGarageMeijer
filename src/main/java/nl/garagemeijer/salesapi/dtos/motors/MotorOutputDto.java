@@ -9,7 +9,7 @@ import nl.garagemeijer.salesapi.dtos.vehicles.VehicleOutputDto;
 public class MotorOutputDto extends VehicleOutputDto {
 
     private String typeMotorcycle;
-    private int wheelbase;
+    private Integer wheelbase;
     private String handlebarType;
 
 }

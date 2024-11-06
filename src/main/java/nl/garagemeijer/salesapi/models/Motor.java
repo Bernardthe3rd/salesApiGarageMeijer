@@ -14,7 +14,7 @@ public class Motor extends Vehicle {
     @Column(nullable = false)
     private String typeMotorcycle;
     @Column(nullable = false)
-    private int wheelbase;
+    private Integer wheelbase;
     @Column(nullable = false)
     private String handlebarType;
 

@@ -49,8 +49,6 @@ VALUES (1, 'markjohnson', '$2a$10$CLwWDPy2bR52uTKx7ZIvqOGmA6TMby64U10zKn0Zk4Ixib
         '2024-01-15'),
        (3, 'pattylover', '$2a$10$kjXWp5bhlPGLaNnrMOe.b.lBzucZMsvXIlxWeFyzgDeW.imGe7Y9m', '2024-01-15', TRUE,
         '2024-01-15');
--- password voor user1 = password123
--- password voor user2 = password456
 
 -- Profiles
 INSERT INTO public.profiles (creation_date, role, first_name, last_name, date_of_birth, street, postal_code, city,
@@ -76,6 +74,6 @@ INSERT INTO public.sales (id, sale_date, quantity, sale_price_ex, bpm_price, tax
                           status, order_number, comment, discount, warranty, payment_method, business_or_private,
                           addition, seller_id, customer_id, vehicle_id)
 VALUES (1, '2024-01-05', 1, 1200.00, 0.00, 252.00, 1452.00, 'Online', 'CLOSED', 1, 'First sale of the year', 0.0,
-        '2 years', 'Credit Card', 'BUSINESS', 'TOWBAR', 2, 1, 4),
+        '2 years', 'Credit Card', 'BUSINESS', 'DPL', 2, 1, 4),
        (2, '2024-01-10', 1, 2500.00, 1000.00, 525.00, 4025.00, 'In-Store', 'CLOSED', 2,
-        'Customer requested a discount', 0.0, '3 years', 'Cash', 'PRIVATE', 'NAVIGATION', 2, 2, 1);
+        'Customer requested a discount', 0.0, '3 years', 'Cash', 'PRIVATE', 'DPP', 2, 2, 1);

@@ -18,7 +18,7 @@ public class User {
     private Long id;
 
     private LocalDate creationDate;
-    @Column(unique = true, length = 64)
+    @Column(unique = true, length = 64, nullable = false)
     private String username;
     @Column(nullable = false)
     private String password;
